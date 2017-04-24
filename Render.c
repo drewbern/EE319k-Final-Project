@@ -78,18 +78,23 @@ void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numIndices) {
 }
 
 void renderPlayer(Player player) {
-	prepareEntity(&player.entity);
-	renderEntity(player.entity.vertexBuffer, player.entity.indexBuffer, player.entity.numIndices);
-	
-	//Not the most efficient.... calculating matrixes twice
 	Matrix4f transformationMatrix = createTransformationMatrix(player.entity.position, player.entity.scale);
 	
-	Matrix4f rotation = createRotationMatrix(player.pitch/4, player.yaw/4, player.roll);
+	Matrix4f rotation = createRotationMatrix(player.pitch, player.yaw, player.roll);
 	
 	Vector3f frontOfPlayer =  {0, 0, 5};
 	Vector2f reticuleCenter = preparePoint(frontOfPlayer, transformationMatrix, rotation);
 	
-	ST7735_FillRect(reticuleCenter.x-5, reticuleCenter.y-5, 10, 10, ST7735_Color565(255, 0, 0));
+	ST7735_FillRect(reticuleCenter.x-5, reticuleCenter.y-5, 10, 10, ST7735_Color565(255, 0, 0));	
+	
+	for(int i = 0; i < (player.entity).numPoints-2; i +=3) {
+		Vector2f* vertexBufferPointer = &((player.entity).vertexBuffer[i/3]);
+		Vector3f entityPoint = {(player.entity).points[i], (player.entity).points[i+1], (player.entity).points[i+2]};
+		Vector2f point = preparePoint(entityPoint, transformationMatrix, rotation);
+		*vertexBufferPointer = point;
+	}
+	
+	renderEntity(player.entity.vertexBuffer, player.entity.indexBuffer, player.entity.numIndices);
 }
 
 Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotation) {
