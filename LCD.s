@@ -1,6 +1,6 @@
 ; LCD.s
-; Student names: change this to your names or look very silly
-; Last modification date: change this to the last modification date or look very silly
+; Student names: Zachary Chilton & Philip Tan
+; Last modification date: 03/27/2017
 
 ; Runs on LM4F120/TM4C123
 ; Use SSI0 to send an 8-bit code to the ST7735 160x128 pixel LCD.
@@ -19,12 +19,14 @@
 ; VCC (pin 2) connected to +3.3 V
 ; Gnd (pin 1) connected to ground
 
-GPIO_PORTA_DATA_R       EQU   0x400043FC
-SSI0_DR_R               EQU   0x40008008
-SSI0_SR_R               EQU   0x4000800C
-SSI_SR_RNE              EQU   0x00000004  ; SSI Receive FIFO Not Empty
-SSI_SR_BSY              EQU   0x00000010  ; SSI Busy Bit
-SSI_SR_TNF              EQU   0x00000002  ; SSI Transmit FIFO Not Full
+DC                  EQU	0x40004100
+DC_COMMAND          EQU 0
+DC_DATA             EQU 0x40
+SSI0_DR_R           EQU 0x40008008
+SSI0_SR_R           EQU 0x4000800C
+SSI_SR_RNE          EQU 0x00000004  ; SSI Receive FIFO Not Empty
+SSI_SR_BSY          EQU 0x00000010  ; SSI Busy Bit
+SSI_SR_TNF          EQU 0x00000002  ; SSI Transmit FIFO Not Full
 
       EXPORT   writecommand
       EXPORT   writedata
@@ -56,31 +58,60 @@ SSI_SR_TNF              EQU   0x00000002  ; SSI Transmit FIFO Not Full
 ; Output: none
 ; Assumes: SSI0 and port A have already been initialized and enabled
 writecommand
+;; --UUU-- Code to write a command to the LCD
 ;1) Read SSI0_SR_R and check bit 4, 
 ;2) If bit 4 is high, loop back to step 1 (wait for BUSY bit to be low)
 ;3) Clear D/C=PA6 to zero
 ;4) Write the command to SSI0_DR_R
 ;5) Read SSI0_SR_R and check bit 4, 
 ;6) If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
-
-    
-    
-    BX  LR                          ;   return
+	LDR R1,=SSI0_SR_R
+readBusyWrite
+	LDR R2,[R1]
+	LSR R2,#4
+	ANDS R2,#1
+	BNE readBusyWrite	;if high, keep reading
+	
+	LDR R2,=DC
+	MOV R3,#DC_COMMAND
+	STRB R3,[R2]		;D/C cleared
+	
+	LDR R2,=SSI0_DR_R
+	STRB R0,[R2]		;command written to SSI0_DR_R
+	
+readBusy2
+	LDR R2,[R1]
+	LSR R2,#4
+	ANDS R2,#1
+	BNE readBusy2		;if high, keep reading
+	
+	BX  LR                       
 
 ; This is a helper function that sends an 8-bit data to the LCD.
 ; Input: R0  8-bit data to transmit
 ; Output: none
 ; Assumes: SSI0 and port A have already been initialized and enabled
 writedata
+;; --UUU-- Code to write data to the LCD
 ;1) Read SSI0_SR_R and check bit 1, 
 ;2) If bit 1 is low loop back to step 1 (wait for TNF bit to be high)
 ;3) Set D/C=PA6 to one
 ;4) Write the 8-bit data to SSI0_DR_R
-
-    
-    
+	LDR R1,=SSI0_SR_R
+readTNF
+	LDR R2,[R1]
+	LSR R2,#1
+	ANDS R2,#1
+	BEQ readTNF		;if low, keep reading
+	
+	LDR R2,=DC
+	MOV R3,#DC_DATA
+	STRB R3,[R2]	;D/C set
+	
+	LDR R1,=SSI0_DR_R
+	STRB R0,[R1]	;input written to SSIO_DR_R
+	
     BX  LR                          ;   return
-
 
 ;***************************************************
 ; This is a library for the Adafruit 1.8" SPI display.

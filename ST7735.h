@@ -55,6 +55,8 @@
 #ifndef _ST7735H_
 #define _ST7735H_
 
+#include <stdint.h>
+
 // some flags for ST7735_InitR()
 enum initRFlags{
   none,
@@ -103,6 +105,8 @@ void ST7735_InitR(enum initRFlags option);
 //        color 16-bit color, which can be produced by ST7735_Color565()
 // Output: none
 void ST7735_DrawPixel(int16_t x, int16_t y, uint16_t color);
+
+void ST7735_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color);
 
 //------------ST7735_DrawFastVLine------------
 // Draw a vertical line at the given coordinates with the given height and color.
@@ -419,7 +423,5 @@ void Output_On(void);
 // Input:  16-bit packed color
 // Output: none
 void Output_Color(uint32_t newColor); 
-
-void LCD_OutDec(uint32_t data);  // output to LCD
 
 #endif

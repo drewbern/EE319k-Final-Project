@@ -26,6 +26,7 @@
 // Augmented 7/17/2014 to have a simple graphics facility
 // Tested with LaunchPadDLL.dll simulator 9/2/2014
 // Last Modified: 3/6/2015 
+
 /* This example accompanies the book
    "Embedded Systems: Real Time Interfacing to Arm Cortex M Microcontrollers",
    ISBN: 978-1463590154, Jonathan Valvano, copyright (c) 2014
@@ -53,9 +54,11 @@
 // VCC (pin 2) connected to +3.3 V
 // Gnd (pin 1) connected to ground
 #include <stdio.h>
+#include <math.h>
 #include <stdint.h>
 #include "ST7735.h"
 #include "tm4c123gh6pm.h"
+
 
 // 16 rows (0 to 15) and 21 characters (0 to 20)
 // Requires (11 + size*size*6*8) bytes of transmission for each character
@@ -186,6 +189,9 @@ uint16_t StTextColor = ST7735_YELLOW;
 
 #define ST7735_GMCTRP1 0xE0
 #define ST7735_GMCTRN1 0xE1
+
+#define WIDTH					128
+#define HEIGHT				160
 
 // standard ascii 5x7 font
 // originally from glcdfont.c from Adafruit project
@@ -801,6 +807,68 @@ void ST7735_DrawPixel(int16_t x, int16_t y, uint16_t color) {
   pushColor(color);
 }
 
+void ST7735_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
+
+	//Are we allowed to use float data type?
+	float slope = 0;
+	if(x1 != x0) {
+		slope = (float)(y1-y0)/(float)(x1-x0);
+	}
+	
+	
+	if (y0 == y1 && y0 >= 0 && y0 <= HEIGHT) {										//Horizontal line
+		x0 = fmin(fmax(x0,0),WIDTH-1);
+		x1 = fmin(fmax(x1,0),WIDTH-1);
+		if(x0 < x1) {
+			ST7735_DrawFastHLine(x0, y0, (x1 - x0), color);
+		} else {
+			ST7735_DrawFastHLine(x1, y0, (x0 - x1), color);
+		}
+	} else if (x0 == x1 && x0 >= 0 && x0 <= WIDTH) {							//Vertical line
+		y0 = fmin(fmax(y0,0),HEIGHT-1);
+		y1 = fmin(fmax(y1,0),HEIGHT-1);
+		if(y0 < y1) {
+			ST7735_DrawFastVLine(x0, y0, (y1 - y0), color);
+		} else {
+			ST7735_DrawFastVLine(x0, y1, (y0 - y1), color);
+		}
+	}	else if(x0 < x1) {																					//Line going from left to right
+		float offset = 0;
+		if(x0 < 0) {
+			offset = -x0;
+		}
+
+		for(float i = 0; i < fmin(x1-x0 - offset, WIDTH-1); i++) {
+			int16_t delta = ((i+offset)*slope);
+			if(slope >= 0) {
+				for(int j = 0; j <= slope; j++){
+					ST7735_DrawPixel(x0 + i + offset, y0 + delta + j, color);
+				}
+			} else {
+				for(int j = 0; j >= slope; j--){
+					ST7735_DrawPixel(x0 + i + offset, y0 + delta + j, color);
+				}
+			}
+		}
+	} else if (x0 > x1) {																					//Line going from right to left
+		float offset = 0;
+		if(x1 < 0) {
+			offset = -x1;
+		}
+		for(float i = 0; i < fmin(x0-x1 - offset, WIDTH-1) - offset; i++) {
+			int16_t delta = (i*slope);
+			if(delta >= 0) {
+				for(int j = 0; j <= slope; j++){
+					ST7735_DrawPixel(x1 + i, y1 + delta + j, color);
+				}
+			} else {
+				for(int j = 0; j >= slope; j--){
+					ST7735_DrawPixel(x1 + i, y1 + delta + j, color);
+				}
+			}
+		}
+	}
+}
 
 //------------ST7735_DrawFastVLine------------
 // Draw a vertical line at the given coordinates with the given height and color.
