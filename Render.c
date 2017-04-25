@@ -14,6 +14,8 @@
 #include "Camera.h"
 #include "Entity.h"
 
+#include "GraphicsBuffer.h"
+
 #define WIDTH					128
 #define HEIGHT				160
 #define HALF_WIDTH		64
@@ -44,7 +46,7 @@ void render(Entity** entitiesP, int numEntities, Camera c) {
 	for(int i = 0; i < numEntities; i ++) {
 		Entity entity = *(entities + i);
 		prepareEntity(&entity);
-		renderEntity(entity.vertexBuffer, entity.indexBuffer, entity.numIndices);
+		renderEntity(entity.vertexBuffer, entity.indexBuffer, entity.numIndices, entity.colorBuffer);
 	}
 }
 
@@ -61,7 +63,7 @@ void prepareEntity(Entity* entityP) {
 	}		
 }
 
-void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numIndices) {
+void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numIndices, uint8_t colorBuffer[]) {
 	for(int i = 0;  i < numIndices-2; i +=3) {
 		int16_t x0 = (int16_t)vertexBuffer[indexBuffer[i]].x;
 		int16_t y0 = (int16_t)vertexBuffer[indexBuffer[i]].y;
@@ -69,27 +71,50 @@ void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numIndices) {
 		int16_t y1 = (int16_t)vertexBuffer[indexBuffer[i+1]].y;
 		int16_t x2 = (int16_t)vertexBuffer[indexBuffer[i+2]].x;
 		int16_t y2 = (int16_t)vertexBuffer[indexBuffer[i+2]].y;
-		
-		
-		ST7735_DrawLine(x0, y0, x1, y1, 0xFFFF);
-		ST7735_DrawLine(x1, y1, x2, y2, 0xFFFF);
-		ST7735_DrawLine(x2, y2, x0, y0, 0xFFFF);
+
+		uint8_t color = *(colorBuffer+i/3);
+		drawLine(x0, y0, x1, y1, color);
+		drawLine(x1, y1, x2, y2, color);
+		drawLine(x2, y2, x0, y0, color);
 	}
 }
 
 void renderPlayer(Player player) {
-	prepareEntity(&player.entity);
-	renderEntity(player.entity.vertexBuffer, player.entity.indexBuffer, player.entity.numIndices);
-	
-	//Not the most efficient.... calculating matrixes twice
 	Matrix4f transformationMatrix = createTransformationMatrix(player.entity.position, player.entity.scale);
 	
-	Matrix4f rotation = createRotationMatrix(player.pitch/4, player.yaw/4, player.roll);
+	Matrix4f rotation = createRotationMatrix(player.pitch, player.yaw, player.roll);
 	
-	Vector3f frontOfPlayer =  {0, 0, 5};
+	Vector3f frontOfPlayer =  {0, 0, 8};
 	Vector2f reticuleCenter = preparePoint(frontOfPlayer, transformationMatrix, rotation);
 	
-	ST7735_FillRect(reticuleCenter.x-5, reticuleCenter.y-5, 10, 10, ST7735_Color565(255, 0, 0));
+	drawLine(reticuleCenter.x - 5, reticuleCenter.y - 7, reticuleCenter.x + 5, reticuleCenter.y - 7, RED);
+	drawLine(reticuleCenter.x - 5, reticuleCenter.y + 7, reticuleCenter.x + 5, reticuleCenter.y + 7, RED);
+	drawLine(reticuleCenter.x - 7, reticuleCenter.y + 5, reticuleCenter.x - 7, reticuleCenter.y - 5, RED);
+	drawLine(reticuleCenter.x + 7, reticuleCenter.y + 5, reticuleCenter.x + 7, reticuleCenter.y - 5, RED);
+	
+	drawLine(reticuleCenter.x - 4, reticuleCenter.y - 4, reticuleCenter.x - 8, reticuleCenter.y - 8, RED);
+	drawLine(reticuleCenter.x + 4, reticuleCenter.y - 4, reticuleCenter.x + 8, reticuleCenter.y - 8, RED);
+	drawLine(reticuleCenter.x - 4, reticuleCenter.y + 4, reticuleCenter.x - 8, reticuleCenter.y + 8, RED);
+	drawLine(reticuleCenter.x + 4, reticuleCenter.y + 4, reticuleCenter.x + 8, reticuleCenter.y + 8, RED);
+	
+	frontOfPlayer =  newVector3f(0, 0, 20);
+	reticuleCenter = preparePoint(frontOfPlayer, transformationMatrix, rotation);
+	
+	drawLine(reticuleCenter.x - 2, reticuleCenter.y - 2, reticuleCenter.x + 2, reticuleCenter.y - 2, RED);
+	drawLine(reticuleCenter.x - 2, reticuleCenter.y + 2, reticuleCenter.x + 2, reticuleCenter.y + 2, RED);
+	drawLine(reticuleCenter.x - 2, reticuleCenter.y + 2, reticuleCenter.x - 2, reticuleCenter.y - 2, RED);
+	drawLine(reticuleCenter.x + 2, reticuleCenter.y + 2, reticuleCenter.x + 2, reticuleCenter.y - 2, RED);
+	
+	
+
+	for(int i = 0; i < (player.entity).numPoints-2; i +=3) {
+		Vector2f* vertexBufferPointer = &((player.entity).vertexBuffer[i/3]);
+		Vector3f entityPoint = {(player.entity).points[i], (player.entity).points[i+1], (player.entity).points[i+2]};
+		Vector2f point = preparePoint(entityPoint, transformationMatrix, rotation);
+		*vertexBufferPointer = point;
+	}
+	
+	renderEntity(player.entity.vertexBuffer, player.entity.indexBuffer, player.entity.numIndices, player.entity.colorBuffer);
 }
 
 Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotation) {
@@ -100,7 +125,7 @@ Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotatio
 	Vector4f point3D = mul_vec4f(positionRelativeToCam, projectionMatrix);
 	
 	float winX = (( point3D.x * WIDTH ) / (2.0 * point3D.w)) + HALF_WIDTH;
-  float winY = (( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
+  float winY = -(( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
 		
 	Vector2f point2D = {winX, winY};
 	return point2D;
@@ -116,7 +141,7 @@ Vector2f preparePointSimple(Vector3f pointA) {
 		
 	
 	float winX = (( point3D.x * WIDTH ) / (2.0 * point3D.w)) + HALF_WIDTH;
-  float winY = (( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
+  float winY = -(( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
 	
 	Vector2f point2D = {winX, winY};
 	return point2D;

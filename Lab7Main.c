@@ -35,11 +35,10 @@
 // Gnd (pin 1) connected to ground
 #include <stdio.h>
 #include <stdint.h>
-#include "tm4c123gh6pm.h"
 #include "ST7735.h"
 #include "PLL.h"
+#include "tm4c123gh6pm.h"
 #include "IO.h"
-#include "TExaS.h"
 #include "Print.h"
 
 #include "Math2.h"
@@ -56,43 +55,67 @@
 #include "Environment.h"
 #include "Player.h"
 
+#include "GraphicsBuffer.h"
+
 #include "ADC.h"
-#include "DAC.h"
-#include "Sound.h"
 #include "InputHandler.h"
 
+void testDrawLine(void);
+
+void SysTick_Init(){
+	//uint32_t period = 400000000;	// set period here (1 every 5 seconds)
+	uint32_t period = 1000000;	
+	
+	NVIC_ST_CTRL_R = 0;						// disable SysTick during initialization
+	NVIC_ST_RELOAD_R = period-1;	// set reload to period
+	NVIC_ST_CURRENT_R = 0;				// reset current time
+	NVIC_ST_CTRL_R |= 0x5;				// re-enable SysTick while enabling clock and interrupts
+}
+
 int main(void){ 
-	PLL_Init();
-	ST7735_InitR(INITR_REDTAB);
 	ADC_Init();
+	SysTick_Init();
 	IO_Init();
-	DAC_Init();
+	PLL_Init();                           // set system clock to 80 MHz
+	ST7735_InitR(INITR_REDTAB);
+	
 	
 	Player player = newPlayer();
 	Camera camera = newCamera(&player);
 	
 	Entity entities[2];
   initRenderer(&camera);
-  ST7735_FillScreen(0);            //set screen to black
+  ST7735_FillScreen(0);            // set screen to black
+			
+	testDrawLine();
   while(1){
 		gatherInputs();
-			
+		
+		
+		//Rendering
 		Entity* entitiesP = entities;
-		ST7735_FillScreen(0);
 		renderGround(camera);
 		render(&entitiesP, 0, camera);
 		renderPlayer(player);
+		//testDrawLine();
+		renderGraphicsBuffer();
 		//renderObstacles(camera);
 		
+		
+		
+		//Game Logic
 		//manageEnvironment(&player);
 		movePlayer(&player);
 		moveCamera(&camera);
+		
+		//for(int i = 0; i < 1000000; i ++) {		}
 		
     IO_HeartBeat();
   }
 }
 
 void testDrawLine() {
+	/*
 	ST7735_DrawLine(64,80,64,160, 0xFFFF);			
 	ST7735_DrawLine(64,80,128,80, 0xFFFF);			
 	ST7735_DrawLine(64,80,64,-1, 0xFFFF);			
@@ -106,5 +129,24 @@ void testDrawLine() {
 	ST7735_DrawLine(-10, 10, 64,80, 0xFFFF);			
 	ST7735_DrawLine(-10, 150, 64,80, 0xFFFF);			
 	ST7735_DrawLine(138,10,64,80, 0xFFFF);			
-	ST7735_DrawLine(138,150,64,80, 0xFFFF);			
+	ST7735_DrawLine(138,150,64,80, 0xFFFF);	
+*/
+	//drawLine(64,80,64,160, 0xFF);			
+	//drawLine(64,80,128,80, 0xFF);			
+	//drawLine(64,80,64,-10, 0xFF);			
+	
+	/*
+	drawLine(64,80,-1,80, 0xFF);	
+				
+	drawLine(64,80,128,160, 0xFF);			
+	drawLine(64,80,-1,160, 0xFF);			
+	drawLine(64,80,-1,-1, 0xFF);			
+	drawLine(64,80,128,-1, 0xFF);
+
+	
+	drawLine(-10, 10, 64,80, 0xFF);			
+	drawLine(-10, 150, 64,80, 0xFF);			
+	drawLine(138,10,64,80, 0xFF);			
+	drawLine(138,150,64,80, 0xFF);	
+	*/
 }

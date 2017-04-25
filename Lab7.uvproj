@@ -480,6 +480,11 @@
               <FileType>1</FileType>
               <FilePath>.\Render.c</FilePath>
             </File>
+            <File>
+              <FileName>GraphicsBuffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\GraphicsBuffer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

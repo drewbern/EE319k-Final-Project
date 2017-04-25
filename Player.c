@@ -1,4 +1,5 @@
 #include <math.h>
+#include "tm4c123gh6pm.h"
 
 #include "vec3f.h"
 #include "Entity.h"
@@ -9,12 +10,13 @@
 
 #define MAX_DISPLACEMENT 1						//How far the player can move from the middle
 #define MAX_HEIGHT 1										//How far up player can move from ground
+#define MIN_HEIGHT 0.05
 #define MAX_ROLL 30											//Maximum roll player will go while turning (in degrees)
-#define MAX_PITCH 20										//Maximum pitch player will do while going up or down
+#define MAX_PITCH 13										//Maximum pitch player will do while going up or down
 
 #define MOVE_SPEED 0.09									
 #define ROLL_SPEED 5										//Degrees per frame
-#define PITCH_SPEED 5										//Degrees per frame
+#define PITCH_SPEED 3										//Degrees per frame
 
 //Can roll factor just be max roll / max input
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
@@ -32,7 +34,7 @@ typedef struct Player {
 } Player;
 
 Player newPlayer(void) {
-	Vector3f initialPosition = {0, 0.5, 4.5};
+	Vector3f initialPosition = {0, 5, 4.5};
 	Player out = {
 		initialPosition,
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.3,0.3,0.3)),
@@ -70,9 +72,14 @@ void movePlayer(Player* p) {
 	float verticalMovement = getYPos() * MOVE_SPEED;
 	
 	(*p).position.y += verticalMovement;
-	(*p).position.y = fmin(fmax((*p).position.y, 0.2), MAX_HEIGHT);				// clamps position
+	(*p).position.y = fmin(fmax((*p).position.y, MIN_HEIGHT), MAX_HEIGHT);				// clamps position
 
+	
 	float targetPitch = verticalMovement * ROLL_FACTOR;
+	if((*p).position.y <= MIN_HEIGHT+0.1 || (*p).position.y >= MAX_HEIGHT) {
+		targetPitch = 0;
+	}
+	
 	
 	float deltaPitch = (targetPitch - (*p).pitch) * fabs(getYPos());
 	if(deltaPitch > 0) {
@@ -80,9 +87,7 @@ void movePlayer(Player* p) {
 	} else if (deltaPitch < 0) {
 		(*p).pitch += fmax(deltaPitch, -PITCH_SPEED);
 	}
-	(*p).pitch = fmin(fmax((*p).pitch, -MAX_PITCH), MAX_PITCH);		
-
-	
+	(*p).pitch = fmin(fmax((*p).pitch, -MAX_PITCH), MAX_PITCH);			
 	
 	//Testing
 	//(*p).position.y += 0.1;

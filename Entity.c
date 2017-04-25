@@ -1,6 +1,8 @@
 #include "vec2f.h"
 #include "vec3f.h"
 #include "Matrix4f.h"
+#include "stdint.h"
+#include "GraphicsBuffer.h"
 
 typedef struct Entity {
 	Vector3f position;
@@ -8,7 +10,8 @@ typedef struct Entity {
 	int numPoints;
 	int indexBuffer[50];
 	int numIndices;
-	Vector2f vertexBuffer[8];
+	Vector2f vertexBuffer[16];
+	uint8_t colorBuffer[15];
 	float pitch;
 	float yaw;
 	float roll;
@@ -57,6 +60,7 @@ Entity newCube(Vector3f position, float p, float y, float r, Vector3f scale) {
 		36,
 		{newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0),
 		newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0)},
+		{WHITE},
 		p, y, r,
 		scale};
 		return out;
@@ -94,6 +98,7 @@ Entity newPlane(Vector3f position, float p, float y, float r, Vector3f scale) {
 		27,
 		{newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0),
 		newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0)},
+		{WHITE, WHITE, WHITE, WHITE, WHITE, BLUE, BLUE, BLUE, BLUE},
 		p, y, r,
 		scale};
 		return out;
