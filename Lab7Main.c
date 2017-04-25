@@ -35,10 +35,11 @@
 // Gnd (pin 1) connected to ground
 #include <stdio.h>
 #include <stdint.h>
+#include "tm4c123gh6pm.h"
 #include "ST7735.h"
 #include "PLL.h"
-#include "tm4c123gh6pm.h"
 #include "IO.h"
+#include "TExaS.h"
 #include "Print.h"
 
 #include "Math2.h"
@@ -56,36 +57,26 @@
 #include "Player.h"
 
 #include "ADC.h"
+#include "DAC.h"
+#include "Sound.h"
 #include "InputHandler.h"
 
-void SysTick_Init(){
-	//uint32_t period = 400000000;	// set period here (1 every 5 seconds)
-	uint32_t period = 1000000;	
-	
-	NVIC_ST_CTRL_R = 0;						// disable SysTick during initialization
-	NVIC_ST_RELOAD_R = period-1;	// set reload to period
-	NVIC_ST_CURRENT_R = 0;				// reset current time
-	NVIC_ST_CTRL_R |= 0x5;				// re-enable SysTick while enabling clock and interrupts
-}
-
 int main(void){ 
-	ADC_Init();
-	SysTick_Init();
-	IO_Init();
-	PLL_Init();                           // set system clock to 80 MHz
+	PLL_Init();
 	ST7735_InitR(INITR_REDTAB);
-	
+	ADC_Init();
+	IO_Init();
+	DAC_Init();
 	
 	Player player = newPlayer();
 	Camera camera = newCamera(&player);
 	
 	Entity entities[2];
   initRenderer(&camera);
-  ST7735_FillScreen(0);            // set screen to black
-			
-	//testDrawLine();
+  ST7735_FillScreen(0);            //set screen to black
   while(1){
 		gatherInputs();
+			
 		Entity* entitiesP = entities;
 		ST7735_FillScreen(0);
 		renderGround(camera);
@@ -96,8 +87,6 @@ int main(void){
 		//manageEnvironment(&player);
 		movePlayer(&player);
 		moveCamera(&camera);
-		
-		//for(int i = 0; i < 1000000; i ++) {		}
 		
     IO_HeartBeat();
   }
