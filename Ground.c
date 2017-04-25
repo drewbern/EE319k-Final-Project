@@ -6,7 +6,7 @@
 
 #include "GraphicsBuffer.h"
 
-#define CAMERA_SPEED 0.1																				//Virtual speed of camera
+#define CAMERA_SPEED 0.5																				//Virtual speed of camera
 
 #define LENGTH 7.0
 #define HALF_LENGTH LENGTH/2
@@ -27,15 +27,13 @@ void renderGround(Camera camera) {
 		Vector2f leftPoint = preparePointSimple(newVector3f(leftCoord, 0, firstLineDistance + (i*FORWARD_DISTANCE)));
 		Vector2f rightPoint = preparePointSimple(newVector3f(rightCoord, 0, firstLineDistance + (i*FORWARD_DISTANCE)));
 		
-		//ST7735_DrawLine(leftPoint.x, leftPoint.y, rightPoint.x, rightPoint.y, ST7735_GREEN);
-		drawLine(leftPoint.x, leftPoint.y, rightPoint.x, rightPoint.y, ST7735_GREEN);
+		drawLine(leftPoint.x, leftPoint.y, rightPoint.x, rightPoint.y, GREEN);
 	}
 	//Draw Horizon Line
 	Vector2f leftPoint = preparePointSimple(newVector3f(leftCoord, 0, HORIZON_DISTANCE));
 	Vector2f rightPoint = preparePointSimple(newVector3f(rightCoord, 0, HORIZON_DISTANCE));
 	
-	//ST7735_DrawLine(leftPoint.x, leftPoint.y, rightPoint.x, rightPoint.y, ST7735_GREEN);
-	drawLine(leftPoint.x, leftPoint.y, rightPoint.x, rightPoint.y, ST7735_GREEN);
+	drawLine(leftPoint.x, leftPoint.y, rightPoint.x, rightPoint.y, GREEN);
 	
 	firstLineDistance -= CAMERA_SPEED;
 	if(firstLineDistance <= -1) {
@@ -43,10 +41,9 @@ void renderGround(Camera camera) {
 	}
 	
 	for(int i = 0; i <= NUM_DEPTH_LINES; i ++) {
-		Vector2f nearPoint  = preparePointSimple(newVector3f(leftCoord + i*DEPTH_LINE_SPREAD, 0, -0.5));
+		Vector2f nearPoint  = preparePointSimple(newVector3f(leftCoord + i*DEPTH_LINE_SPREAD, 0, -0));
 		Vector2f farPoint  = preparePointSimple(newVector3f(leftCoord + i*DEPTH_LINE_SPREAD, 0, HORIZON_DISTANCE));
 		
-		//ST7735_DrawLine(nearPoint.x, nearPoint.y, farPoint.x, farPoint.y, ST7735_GREEN);
-		drawLine(nearPoint.x, nearPoint.y, farPoint.x, farPoint.y, ST7735_GREEN);
+		drawLine(nearPoint.x, nearPoint.y, farPoint.x, farPoint.y, GREEN);
 	}
 }

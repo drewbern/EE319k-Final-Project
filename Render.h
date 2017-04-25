@@ -19,7 +19,7 @@ void render(Entity** entities, int numEntities, Camera c);
 
 void prepareEntity(Entity* entityP);
 
-void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numTriangles);
+void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numTriangles, uint8_t colorBuffer[]);
 
 void renderPlayer(Player player);
 

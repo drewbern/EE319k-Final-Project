@@ -4,6 +4,7 @@
 #include "vec2f.h"
 #include "vec3f.h"
 #include "Matrix4f.h"
+#include "stdint.h"
 
 typedef struct Entity {
 	Vector3f position;
@@ -11,7 +12,8 @@ typedef struct Entity {
 	int numPoints;
 	int indexBuffer[50];
 	int numIndices;
-	Vector2f vertexBuffer[8];
+	Vector2f vertexBuffer[16];
+	uint8_t colorBuffer[15];
 	float pitch;
 	float yaw;
 	float roll;

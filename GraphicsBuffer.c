@@ -3,15 +3,15 @@
 #include <math.h>
 
 #define WIDTH					128
-#define HEIGHT				110
+#define HEIGHT				160
 #define SCREEN_HEIGHT	160
 
-uint16_t graphicsBuffer[HEIGHT][WIDTH];			//ROW, COLUMN NOTATION
+uint8_t graphicsBuffer[HEIGHT][WIDTH];			//ROW, COLUMN NOTATION
 //uint16_t graphicsBuffer[5][5];
 
-void clipAndDrawLine(float x0, float y0, float x1, float y1, uint16_t color);
+void clipAndDrawLine(float x0, float y0, float x1, float y1, uint8_t color);
 
-void putLineInBuffer(float x0, float y0, float x1, float y1, uint16_t color);
+void putLineInBuffer(float x0, float y0, float x1, float y1, uint8_t color);
 
 void renderGraphicsBuffer() {
 	/*
@@ -20,10 +20,16 @@ void renderGraphicsBuffer() {
 		graphicsBuffer[0][i] = 0xFFFF;
 	}
 	*/
-	ST7735_DrawBitmap(0,160,&graphicsBuffer[0][0],WIDTH,HEIGHT);
+	ST7735_PushBuffer(0,160,&graphicsBuffer[0][0],WIDTH,HEIGHT);
+	for(int r = 0; r < HEIGHT; r ++) {
+		for(int c = 0; c < WIDTH; c++) {
+			graphicsBuffer[r][c] = 0;
+		}
+	}
+		
 }
 
-void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
+void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint8_t color) {
 	clipAndDrawLine(x0,y0,x1,y1,color);
 }
 
@@ -36,11 +42,11 @@ void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
 
 int findRegion(float x, float y) {
 	int region = INSIDE;
-	if (x < 0)   
+	if (x < 1)   
 			region |= LEFT;
 	else if (x >= WIDTH) 
 			region |= RIGHT;
-	if (y < 0) 
+	if (y < 1) 
 			region |= BOTTOM;
 	else if (y >= HEIGHT)
 			region |= TOP;
@@ -49,7 +55,7 @@ int findRegion(float x, float y) {
  
 // Implementing Cohen-Sutherland algorithm
 // Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
-void clipAndDrawLine(float x1, float y1, float x2, float y2, uint16_t color) {
+void clipAndDrawLine(float x1, float y1, float x2, float y2, uint8_t color) {
 	int region1 = findRegion(x1, y1);
 	int region2 = findRegion(x2, y2);
 
@@ -73,17 +79,17 @@ void clipAndDrawLine(float x1, float y1, float x2, float y2, uint16_t color) {
 					code_out = region2;
 
 			if (code_out & TOP)	{
-					x = x1 + (x2 - x1) * (HEIGHT - y1) / (y2 - y1);
+					x = x1 + (x2 - x1) * (HEIGHT - 1 - y1) / (y2 - y1);
 					y = HEIGHT - 1;
 			}	else if (code_out & BOTTOM) {
-					x = x1 + (x2 - x1) * (0 - y1) / (y2 - y1);
-					y = 0;
+					x = x1 + (x2 - x1) * (1 - y1) / (y2 - y1);
+					y = 1;
 			}	else if (code_out & RIGHT) {
-					y = y1 + (y2 - y1) * (WIDTH - x1) / (x2 - x1);
+					y = y1 + (y2 - y1) * (WIDTH - 1 - x1) / (x2 - x1);
 					x = WIDTH - 1;
 			} else if (code_out & LEFT) {
-					y = y1 + (y2 - y1) * (0 - x1) / (x2 - x1);
-					x = 0;
+					y = y1 + (y2 - y1) * (1 - x1) / (x2 - x1);
+					x = 1;
 			}
 			if (code_out == region1) {
 					x1 = x;
@@ -97,12 +103,11 @@ void clipAndDrawLine(float x1, float y1, float x2, float y2, uint16_t color) {
 		}
 	}
 	if (inside == 1) {
-		//putLineInBuffer(x1, y1, x2, y2, color);
 		putLineInBuffer(x1, y1, x2, y2, color);
 	}
 }
 
-void putLineInBuffer(float x0, float y0, float x1, float y1, uint16_t color) {
+void putLineInBuffer(float x0, float y0, float x1, float y1, uint8_t color) {
 	if(x0 == x1) {
 		if(y0 < y1) {
 			for(int i = y0; i < y1; i ++) {
@@ -118,11 +123,17 @@ void putLineInBuffer(float x0, float y0, float x1, float y1, uint16_t color) {
 		for(int i = 0; i < x1-x0; i ++ ) {
 			if(slope >= 0) {
 				for(float j = 0; j <= slope; j ++) {
-					graphicsBuffer[(int)(y0 + i * slope + j)][(int)x0+i] = color;
+					int yCoord = (int)(y0 + i * slope + j);
+					int xCoord = (int)x0+i;
+					if(xCoord > 0 && xCoord < WIDTH && yCoord > 0 && yCoord < HEIGHT)
+						graphicsBuffer[yCoord][xCoord] = color;
 				}
 			} else {
 				for(float j = 0; j >= slope; j --) {
-					graphicsBuffer[(int)(y0 + i * slope + j)][(int)x0+i] = color;
+					int yCoord = (int)(y0 + i * slope + j);
+					int xCoord = (int)x0+i;
+					if(xCoord > 0 && xCoord < WIDTH && yCoord > 0 && yCoord < HEIGHT)
+						graphicsBuffer[yCoord][xCoord] = color;
 				}
 			}
 		}
@@ -131,11 +142,17 @@ void putLineInBuffer(float x0, float y0, float x1, float y1, uint16_t color) {
 		for(int i = 0; i < x0-x1; i ++ ) {
 			if(slope >= 0) {
 				for(float j = 0; j <= slope; j ++) {
-					graphicsBuffer[(int)(y1 + i * slope + j)][(int)x1+i] = color;
+					int yCoord = (int)(y1 + i * slope + j);
+					int xCoord = (int)x1+i;
+					if(xCoord > 0 && xCoord < WIDTH && yCoord > 0 && yCoord < HEIGHT)
+						graphicsBuffer[yCoord][xCoord] = color;
 				}
 			} else {
 				for(float j = 0; j >= slope; j --) {
-					graphicsBuffer[(int)(y1 + i * slope + j)][(int)x1+i] = color;
+					int yCoord = (int)(y1 + i * slope + j);
+					int xCoord = (int)x1+i;
+					if(xCoord > 0 && xCoord < WIDTH && yCoord > 0 && yCoord < HEIGHT)
+						graphicsBuffer[yCoord][xCoord] = color;
 				}
 			}
 		}

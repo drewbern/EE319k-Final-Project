@@ -1046,6 +1046,81 @@ void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, i
   }
 }
 
+// (x,y) is the screen location of the lower left corner of BMP image
+// Requires (11 + 2*w*h) bytes of transmission (assuming image fully on screen)
+// Input: x     horizontal position of the bottom left corner of the image, columns from the left edge
+//        y     vertical position of the bottom left corner of the image, rows from the top edge
+//        image pointer to a 16-bit color BMP image
+//        w     number of pixels wide
+//        h     number of pixels tall
+// Output: none
+// Must be less than or equal to 128 pixels wide by 160 pixels high
+void ST7735_PushBuffer(int16_t x, int16_t y, const uint8_t *image, int16_t w, int16_t h){
+  int16_t skipC = 0;                      // non-zero if columns need to be skipped due to clipping
+  int16_t originalWidth = w;              // save this value; even if not all columns fit on the screen, the image is still this width in ROM
+  int i = w*(h - 1);
+
+  if((x >= _width) || ((y - h + 1) >= _height) || ((x + w) <= 0) || (y < 0)){
+    return;                             // image is totally off the screen, do nothing
+  }
+  if((w > _width) || (h > _height)){    // image is too wide for the screen, do nothing
+    //***This isn't necessarily a fatal error, but it makes the
+    //following logic much more complicated, since you can have
+    //an image that exceeds multiple boundaries and needs to be
+    //clipped on more than one side.
+    return;
+  }
+  if((x + w - 1) >= _width){            // image exceeds right of screen
+    skipC = (x + w) - _width;           // skip cut off columns
+    w = _width - x;
+  }
+  if((y - h + 1) < 0){                  // image exceeds top of screen
+    i = i - (h - y - 1)*originalWidth;  // skip the last cut off rows
+    h = y + 1;
+  }
+  if(x < 0){                            // image exceeds left of screen
+    w = w + x;
+    skipC = -1*x;                       // skip cut off columns
+    i = i - x;                          // skip the first cut off columns
+    x = 0;
+  }
+  if(y >= _height){                     // image exceeds bottom of screen
+    h = h - (y - _height + 1);
+    y = _height - 1;
+  }
+
+  setAddrWindow(x, y-h+1, x+w-1, y);
+
+  for(y=0; y<h; y=y+1){
+    for(x=0; x<w; x=x+1){
+			
+			//16 bit color is RRRRRGGG GGGBBBBB (5R, 6G, 5B)
+			//8 bit color is RRRGGGBB	(3R, 3G, 2B)
+			//Convert 8 to 16
+			//Original 	(R1 R2 R3 G1 G2 G3 B1 B2)
+			//Byte 1 		(R1 R1 R2 R2 R3 G1 G1 G2)
+			//Byte 2		(G2 G3 G3 B1 B1 B2 B2 B2)
+//1)	Mask R1 (OR 0x80)
+			uint8_t color = image[i];
+			uint8_t R1 = (color & 0x80);
+			uint8_t R2 = (color & 0x40);
+			uint8_t R3 = (color & 0x20);
+			uint8_t G1 = (color & 0x10);
+			uint8_t G2 = (color & 0x08);
+			uint8_t G3 = (color & 0x04);
+			uint8_t B1 = (color & 0x02);
+			uint8_t B2 = (color & 0x01);
+			
+			writedata(R1 | (R1 >> 1) | (R2 >> 1)| (R2 >> 2) | (R3 >> 2) | (G1 >> 2) | (G1 >> 3) | (G2 >> 3));
+      writedata((G2 << 4) | (G3 << 4) | (G3 << 3) | (B1 << 3) | (B1 << 2)| (B2 << 2) | (B2 << 1) | B2);
+
+      i = i + 1;                        // go to the next pixel
+    }
+    i = i + skipC;
+    i = i - 2*originalWidth;
+  }
+}
+
 
 //------------ST7735_DrawCharS------------
 // Simple character draw function.  This is the same function from
