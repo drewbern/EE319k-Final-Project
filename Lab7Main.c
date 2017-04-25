@@ -55,8 +55,12 @@
 #include "Environment.h"
 #include "Player.h"
 
+#include "GraphicsBuffer.h"
+
 #include "ADC.h"
 #include "InputHandler.h"
+
+void testDrawLine();
 
 void SysTick_Init(){
 	//uint32_t period = 400000000;	// set period here (1 every 5 seconds)
@@ -69,7 +73,7 @@ void SysTick_Init(){
 }
 
 int main(void){ 
-	ADC_Init();
+	//ADC_Init();
 	SysTick_Init();
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
@@ -85,25 +89,33 @@ int main(void){
 			
 	//testDrawLine();
   while(1){
-		gatherInputs();
+		//gatherInputs();
+		
+		
+		//Rendering
 		Entity* entitiesP = entities;
-		ST7735_FillScreen(0);
+		//ST7735_FillScreen(0);
 		renderGround(camera);
 		render(&entitiesP, 0, camera);
 		renderPlayer(player);
+		renderGraphicsBuffer();
 		//renderObstacles(camera);
 		
+		
+		
+		//Game Logic
 		//manageEnvironment(&player);
 		movePlayer(&player);
 		moveCamera(&camera);
 		
-		//for(int i = 0; i < 1000000; i ++) {		}
+		for(int i = 0; i < 1000000; i ++) {		}
 		
-    //IO_HeartBeat();
+    IO_HeartBeat();
   }
 }
 
 void testDrawLine() {
+	/*
 	ST7735_DrawLine(64,80,64,160, 0xFFFF);			
 	ST7735_DrawLine(64,80,128,80, 0xFFFF);			
 	ST7735_DrawLine(64,80,64,-1, 0xFFFF);			
@@ -117,5 +129,21 @@ void testDrawLine() {
 	ST7735_DrawLine(-10, 10, 64,80, 0xFFFF);			
 	ST7735_DrawLine(-10, 150, 64,80, 0xFFFF);			
 	ST7735_DrawLine(138,10,64,80, 0xFFFF);			
-	ST7735_DrawLine(138,150,64,80, 0xFFFF);			
+	ST7735_DrawLine(138,150,64,80, 0xFFFF);	
+*/
+	drawLine(64,80,64,160, 0xFFFF);			
+	drawLine(64,80,128,80, 0xFFFF);			
+	drawLine(64,80,64,-1, 0xFFFF);			
+	drawLine(64,80,-1,80, 0xFFFF);	
+				
+	drawLine(64,80,128,160, 0xFFFF);			
+	drawLine(64,80,-1,160, 0xFFFF);			
+	drawLine(64,80,-1,-1, 0xFFFF);			
+	drawLine(64,80,128,-1, 0xFFFF);
+
+	
+	drawLine(-10, 10, 64,80, 0xFFFF);			
+	drawLine(-10, 150, 64,80, 0xFFFF);			
+	drawLine(138,10,64,80, 0xFFFF);			
+	drawLine(138,150,64,80, 0xFFFF);	
 }

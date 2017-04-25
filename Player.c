@@ -34,7 +34,7 @@ typedef struct Player {
 } Player;
 
 Player newPlayer(void) {
-	Vector3f initialPosition = {0, 0.5, 4.5};
+	Vector3f initialPosition = {0, 5, 4.5};
 	Player out = {
 		initialPosition,
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.3,0.3,0.3)),
@@ -77,7 +77,6 @@ void movePlayer(Player* p) {
 	
 	float targetPitch = verticalMovement * ROLL_FACTOR;
 	if((*p).position.y <= MIN_HEIGHT+0.1 || (*p).position.y >= MAX_HEIGHT) {
-		GPIO_PORTF_DATA_R ^= 0x2;
 		targetPitch = 0;
 	}
 	

@@ -14,6 +14,8 @@
 #include "Camera.h"
 #include "Entity.h"
 
+#include "GraphicsBuffer.h"
+
 #define WIDTH					128
 #define HEIGHT				160
 #define HALF_WIDTH		64
@@ -70,10 +72,15 @@ void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numIndices) {
 		int16_t x2 = (int16_t)vertexBuffer[indexBuffer[i+2]].x;
 		int16_t y2 = (int16_t)vertexBuffer[indexBuffer[i+2]].y;
 		
-		
+		/*
 		ST7735_DrawLine(x0, y0, x1, y1, 0xFFFF);
 		ST7735_DrawLine(x1, y1, x2, y2, 0xFFFF);
 		ST7735_DrawLine(x2, y2, x0, y0, 0xFFFF);
+		*/
+		
+		drawLine(x0, y0, x1, y1, 0xFFFF);
+		drawLine(x1, y1, x2, y2, 0xFFFF);
+		drawLine(x2, y2, x0, y0, 0xFFFF);
 	}
 }
 
@@ -85,7 +92,7 @@ void renderPlayer(Player player) {
 	Vector3f frontOfPlayer =  {0, 0, 5};
 	Vector2f reticuleCenter = preparePoint(frontOfPlayer, transformationMatrix, rotation);
 	
-	ST7735_FillRect(reticuleCenter.x-5, reticuleCenter.y-5, 10, 10, ST7735_Color565(255, 0, 0));	
+	//ST7735_FillRect(reticuleCenter.x-5, reticuleCenter.y-5, 10, 10, ST7735_Color565(255, 0, 0));	
 	
 	for(int i = 0; i < (player.entity).numPoints-2; i +=3) {
 		Vector2f* vertexBufferPointer = &((player.entity).vertexBuffer[i/3]);
@@ -105,7 +112,7 @@ Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotatio
 	Vector4f point3D = mul_vec4f(positionRelativeToCam, projectionMatrix);
 	
 	float winX = (( point3D.x * WIDTH ) / (2.0 * point3D.w)) + HALF_WIDTH;
-  float winY = (( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
+  float winY = -(( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
 		
 	Vector2f point2D = {winX, winY};
 	return point2D;
@@ -121,7 +128,7 @@ Vector2f preparePointSimple(Vector3f pointA) {
 		
 	
 	float winX = (( point3D.x * WIDTH ) / (2.0 * point3D.w)) + HALF_WIDTH;
-  float winY = (( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
+  float winY = -(( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
 	
 	Vector2f point2D = {winX, winY};
 	return point2D;

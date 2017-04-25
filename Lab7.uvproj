@@ -170,7 +170,7 @@
             <Capability>1</Capability>
             <DriverSelection>4097</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
+          <bUseTDR>1</bUseTDR>
           <Flash2>BIN\lmidk-agdi.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -479,6 +479,11 @@
               <FileName>Render.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Render.c</FilePath>
+            </File>
+            <File>
+              <FileName>GraphicsBuffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\GraphicsBuffer.c</FilePath>
             </File>
           </Files>
         </Group>
