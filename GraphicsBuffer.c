@@ -29,6 +29,31 @@ void renderGraphicsBuffer() {
 		
 }
 
+void drawImage(int x, int y, const uint8_t *image, int w, int h ) {
+	if(x > WIDTH || y > HEIGHT || (x + w) < 0 || (y + h) < 0) {
+		return;
+	}
+	
+	int xOffset = fmin(x, 0);						//If x is less than 0 it will be the offset
+	int yOffset = fmin(y, 0);						//If y is less than 0 it will be the offset
+	
+	int realWidth = fmin(w + xOffset, WIDTH - x);
+	int realHeight = fmin(h + yOffset, HEIGHT - y);
+	
+	for(int r = -yOffset; r < realHeight; r ++) {
+		for(int c = -xOffset; c < realWidth; c ++) {
+			graphicsBuffer[r+y][c+x] = image[r*w + c];
+		}
+	}
+	
+}
+
+void drawPixel(int x, int y, uint8_t color) {
+	if(x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
+		graphicsBuffer[x][y] = color;
+	}
+}
+
 void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint8_t color) {
 	clipAndDrawLine(x0,y0,x1,y1,color);
 }

@@ -1,4 +1,5 @@
 #include <math.h>
+#include "math2.h"
 #include "vec3f.h"
 #include "vec4f.h"
 #include "Matrix3f.h"
@@ -79,37 +80,29 @@ Matrix4f mul_mat4f_mat4f(Matrix4f left, Matrix4f right) {
 	return out;
 }
 
-Matrix4f rotate_mat4f(float angle, Vector3f axis, Matrix4f src) {
-		if(axis.x == 1 && axis.y == 0 && axis.z == 0){
-			Matrix4f rotate = {
-				1,		  			0, 		      		0,       			0, 
-				0,		  			cos(angle), 		-sin(angle),	0,
-        0,  					sin(angle),		  cos(angle),	  0,
-        0, 						0,							0,		   			1
-			};
-			
-			return mul_mat4f_mat4f(rotate, src);
-			
-		} else if (axis.x == 0 && axis.y == 1 && axis.z == 0){
-			Matrix4f rotate = {
-				cos(angle),		0, 		      		sin(angle), 	0, 
-				0,		  			1, 							0,						0,
-        -sin(angle),  0,						  cos(angle),	  0,
-        0, 						0,							0,		   			1
-			};
-			
-			return mul_mat4f_mat4f(rotate, src);
-			
-		} else if (axis.x == 0 && axis.y == 0 && axis.z == 1){
-			Matrix4f rotate = {
-				cos(angle),		-sin(angle), 		0,       			0, 
-				sin(angle),		cos(angle), 		0,						0,
-        0,  					0,		  				1,					  0,
-        0, 						0,							0,		   			1
-			};
-			
-			return mul_mat4f_mat4f(rotate, src);
-		}
+Matrix4f createTransformationMatrix(Vector3f translation, Vector3f scale) {
+		Matrix4f matrix = {1,0,0,0,
+											 0,1,0,0,
+											 0,0,1,0,
+											 0,0,0,1};
+		
+		scale_mat4f(scale, &matrix);
+		translate_mat4f(translation, &matrix);
+		
+		return matrix;
+}
+
+Matrix4f createRotationMatrix(float p, float y, float r) {
+	float pitch = toRadians(p);
+	float yaw = toRadians(y);
+	float roll = toRadians(r);
 	
-	return src;
+	Matrix4f matrix = {
+		cos(yaw)*cos(roll), cos(roll)*sin(pitch)*sin(yaw)-cos(pitch)*sin(roll), cos(pitch)*cos(roll)*sin(yaw)+sin(pitch)*sin(roll), 0,
+		cos(yaw)*sin(roll), cos(pitch)*cos(roll)+sin(pitch)*sin(yaw)*sin(roll), cos(pitch)*sin(yaw)*sin(roll)-cos(roll)*sin(pitch), 0,
+		-sin(yaw), cos(yaw)*sin(pitch), cos(pitch)*cos(yaw), 0,
+		0, 0, 0, 1
+	};
+	
+	return matrix;
 }

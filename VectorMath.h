@@ -26,6 +26,8 @@ Vector4f mul_vec4f(Vector4f vector, Matrix4f matrix);
 
 Matrix4f mul_mat4f_mat4f(Matrix4f left, Matrix4f right);
 
-Matrix4f rotate_mat4f(float angle, Vector3f axis, Matrix4f src);
+Matrix4f createTransformationMatrix(Vector3f translation, Vector3f scale);
+
+Matrix4f createRotationMatrix(float pitch, float yaw, float roll);
 
 #endif

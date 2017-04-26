@@ -33,12 +33,4 @@ void createViewMatrix(Camera camera);
 
 void createProjectionMatrix(void);
 
-Matrix4f createTransformationMatrix(Vector3f translation, Vector3f scale);
-
-Vector3f mul(Vector3f vector, Matrix3f matrix);
-
-Matrix4f axisToOrientation(Vector3f forward, Vector3f directionUp);
-
-Matrix4f createRotationMatrix(float pitch, float yaw, float roll);
-
 #endif

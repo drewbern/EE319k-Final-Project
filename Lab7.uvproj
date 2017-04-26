@@ -421,11 +421,6 @@
               <FilePath>.\LCD.s</FilePath>
             </File>
             <File>
-              <FileName>IO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\IO.c</FilePath>
-            </File>
-            <File>
               <FileName>Lab7Main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Lab7Main.c</FilePath>
@@ -459,6 +454,11 @@
               <FileName>Player.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Player.c</FilePath>
+            </File>
+            <File>
+              <FileName>Projectile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Projectile.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -550,6 +550,11 @@
         <Group>
           <GroupName>Peripherals</GroupName>
           <Files>
+            <File>
+              <FileName>IO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\IO.c</FilePath>
+            </File>
             <File>
               <FileName>ADC.c</FileName>
               <FileType>1</FileType>

@@ -3,6 +3,7 @@
 
 #include "vec3f.h"
 #include "Entity.h"
+#include "Projectile.h"
 
 
 typedef struct Player {
@@ -19,6 +20,6 @@ typedef struct Player {
 
 Player newPlayer(void);
 
-void movePlayer(Player* p);
+void movePlayer(Player* p, Projectile_Collection* pCollection);
 
 #endif

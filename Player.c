@@ -8,6 +8,8 @@
 #include "VectorMath.h"
 #include "Matrix4f.h"
 
+#include "Projectile.h"
+
 #define MAX_DISPLACEMENT 1						//How far the player can move from the middle
 #define MAX_HEIGHT 1										//How far up player can move from ground
 #define MIN_HEIGHT 0.05
@@ -48,7 +50,7 @@ Player newPlayer(void) {
 	return out;
 }
 
-void movePlayer(Player* p) {
+void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	
 	//Horizontal Movement
 	float horizontalMovement = getXPos() * MOVE_SPEED;
@@ -95,4 +97,16 @@ void movePlayer(Player* p) {
 	(*p).entity.position = (*p).position;
 	(*p).entity.pitch = (*p).pitch;
 	(*p).entity.roll = (*p).roll;
+}
+
+void shoot(Player* p, Projectile_Collection* pCollection) {
+	if(((*pCollection).putIndex + 1) % PROJECTILE_COLLECTION_SIZE != (*pCollection).getIndex) {
+		Vector4f velocity = {0, 0, 0.5, 1};
+		Matrix4f rotate = createRotationMatrix((*p).pitch, (*p).yaw, (*p).roll);
+		
+		velocity = mul_vec4f(velocity, rotate);
+		
+		(*pCollection).projectiles[(*pCollection).putIndex] = newProjectile((*p).position, newVector3f(velocity.x, velocity.y,
+			velocity.z));
+	}
 }

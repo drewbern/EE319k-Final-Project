@@ -98,7 +98,7 @@ Entity newPlane(Vector3f position, float p, float y, float r, Vector3f scale) {
 		27,
 		{newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0),
 		newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0)},
-		{WHITE, WHITE, WHITE, WHITE, WHITE, BLUE, BLUE, BLUE, BLUE},
+		{GREY, GREY, GREY, GREY, GREY, BLUE, BLUE, BLUE, BLUE},
 		p, y, r,
 		scale};
 		return out;

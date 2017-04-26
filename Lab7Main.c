@@ -54,6 +54,7 @@
 #include "Ground.h"
 #include "Environment.h"
 #include "Player.h"
+#include "Projectile.h"
 
 #include "GraphicsBuffer.h"
 
@@ -79,25 +80,27 @@ int main(void){
 	PLL_Init();                           // set system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
 	
-	
+	//Construct stuff
 	Player player = newPlayer();
 	Camera camera = newCamera(&player);
+	initRenderer(&camera);
 	
+	//Arrays
 	Entity entities[2];
-  initRenderer(&camera);
-  ST7735_FillScreen(0);            // set screen to black
+  Projectile_Collection pCollection = newProjectileCollection();
+	
 			
-	testDrawLine();
+	//testDrawLine();
   while(1){
 		gatherInputs();
 		
 		
 		//Rendering
 		Entity* entitiesP = entities;
-		renderGround(camera);
-		render(&entitiesP, 0, camera);
-		renderPlayer(player);
-		//testDrawLine();
+		//renderGround(camera);
+		//render(&entitiesP, 0, camera);
+		//renderPlayer(player);
+		renderProjectiles(pCollection);
 		renderGraphicsBuffer();
 		//renderObstacles(camera);
 		
@@ -105,7 +108,7 @@ int main(void){
 		
 		//Game Logic
 		//manageEnvironment(&player);
-		movePlayer(&player);
+		movePlayer(&player, &pCollection);
 		moveCamera(&camera);
 		
 		//for(int i = 0; i < 1000000; i ++) {		}
