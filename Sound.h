@@ -4,10 +4,16 @@
 #include <stdint.h>
 #define LENGTH 8000
 
-typedef struct sound{
+enum soundList{
+	none,
+	laser
+};
+
+typedef struct wav{
 	uint16_t length;
+	enum soundList name;
 	uint8_t sounds[LENGTH];
-} sound;
+} wav;
 
 void soundInit(void);
-void startSound(sound sound);
+void startSound(wav soundToPlay);
