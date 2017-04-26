@@ -16,10 +16,15 @@ typedef struct Player {
 	float pitch;
 	float yaw;
 	float roll;
+	
+	float reloadTime;
+	float reloadCounter;
 } Player;
 
 Player newPlayer(void);
 
 void movePlayer(Player* p, Projectile_Collection* pCollection);
 
+void shoot(Player* p, Projectile_Collection* pCollection);
+	
 #endif

@@ -5,8 +5,8 @@
 #define LENGTH 8000
 
 enum soundList{
-	none,
-	laser
+	NONE,
+	LASER
 };
 
 typedef struct wav{

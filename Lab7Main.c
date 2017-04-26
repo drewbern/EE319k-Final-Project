@@ -60,11 +60,11 @@
 
 #include "ADC.h"
 #include "InputHandler.h"
+#include "Sound.h"
 
 void testDrawLine(void);
 
 void SysTick_Init(){
-	//uint32_t period = 400000000;	// set period here (1 every 5 seconds)
 	uint32_t period = 1000000;	
 	
 	NVIC_ST_CTRL_R = 0;						// disable SysTick during initialization
@@ -74,7 +74,7 @@ void SysTick_Init(){
 }
 
 int main(void){ 
-	ADC_Init();
+	//ADC_Init();
 	SysTick_Init();
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
@@ -88,18 +88,20 @@ int main(void){
 	//Arrays
 	Entity entities[2];
   Projectile_Collection pCollection = newProjectileCollection();
-	
+	addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 15), newVector3f(0, 0, 0)));
+	addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 10), newVector3f(0, 0, 0)));
+	addProjectile(&pCollection, newProjectile(newVector3f(0, 4, 1), newVector3f(0, 0, 0)));
 			
 	//testDrawLine();
   while(1){
-		gatherInputs();
+		//gatherInputs();
 		
 		
 		//Rendering
 		Entity* entitiesP = entities;
-		//renderGround(camera);
-		//render(&entitiesP, 0, camera);
-		//renderPlayer(player);
+		renderGround(camera);
+		render(&entitiesP, 0, camera);
+		renderPlayer(player);
 		renderProjectiles(pCollection);
 		renderGraphicsBuffer();
 		//renderObstacles(camera);

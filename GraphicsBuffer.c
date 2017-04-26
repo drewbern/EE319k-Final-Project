@@ -50,7 +50,7 @@ void drawImage(int x, int y, const uint8_t *image, int w, int h ) {
 
 void drawPixel(int x, int y, uint8_t color) {
 	if(x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
-		graphicsBuffer[x][y] = color;
+		graphicsBuffer[y][x] = color;
 	}
 }
 

@@ -24,6 +24,8 @@ Projectile_Collection newProjectileCollection(void);
 
 Projectile newProjectile(Vector3f position, Vector3f velocity);
 
+void addProjectile(Projectile_Collection* pCollection, Projectile projectile);
+
 void renderProjectiles(Projectile_Collection pCollection);
 
 #endif

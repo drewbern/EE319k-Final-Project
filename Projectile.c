@@ -69,7 +69,14 @@ Projectile newProjectile(Vector3f position, Vector3f velocity) {
 	return out;
 }
 
-void addProjectile(Projectile projectile) {
+void addProjectile(Projectile_Collection* pCollection, Projectile projectile) {
+	if(((*pCollection).putIndex + 1) % 20 != (*pCollection).getIndex ) {
+			(*pCollection).projectiles[(*pCollection).putIndex] = projectile;
+			(*pCollection).putIndex = ((*pCollection).putIndex + 1) % 20;
+	}
+}
+
+void moveProjectiles() {
 	
 }
 
@@ -79,8 +86,8 @@ void testCollision(Entity entitiesToTest[], Projectile projctiles[]) {
 }
 */
 void renderProjectiles(Projectile_Collection pCollection) {
-	for(int i = 0; i < (pCollection.getIndex-pCollection.putIndex)	% 20; i ++) {
-		float size = 10 / (pCollection.projectiles[pCollection.getIndex].position.z - CAMERA_Z);
+	for(int i = 0; i < (pCollection.putIndex-pCollection.getIndex)	% 20; i ++) {
+		float size = (pCollection.projectiles[pCollection.getIndex].position.z - CAMERA_Z);
 		
 		Vector2f screenPos = preparePointSimple(pCollection.projectiles[i].position);
 		

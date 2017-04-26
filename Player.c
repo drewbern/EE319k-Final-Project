@@ -33,6 +33,9 @@ typedef struct Player {
 	float pitch;
 	float yaw;
 	float roll;
+	
+	float reladTime;
+	float reloadCounter;
 } Player;
 
 Player newPlayer(void) {
@@ -44,7 +47,9 @@ Player newPlayer(void) {
 		0,
 		0,
 		0,
-		0
+		0,
+		100,
+		0		
 	};
 	
 	return out;
@@ -90,10 +95,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 		(*p).pitch += fmax(deltaPitch, -PITCH_SPEED);
 	}
 	(*p).pitch = fmin(fmax((*p).pitch, -MAX_PITCH), MAX_PITCH);			
-	
-	//Testing
-	//(*p).position.y += 0.1;
-	
+		
 	(*p).entity.position = (*p).position;
 	(*p).entity.pitch = (*p).pitch;
 	(*p).entity.roll = (*p).roll;
@@ -106,7 +108,6 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 		
 		velocity = mul_vec4f(velocity, rotate);
 		
-		(*pCollection).projectiles[(*pCollection).putIndex] = newProjectile((*p).position, newVector3f(velocity.x, velocity.y,
-			velocity.z));
+		addProjectile(pCollection, newProjectile((*p).position, newVector3f(velocity.x, velocity.y, velocity.z)));
 	}
 }
