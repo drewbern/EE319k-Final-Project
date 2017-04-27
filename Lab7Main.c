@@ -79,6 +79,7 @@ int main(void){
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
+	soundInit();
 	
 	//Construct stuff
 	Player player = newPlayer();
@@ -88,11 +89,21 @@ int main(void){
 	//Arrays
 	Entity entities[2];
   Projectile_Collection pCollection = newProjectileCollection();
+<<<<<<< HEAD
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 1, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
 
+=======
+	addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 15), newVector3f(0, 0, 0)));
+	addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 10), newVector3f(0, 0, 0)));
+	addProjectile(&pCollection, newProjectile(newVector3f(0, 4, 1), newVector3f(0, 0, 0)));
+	
+	sound_Laser();
+	
+>>>>>>> 8e320e7bb2e1dafd54b9dd0738e348a0254f9059
 	//testDrawLine();
+	/*
   while(1){
 		gatherInputs();
 		
@@ -118,7 +129,9 @@ int main(void){
 		//for(int i = 0; i < 1000000; i ++) {		}
 		
     IO_HeartBeat();
+		
   }
+	*/
 }
 
 void testDrawLine() {

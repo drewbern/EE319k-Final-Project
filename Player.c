@@ -15,16 +15,19 @@
 #define MIN_HEIGHT 0.05
 #define MAX_ROLL 30											//Maximum roll player will go while turning (in degrees)
 #define MAX_PITCH 13										//Maximum pitch player will do while going up or down
+#define MAX_YAW 30
 
-#define MOVE_SPEED 0.09									
+#define MOVE_SPEED 0.20									
 #define ROLL_SPEED 5										//Degrees per frame
 #define PITCH_SPEED 3										//Degrees per frame
+#define YAW_SPEED 0.001
 
 #define PROJECTILE_SPEED 0.6
 
 //Can roll factor just be max roll / max input
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
-	
+#define YAW_FACTOR 50		
+
 typedef struct Player {
 	Vector3f position;
 	Entity entity;
@@ -41,7 +44,7 @@ typedef struct Player {
 } Player;
 
 Player newPlayer(void) {
-	Vector3f initialPosition = {0, 2, 0};
+	Vector3f initialPosition = {0, 2, 2};
 	Player out = {
 		initialPosition,
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.3,0.3,0.3)),
@@ -50,7 +53,7 @@ Player newPlayer(void) {
 		0,
 		0,
 		0,
-		8,
+		5,
 		0		
 	};
 	
@@ -79,6 +82,16 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 		(*p).roll += fmax(deltaRoll, -ROLL_SPEED);
 	}
 	(*p).roll = fmin(fmax((*p).roll, -MAX_ROLL), MAX_ROLL);	
+	
+	float targetYaw = horizontalMovement * YAW_FACTOR;
+	
+	float deltaYaw = (targetYaw - (*p).yaw) * fabs(getXPos());
+	if(deltaYaw < 0) {
+		(*p).yaw += fmin(deltaYaw, YAW_SPEED);
+	} else if (deltaRoll < 0) {
+		(*p).yaw += fmax(deltaYaw, -YAW_SPEED);
+	}
+	(*p).yaw = fmin(fmax((*p).yaw, -MAX_YAW), MAX_YAW);
 
 	//Vertical Movement
 	float verticalMovement = getYPos() * MOVE_SPEED;

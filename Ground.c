@@ -6,7 +6,7 @@
 
 #include "GraphicsBuffer.h"
 
-#define CAMERA_SPEED 0.5																				//Virtual speed of camera
+#define CAMERA_SPEED 0.7																				//Virtual speed of camera
 
 #define LENGTH 10.0
 #define HALF_LENGTH LENGTH/2

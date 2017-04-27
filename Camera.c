@@ -15,12 +15,13 @@ typedef struct Camera {
 } Camera;
 
 void moveCamera(Camera* c) {
-	(*c).position.x = 3*(*(*c).player).position.x/4;
-	(*c).position.y = (*(*c).player).position.y/4;
+	(*c).position.x = 3*(*(*c).player).position.x/6;
+	(*c).position.y = (*(*c).player).position.y/2 + HEIGHT_ABOVE_PLAYER;
 	(*c).position.z = (*(*c).player).position.z - DISTANCE_FROM_PLAYER;
 	
 	(*c).roll = -(*(*c).player).roll/2;
 	(*c).pitch = (*(*c).player).pitch/3;
+	(*c).yaw = -(*(*c).player).yaw/2;
 	//(*c).roll = 30;
 }
 

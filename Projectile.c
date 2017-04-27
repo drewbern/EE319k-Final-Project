@@ -4,8 +4,8 @@
 #include "Render.h"
 #include "GraphicsBuffer.h"
 
-#define CAMERA_Z -6.3				//The focal point
-#define MAX_PROJECTILE_DISTANCE 10
+#define CAMERA_Z -8.3				//The focal point
+#define MAX_PROJECTILE_DISTANCE 20
 
 const uint8_t Projectile_10[] = {
 	BLACK, BLACK, BLACK, DARK_YELLOW, YELLOW, YELLOW, DARK_YELLOW, BLACK, BLACK, BLACK,
