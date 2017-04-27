@@ -125,7 +125,7 @@ Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotatio
 	Vector4f point3D = mul_vec4f(positionRelativeToCam, projectionMatrix);
 	
 	float winX = (( point3D.x * WIDTH ) / (2.0 * point3D.w)) + HALF_WIDTH;
-  float winY = -(( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
+  float winY = (( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
 		
 	Vector2f point2D = {winX, winY};
 	return point2D;
@@ -141,7 +141,7 @@ Vector2f preparePointSimple(Vector3f pointA) {
 		
 	
 	float winX = (( point3D.x * WIDTH ) / (2.0 * point3D.w)) + HALF_WIDTH;
-  float winY = -(( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
+  float winY = (( point3D.y * HEIGHT ) / (2.0 * point3D.w)) + HALF_HEIGHT;
 	
 	Vector2f point2D = {winX, winY};
 	return point2D;

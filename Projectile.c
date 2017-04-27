@@ -1,9 +1,11 @@
 #include "vec3f.h"
+#include "VectorMath.h"
 #include "stdint.h"
 #include "Render.h"
 #include "GraphicsBuffer.h"
 
-#define CAMERA_Z 2.5				//The focal point
+#define CAMERA_Z -6.3				//The focal point
+#define MAX_PROJECTILE_DISTANCE 10
 
 const uint8_t Projectile_10[] = {
 	BLACK, BLACK, BLACK, DARK_YELLOW, YELLOW, YELLOW, DARK_YELLOW, BLACK, BLACK, BLACK,
@@ -76,8 +78,32 @@ void addProjectile(Projectile_Collection* pCollection, Projectile projectile) {
 	}
 }
 
-void moveProjectiles() {
+void removeProjectile(Projectile_Collection* pCollection, int index) {
+	if((*pCollection).putIndex != (*pCollection).getIndex ) {
+			(*pCollection).getIndex = ((*pCollection).getIndex + 1)%20;
+	}
+}
+
+void moveProjectiles(Projectile_Collection* pCollection) {
+	uint8_t index = (*pCollection).getIndex;
+	uint8_t numToRemove = 0;
+	uint8_t projToRemove[20];
 	
+	while ((index) != (*pCollection).putIndex) {
+		if((*pCollection).projectiles[index].position.z >= MAX_PROJECTILE_DISTANCE ||
+					(*pCollection).projectiles[index].position.y <= 0) {
+			projToRemove[numToRemove] = index;
+			numToRemove ++;			
+		}
+		
+		(*pCollection).projectiles[index].position = add_vec3f((*pCollection).projectiles[index].position,
+			(*pCollection).projectiles[index].velocity);
+		index = (index+1)%20;
+	}
+	
+	for(int i = 0; i < numToRemove; i ++) {
+		removeProjectile(pCollection, projToRemove[i]);
+	}
 }
 
 /*
@@ -86,10 +112,12 @@ void testCollision(Entity entitiesToTest[], Projectile projctiles[]) {
 }
 */
 void renderProjectiles(Projectile_Collection pCollection) {
-	for(int i = 0; i < (pCollection.putIndex-pCollection.getIndex)	% 20; i ++) {
-		float size = (pCollection.projectiles[pCollection.getIndex].position.z - CAMERA_Z);
+	uint8_t index = (pCollection).getIndex;
+	
+	while ((index) != pCollection.putIndex) {
+		float size = 10 * -CAMERA_Z / (pCollection.projectiles[index].position.z - CAMERA_Z);
 		
-		Vector2f screenPos = preparePointSimple(pCollection.projectiles[i].position);
+		Vector2f screenPos = preparePointSimple(pCollection.projectiles[index].position);
 		
 		if(size > 8) {
 			drawImage(screenPos.x - 5, screenPos.y - 5, Projectile_10, 10, 10);
@@ -106,6 +134,7 @@ void renderProjectiles(Projectile_Collection pCollection) {
 		} else {
 			drawPixel(screenPos.x, screenPos.y, YELLOW);
 		}
+			
+		index = (index+1)%20;	
 	}
-	
 }

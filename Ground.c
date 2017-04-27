@@ -8,7 +8,7 @@
 
 #define CAMERA_SPEED 0.5																				//Virtual speed of camera
 
-#define LENGTH 7.0
+#define LENGTH 10.0
 #define HALF_LENGTH LENGTH/2
 #define FORWARD_DISTANCE 2																				//Distance between each horizontal line
 #define NUM_HORIZONTAL_LINES 6																		//Number of horizontal lines

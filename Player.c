@@ -10,8 +10,8 @@
 
 #include "Projectile.h"
 
-#define MAX_DISPLACEMENT 1						//How far the player can move from the middle
-#define MAX_HEIGHT 1										//How far up player can move from ground
+#define MAX_DISPLACEMENT 2							//How far the player can move from the middle
+#define MAX_HEIGHT 3										//How far up player can move from ground
 #define MIN_HEIGHT 0.05
 #define MAX_ROLL 30											//Maximum roll player will go while turning (in degrees)
 #define MAX_PITCH 13										//Maximum pitch player will do while going up or down
@@ -19,6 +19,8 @@
 #define MOVE_SPEED 0.09									
 #define ROLL_SPEED 5										//Degrees per frame
 #define PITCH_SPEED 3										//Degrees per frame
+
+#define PROJECTILE_SPEED 0.6
 
 //Can roll factor just be max roll / max input
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
@@ -34,12 +36,12 @@ typedef struct Player {
 	float yaw;
 	float roll;
 	
-	float reladTime;
+	float reloadTime;
 	float reloadCounter;
 } Player;
 
 Player newPlayer(void) {
-	Vector3f initialPosition = {0, 5, 4.5};
+	Vector3f initialPosition = {0, 2, 0};
 	Player out = {
 		initialPosition,
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.3,0.3,0.3)),
@@ -48,7 +50,7 @@ Player newPlayer(void) {
 		0,
 		0,
 		0,
-		100,
+		8,
 		0		
 	};
 	
@@ -56,6 +58,9 @@ Player newPlayer(void) {
 }
 
 void movePlayer(Player* p, Projectile_Collection* pCollection) {
+	//Other important stuff for player that is not movement
+	(*p).reloadCounter = fmax((*p).reloadCounter - 1, 0);
+	
 	
 	//Horizontal Movement
 	float horizontalMovement = getXPos() * MOVE_SPEED;
@@ -87,7 +92,6 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 		targetPitch = 0;
 	}
 	
-	
 	float deltaPitch = (targetPitch - (*p).pitch) * fabs(getYPos());
 	if(deltaPitch > 0) {
 		(*p).pitch += fmin(deltaPitch, PITCH_SPEED);
@@ -102,12 +106,14 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 }
 
 void shoot(Player* p, Projectile_Collection* pCollection) {
-	if(((*pCollection).putIndex + 1) % PROJECTILE_COLLECTION_SIZE != (*pCollection).getIndex) {
-		Vector4f velocity = {0, 0, 0.5, 1};
+	if((*p).reloadCounter <= 0 && ((*pCollection).putIndex + 1) % PROJECTILE_COLLECTION_SIZE != (*pCollection).getIndex) {
+		Vector4f velocity = {0, 0, PROJECTILE_SPEED, 1};
 		Matrix4f rotate = createRotationMatrix((*p).pitch, (*p).yaw, (*p).roll);
 		
 		velocity = mul_vec4f(velocity, rotate);
 		
 		addProjectile(pCollection, newProjectile((*p).position, newVector3f(velocity.x, velocity.y, velocity.z)));
+		
+		(*p).reloadCounter = (*p).reloadTime;
 	}
 }

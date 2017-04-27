@@ -14,4 +14,6 @@ void ADC_Init(void);
 // Busy-wait Analog to digital conversion
 // Input: none
 // Output: 12-bit result of ADC conversion
-uint32_t ADC_In(void);
+uint32_t ADC0_In(void);
+
+uint32_t ADC1_In(void);

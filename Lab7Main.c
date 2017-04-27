@@ -74,7 +74,7 @@ void SysTick_Init(){
 }
 
 int main(void){ 
-	//ADC_Init();
+	ADC_Init();
 	SysTick_Init();
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
@@ -88,13 +88,13 @@ int main(void){
 	//Arrays
 	Entity entities[2];
   Projectile_Collection pCollection = newProjectileCollection();
-	addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 15), newVector3f(0, 0, 0)));
-	addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 10), newVector3f(0, 0, 0)));
-	addProjectile(&pCollection, newProjectile(newVector3f(0, 4, 1), newVector3f(0, 0, 0)));
-			
+	//addProjectile(&pCollection, newProjectile(newVector3f(0, 1, 5), newVector3f(0, 0, 0)));
+	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
+	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
+
 	//testDrawLine();
   while(1){
-		//gatherInputs();
+		gatherInputs();
 		
 		
 		//Rendering
@@ -111,6 +111,8 @@ int main(void){
 		//Game Logic
 		//manageEnvironment(&player);
 		movePlayer(&player, &pCollection);
+		shoot(&player, &pCollection);
+		moveProjectiles(&pCollection);
 		moveCamera(&camera);
 		
 		//for(int i = 0; i < 1000000; i ++) {		}

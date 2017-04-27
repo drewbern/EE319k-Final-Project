@@ -20,6 +20,8 @@ typedef struct Projectile_Collection {
 
 void testCollision(Entity entitiesToTest[], Projectile projctiles[]);
 
+void moveProjectiles(Projectile_Collection* pCollection);
+	
 Projectile_Collection newProjectileCollection(void);
 
 Projectile newProjectile(Vector3f position, Vector3f velocity);

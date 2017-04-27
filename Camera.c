@@ -1,8 +1,10 @@
 #include "vec3f.h"
 #include "Player.h"
 
-#define DISTANCE_FROM_PLAYER 7
-#define HEIGHT_ABOVE_PLAYER 0.6
+#define DISTANCE_FROM_PLAYER 6.3
+
+
+#define HEIGHT_ABOVE_PLAYER 1
 
 typedef struct Camera {
 	Vector3f position;
@@ -14,7 +16,7 @@ typedef struct Camera {
 
 void moveCamera(Camera* c) {
 	(*c).position.x = 3*(*(*c).player).position.x/4;
-	(*c).position.y = (*(*c).player).position.y/2 + HEIGHT_ABOVE_PLAYER;
+	(*c).position.y = (*(*c).player).position.y/4;
 	(*c).position.z = (*(*c).player).position.z - DISTANCE_FROM_PLAYER;
 	
 	(*c).roll = -(*(*c).player).roll/2;
