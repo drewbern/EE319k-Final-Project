@@ -7,7 +7,6 @@
 
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
-#include "Sound.h"
 
 // **************DAC_Init*********************
 // Initialize 6-bit DAC, called once 
@@ -21,8 +20,6 @@ void DAC_Init(void){
 	GPIO_PORTB_DEN_R |= 0x3F;
 	GPIO_PORTB_DIR_R |= 0x3F;
 	GPIO_PORTB_DR8R_R |= 0x3F;
-	
-	soundInit();
 }
 
 // **************DAC_Out*********************

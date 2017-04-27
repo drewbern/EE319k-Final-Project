@@ -79,6 +79,7 @@ int main(void){
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
+	soundInit();
 	
 	//Construct stuff
 	Player player = newPlayer();
@@ -91,8 +92,11 @@ int main(void){
 	addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 15), newVector3f(0, 0, 0)));
 	addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 10), newVector3f(0, 0, 0)));
 	addProjectile(&pCollection, newProjectile(newVector3f(0, 4, 1), newVector3f(0, 0, 0)));
-			
+	
+	sound_Laser();
+	
 	//testDrawLine();
+	/*
   while(1){
 		//gatherInputs();
 		
@@ -116,7 +120,9 @@ int main(void){
 		//for(int i = 0; i < 1000000; i ++) {		}
 		
     IO_HeartBeat();
+		
   }
+	*/
 }
 
 void testDrawLine() {
