@@ -1,0 +1,22 @@
+#include "stdint.h"
+#include "Enemy.h"
+#include "graphicsBuffer.h"
+
+const uint8_t BASIC_ENEMY[] = {
+	BLACK, BLACK, BLACK, RED, RED, RED, RED, BLACK, BLACK, BLACK,
+	BLACK, RED, RED, RED, RED, RED, RED, RED, RED, BLACK,
+	BLACK, RED, RED, RED, RED, RED, RED, RED, RED, BLACK,
+	RED, RED,RED,RED,RED,RED,RED,RED,RED, RED,
+	RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,
+	RED,RED,RED,RED,RED,RED,RED,RED,RED,RED,
+	RED, RED,RED,RED,RED,RED,RED,RED,RED, RED,
+	BLACK, RED, RED, RED, RED, RED, RED, RED, RED, BLACK,
+	BLACK, RED, RED, RED, RED, RED, RED, RED, RED, BLACK,
+	BLACK, BLACK, BLACK, RED, RED, RED, RED, BLACK, BLACK, BLACK
+};
+
+Enemy newEnemy(Vector3f position) {
+	Enemy out  = {BASIC, position, 1};
+	return out;
+}
+
