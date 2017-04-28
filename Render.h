@@ -15,11 +15,13 @@
 
 void initRenderer(Camera* cameraP);
 
-void render(Entity** entities, int numEntities, Camera c);
+void prepareRenderer(Camera c);
 
-void prepareEntity(Entity* entityP);
+void render(Entity** entitiesP, int numElements);
 
-void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numTriangles, uint8_t colorBuffer[]);
+void prepareEntity(Entity* entityP, const float points[]);
+
+void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numTriangles, const uint8_t colorBuffer[]);
 
 void renderPlayer(Player player);
 

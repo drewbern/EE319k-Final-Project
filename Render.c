@@ -39,31 +39,46 @@ void initRenderer(Camera* cameraP) {
 	camera = cameraP;
 }
 
-void render(Entity** entitiesP, int numEntities, Camera c) {
-	Entity* entities = *entitiesP;
-		
+void prepareRenderer(Camera c) {
 	createViewMatrix(*camera);
-	for(int i = 0; i < numEntities; i ++) {
+}
+
+void render(Entity** entitiesP, int numElements) {
+	Entity* entities = *entitiesP;
+	
+	for(int i = 0; i < numElements; i ++) {
 		Entity entity = *(entities + i);
-		prepareEntity(&entity);
-		renderEntity(entity.vertexBuffer, entity.indexBuffer, entity.numIndices, entity.colorBuffer);
+		if(entity.type == PLANE) {
+			prepareEntity(&entity, PLANE_POINTS);
+			renderEntity(entity.vertexBuffer, PLANE_INDICES, PLANE_NUM_INDICES, PLANE_COLOR_BUFFER);	
+		} else if (entity.type == CUBE) {
+			prepareEntity(&entity, CUBE_POINTS);
+			renderEntity(entity.vertexBuffer, CUBE_INDICES, CUBE_NUM_INDICES, CUBE_COLOR_BUFFER);	
+		}
 	}
 }
 
-void prepareEntity(Entity* entityP) {
+void prepareEntity(Entity* entityP, const float points[]) {
 	Matrix4f transformationMatrix = createTransformationMatrix((*entityP).position, (*entityP).scale);
 	
 	Matrix4f rotation = createRotationMatrix((*entityP).pitch, (*entityP).yaw, (*entityP).roll);
 	
-	for(int i = 0; i < (*entityP).numPoints-2; i +=3) {
+	uint8_t numPoints = 0;
+	if((*entityP).type == PLANE) {
+		numPoints = PLANE_NUM_POINTS;
+	} else if ((*entityP).type == CUBE) {
+		numPoints = CUBE_NUM_POINTS;
+	}
+	
+	for(int i = 0; i < numPoints-2; i +=3) {
 		Vector2f* vertexBufferPointer = &((*entityP).vertexBuffer[i/3]);
-		Vector3f entityPoint = {(*entityP).points[i], (*entityP).points[i+1], (*entityP).points[i+2]};
+		Vector3f entityPoint = {points[i], points[i+1], points[i+2]};
 		Vector2f point = preparePoint(entityPoint, transformationMatrix, rotation);
 		*vertexBufferPointer = point;
 	}		
 }
 
-void renderEntity(Vector2f vertexBuffer[], int indexBuffer[], int numIndices, uint8_t colorBuffer[]) {
+void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numIndices, const uint8_t colorBuffer[]) {
 	for(int i = 0;  i < numIndices-2; i +=3) {
 		int16_t x0 = (int16_t)vertexBuffer[indexBuffer[i]].x;
 		int16_t y0 = (int16_t)vertexBuffer[indexBuffer[i]].y;
@@ -107,14 +122,14 @@ void renderPlayer(Player player) {
 	
 	
 
-	for(int i = 0; i < (player.entity).numPoints-2; i +=3) {
+	for(int i = 0; i < PLANE_NUM_POINTS-2; i +=3) {
 		Vector2f* vertexBufferPointer = &((player.entity).vertexBuffer[i/3]);
-		Vector3f entityPoint = {(player.entity).points[i], (player.entity).points[i+1], (player.entity).points[i+2]};
+		Vector3f entityPoint = {PLANE_POINTS[i], PLANE_POINTS[i+1], PLANE_POINTS[i+2]};
 		Vector2f point = preparePoint(entityPoint, transformationMatrix, rotation);
 		*vertexBufferPointer = point;
 	}
 	
-	renderEntity(player.entity.vertexBuffer, player.entity.indexBuffer, player.entity.numIndices, player.entity.colorBuffer);
+	renderEntity(player.entity.vertexBuffer, PLANE_INDICES, PLANE_NUM_INDICES, PLANE_COLOR_BUFFER);
 }
 
 Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotation) {

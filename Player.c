@@ -14,8 +14,8 @@
 #define MAX_HEIGHT 3										//How far up player can move from ground
 #define MIN_HEIGHT 0.05
 #define MAX_ROLL 30											//Maximum roll player will go while turning (in degrees)
-#define MAX_PITCH 13										//Maximum pitch player will do while going up or down
-#define MAX_YAW 30
+#define MAX_PITCH 16										//Maximum pitch player will do while going up or down
+#define MAX_YAW 35
 
 #define MOVE_SPEED 0.20									
 #define ROLL_SPEED 5										//Degrees per frame
@@ -68,9 +68,10 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	//Horizontal Movement
 	float horizontalMovement = getXPos() * MOVE_SPEED;
 	
-	(*p).position.x += horizontalMovement;
-	(*p).position.x = fmin(fmax((*p).position.x, -MAX_DISPLACEMENT), MAX_DISPLACEMENT);				// clamps position
-
+	if(fabs(horizontalMovement)  > MOVE_SPEED*0.6) {
+		(*p).position.x += horizontalMovement;
+		(*p).position.x = fmin(fmax((*p).position.x, -MAX_DISPLACEMENT), MAX_DISPLACEMENT);				// clamps position
+	}
 	
 	
 	float targetRoll = horizontalMovement * ROLL_FACTOR;
@@ -96,9 +97,10 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	//Vertical Movement
 	float verticalMovement = getYPos() * MOVE_SPEED;
 	
-	(*p).position.y += verticalMovement;
-	(*p).position.y = fmin(fmax((*p).position.y, MIN_HEIGHT), MAX_HEIGHT);				// clamps position
-
+	if(fabs(verticalMovement) >= MOVE_SPEED*0.6) {
+		(*p).position.y += verticalMovement;
+		(*p).position.y = fmin(fmax((*p).position.y, MIN_HEIGHT), MAX_HEIGHT);				// clamps position
+	}
 	
 	float targetPitch = verticalMovement * ROLL_FACTOR;
 	if((*p).position.y <= MIN_HEIGHT+0.1 || (*p).position.y >= MAX_HEIGHT) {
@@ -119,7 +121,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 }
 
 void shoot(Player* p, Projectile_Collection* pCollection) {
-	if((*p).reloadCounter <= 0 && ((*pCollection).putIndex + 1) % PROJECTILE_COLLECTION_SIZE != (*pCollection).getIndex) {
+	if((*p).reloadCounter <= 0) {
 		Vector4f velocity = {0, 0, PROJECTILE_SPEED, 1};
 		Matrix4f rotate = createRotationMatrix((*p).pitch, (*p).yaw, (*p).roll);
 		

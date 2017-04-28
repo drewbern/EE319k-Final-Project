@@ -9,16 +9,14 @@
 typedef struct Projectile {
 	Vector3f position;
 	Vector3f velocity;
+	uint8_t live;														//If the projectile should be rendered, moved, etc. 
 } Projectile;
 
 typedef struct Projectile_Collection {
-	Projectile projectiles[20];
-	int8_t putIndex;
-	int8_t getIndex;
-	
+	Projectile projectiles[20];	
 } Projectile_Collection;
 
-void testCollision(Entity entitiesToTest[], Projectile projctiles[]);
+uint8_t testCollision(Entity entity, Projectile_Collection* pCollection);
 
 void moveProjectiles(Projectile_Collection* pCollection);
 	

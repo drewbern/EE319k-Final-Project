@@ -435,6 +435,11 @@
               <FileType>1</FileType>
               <FilePath>.\Ground.c</FilePath>
             </File>
+            <File>
+              <FileName>Environment.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Environment.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -459,6 +464,11 @@
               <FileName>Projectile.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Projectile.c</FilePath>
+            </File>
+            <File>
+              <FileName>Enemy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Enemy.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -544,6 +554,11 @@
               <FileName>Quaternion.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Quaternion.c</FilePath>
+            </File>
+            <File>
+              <FileName>Random.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Random.s</FilePath>
             </File>
           </Files>
         </Group>

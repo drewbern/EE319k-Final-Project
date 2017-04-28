@@ -65,7 +65,7 @@
 void testDrawLine(void);
 
 void SysTick_Init(){
-	uint32_t period = 1000000;	
+	uint32_t period = 10000000;	//I change it for random fct
 	
 	NVIC_ST_CTRL_R = 0;						// disable SysTick during initialization
 	NVIC_ST_RELOAD_R = period-1;	// set reload to period
@@ -79,7 +79,6 @@ int main(void){
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
-	soundInit();
 	
 	//Construct stuff
 	Player player = newPlayer();
@@ -88,39 +87,31 @@ int main(void){
 	
 	//Arrays
 	Entity entities[2];
+	//entities[0] = newCube(newVector3f(0,0,10), 0, 0, 0, newVector3f(1,1,1));
   Projectile_Collection pCollection = newProjectileCollection();
-<<<<<<< HEAD
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 1, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
 
-=======
-	addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 15), newVector3f(0, 0, 0)));
-	addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 10), newVector3f(0, 0, 0)));
-	addProjectile(&pCollection, newProjectile(newVector3f(0, 4, 1), newVector3f(0, 0, 0)));
-	
-	sound_Laser();
-	
->>>>>>> 8e320e7bb2e1dafd54b9dd0738e348a0254f9059
 	//testDrawLine();
-	/*
   while(1){
 		gatherInputs();
 		
 		
 		//Rendering
+		prepareRenderer(camera);
 		Entity* entitiesP = entities;
 		renderGround(camera);
-		render(&entitiesP, 0, camera);
+		renderObstacles();
+		render(&entitiesP, 1);
 		renderPlayer(player);
 		renderProjectiles(pCollection);
 		renderGraphicsBuffer();
-		//renderObstacles(camera);
 		
 		
 		
 		//Game Logic
-		//manageEnvironment(&player);
+		manageEnvironment(&player);
 		movePlayer(&player, &pCollection);
 		shoot(&player, &pCollection);
 		moveProjectiles(&pCollection);
@@ -128,10 +119,8 @@ int main(void){
 		
 		//for(int i = 0; i < 1000000; i ++) {		}
 		
-    IO_HeartBeat();
-		
+    //IO_HeartBeat();
   }
-	*/
 }
 
 void testDrawLine() {

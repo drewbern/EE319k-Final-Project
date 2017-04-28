@@ -20,8 +20,8 @@ void moveCamera(Camera* c) {
 	(*c).position.z = (*(*c).player).position.z - DISTANCE_FROM_PLAYER;
 	
 	(*c).roll = -(*(*c).player).roll/2;
-	(*c).pitch = (*(*c).player).pitch/3;
-	(*c).yaw = -(*(*c).player).yaw/2;
+	(*c).pitch = (*(*c).player).pitch/4;
+	(*c).yaw = -(*(*c).player).yaw/3;
 	//(*c).roll = 30;
 }
 
