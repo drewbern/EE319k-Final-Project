@@ -5,7 +5,6 @@
 #include "Entity.h"
 #include "Projectile.h"
 
-
 typedef struct Player {
 	Vector3f position;
 	Entity entity;

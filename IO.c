@@ -2,17 +2,49 @@
 // Last Modified: 04/28/2017
 // Initializes all IO
 
-#include "tm4c123gh6pm.h"
 #include <stdint.h>
+#include "tm4c123gh6pm.h"
+#include "Player.h"
+#include "Projectile.h"
 
-#define delayCounter 320000
-#define laserInput ((GPIO_PORTF_DATA_R&0x10)>>4)
+#define delayCounter 		320000
+#define laserInput			((GPIO_PORTF_DATA_R&0x10) >> 4)
 
 float xPos;
 float yPos;
 
+//converts ADC0 input
+uint32_t ADC0In(void){  
+	ADC0_PSSI_R = 0x08;							// initiate conversion
+	
+	while((ADC0_RIS_R&0x08) == 0){}	// while busy converting, wait
+	ADC0_ISC_R = 0x08;							// done converting, indicate so
+	
+  return ADC0_SSFIFO3_R&0xFFF; 		// return conversion result
+}
+
+//converts ADC1 input
+uint32_t ADC1In(void){  
+	ADC1_PSSI_R = 0x08;							// initiate conversion
+	
+	while((ADC1_RIS_R&0x08) == 0){}	// while busy converting, wait
+	ADC1_ISC_R = 0x08;							// done converting, indicate so
+	
+  return ADC1_SSFIFO3_R&0xFFF; 		// return conversion result
+}
+
+void gatherInputs(void){
+	yPos = (((float)ADC0In())-2048)/2048;												//Percentage how far pushed away from center
+	xPos = (((float)ADC1In())-2048)/2048;												//Percentage how far pushed away from center
+}
+
+//toggles red onboard LED for heartbeat
+void beat(void) {
+	GPIO_PORTF_DATA_R ^= 0x2;	//red LED toggled
+}
+
 //initializes PF1 (red onboard LED)
-void IO_Init(void) {
+void IOInit(void) {
 	SYSCTL_RCGCGPIO_R |= 0x20;
 	uint8_t delay = 1;
 	delay--;
@@ -21,13 +53,8 @@ void IO_Init(void) {
 	GPIO_PORTF_DEN_R |= 0x2;
 }
 
-//toggles red onboard LED for heartbeat
-void IO_HeartBeat(void) {
-	GPIO_PORTF_DATA_R ^= 0x2;	//red LED toggled
-}
-
 //initializes ADC input
-void ADC_Init(void){
+void ADCInit(void){
 	uint32_t delay;
 	SYSCTL_RCGCGPIO_R |= 0x18;   		// Port D and E clock initialized
   delay = 0;        						  // allow time for clocks
@@ -68,30 +95,6 @@ void ADC_Init(void){
   ADC1_SSCTL3_R = 0x0006;         // not measuring temperature, set END to prevent unintended behavior
 	ADC1_IM_R &= ~0x0008;           // sq3 interrupts disabled
   ADC1_ACTSS_R |= 0x0008;       	// sq3 re-enabled
-}
-//converts ADC0 input
-uint32_t ADC0_In(void){  
-	ADC0_PSSI_R = 0x08;							// initiate conversion
-	
-	while((ADC0_RIS_R&0x08) == 0){}	// while busy converting, wait
-	ADC0_ISC_R = 0x08;							// done converting, indicate so
-	
-  return ADC0_SSFIFO3_R&0xFFF; 		// return conversion result
-}
-
-//converts ADC1 input
-uint32_t ADC1_In(void){  
-	ADC1_PSSI_R = 0x08;							// initiate conversion
-	
-	while((ADC1_RIS_R&0x08) == 0){}	// while busy converting, wait
-	ADC1_ISC_R = 0x08;							// done converting, indicate so
-	
-  return ADC1_SSFIFO3_R&0xFFF; 		// return conversion result
-}
-
-void gatherInputs(void) {
-	yPos = (((float)ADC0_In())-2048)/2048;												//Percentage how far pushed away from center
-	xPos = (((float)ADC1_In())-2048)/2048;												//Percentage how far pushed away from center
 }
 
 float getXPos(void) {

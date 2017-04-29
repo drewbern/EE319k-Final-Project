@@ -7,13 +7,13 @@
 #include <stdint.h>
 
 //basic IO
-void IO_Init(void);
-void IO_HeartBeat(void);
+void IOInit(void);
+void beat(void);
 
 //ADC
-void ADC_Init(void);
-uint32_t ADC0_In(void);
-uint32_t ADC1_In(void);
+void ADCInit(void);
+uint32_t ADC0In(void);
+uint32_t ADC1In(void);
 
 //ADC -> game input
 void gatherInputs(void);

@@ -62,12 +62,6 @@
 void testDrawLine(void);
 
 int main(void){ 
-	ADC_Init();
-	soundInit();
-	IO_Init();
-	PLL_Init();                           // set system clock to 80 MHz
-	ST7735_InitR(INITR_REDTAB);
-	
 	//Construct stuff
 	Player player = newPlayer();
 	Camera camera = newCamera(&player);
@@ -80,11 +74,16 @@ int main(void){
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 1, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
+	
+	ADCInit();
+	soundInit();
+	IOInit();
+	PLL_Init();                           // set system clock to 80 MHz
+	ST7735_InitR(INITR_REDTAB);
 
 	//testDrawLine();
   while(1){
 		gatherInputs();
-		
 		
 		//Rendering
 		prepareRenderer(camera);
@@ -96,12 +95,9 @@ int main(void){
 		renderProjectiles(pCollection);
 		renderGraphicsBuffer();
 		
-		
-		
 		//Game Logic
 		manageEnvironment(&player);
-		movePlayer(&player, &pCollection);
-		//shoot(&player, &pCollection);
+		movePlayer(&player, &pCollection);			
 		moveProjectiles(&pCollection);
 		moveCamera(&camera);
 		

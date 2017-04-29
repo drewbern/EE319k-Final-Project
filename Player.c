@@ -1,12 +1,16 @@
+// FiFo.h
+// Last Modified: 04/28/2017
+// Written by: Zachary Chilton & Philip Tan
+
 #include <math.h>
 #include "tm4c123gh6pm.h"
 
 #include "vec3f.h"
 #include "Entity.h"
-#include "IO.h"
 #include "vec4f.h"
 #include "VectorMath.h"
 #include "Matrix4f.h"
+#include "IO.h"
 
 #include "Projectile.h"
 

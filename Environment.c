@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "Ground.h"
 #include "Projectile.h"
-
+#include "IO.h"
 
 #define MAX_OBSTACLES 7
 
@@ -29,7 +29,7 @@ void manageEnvironment(Player* player) {
 	if(distanceTraveled >= 20) {
 		generateNewObstacles();
 		distanceTraveled = 0;
-		GPIO_PORTF_DATA_R ^= 0x2;	//red LED toggled
+		beat();
 	}
 
 	
