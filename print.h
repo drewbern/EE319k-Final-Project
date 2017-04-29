@@ -19,3 +19,7 @@ void LCD_OutDec(uint32_t);
 // Input: none
 // Output: none
 void LCD_OutFix(uint32_t);
+
+void writecommand(uint8_t c);
+
+void writedata(uint8_t c);

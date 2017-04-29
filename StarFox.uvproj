@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Star Fox</TargetName>
+      <TargetName>StarFox</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -580,11 +580,6 @@
         <Group>
           <GroupName>UI</GroupName>
           <Files>
-            <File>
-              <FileName>UI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\UI.c</FilePath>
-            </File>
             <File>
               <FileName>UART.c</FileName>
               <FileType>1</FileType>

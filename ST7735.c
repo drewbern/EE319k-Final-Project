@@ -53,11 +53,13 @@
 // RESET (pin 3) connected to PA7 (GPIO)
 // VCC (pin 2) connected to +3.3 V
 // Gnd (pin 1) connected to ground
+
 #include <stdio.h>
 #include <math.h>
 #include <stdint.h>
 #include "ST7735.h"
 #include "tm4c123gh6pm.h"
+#include "print.h"
 
 
 // 16 rows (0 to 15) and 21 characters (0 to 20)
@@ -479,7 +481,6 @@ static int16_t _height = ST7735_TFTHEIGHT;
 // NOTE: These functions will crash or stall indefinitely if
 // the SSI0 module is not initialized and enabled.
 void writecommand(uint8_t c);
-
 
 void writedata(uint8_t c);
 
