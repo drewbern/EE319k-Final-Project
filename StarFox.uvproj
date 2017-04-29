@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Lab7</TargetName>
+      <TargetName>Star Fox</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -45,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>Lab7</OutputName>
+          <OutputName>Star Fox</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -421,9 +421,9 @@
               <FilePath>.\LCD.s</FilePath>
             </File>
             <File>
-              <FileName>Lab7Main.c</FileName>
+              <FileName>StarFoxmain.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Lab7Main.c</FilePath>
+              <FilePath>.\StarFoxmain.c</FilePath>
             </File>
           </Files>
         </Group>
