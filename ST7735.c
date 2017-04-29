@@ -59,8 +59,6 @@
 #include <stdint.h>
 #include "ST7735.h"
 #include "tm4c123gh6pm.h"
-#include "print.h"
-
 
 // 16 rows (0 to 15) and 21 characters (0 to 20)
 // Requires (11 + size*size*6*8) bytes of transmission for each character
