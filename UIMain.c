@@ -15,5 +15,7 @@ int main(void){
 	PLL_Init();
 	ST7735_InitR(INITR_REDTAB);
 	
-	thicc();
+	drawBG();
+	drawLives(3);
+	drawBombs(3);
 }
