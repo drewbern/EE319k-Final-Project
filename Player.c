@@ -3,7 +3,7 @@
 
 #include "vec3f.h"
 #include "Entity.h"
-#include "InputHandler.h"
+#include "IO.h"
 #include "vec4f.h"
 #include "VectorMath.h"
 #include "Matrix4f.h"

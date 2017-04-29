@@ -17,3 +17,8 @@ typedef struct wav{
 
 void soundInit(void);
 void startSound(wav soundToPlay);
+void sound_laser(void);
+
+//DAC
+void DACOut(uint8_t data);
+void DACInit(void);

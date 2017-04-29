@@ -40,6 +40,7 @@
 #include "tm4c123gh6pm.h"
 #include "IO.h"
 #include "Print.h"
+#include "Sound.h"
 
 #include "Math2.h"
 #include "vec2f.h"
@@ -58,24 +59,11 @@
 
 #include "GraphicsBuffer.h"
 
-#include "ADC.h"
-#include "InputHandler.h"
-#include "Sound.h"
-
 void testDrawLine(void);
-
-void SysTick_Init(){
-	uint32_t period = 10000000;	//I change it for random fct
-	
-	NVIC_ST_CTRL_R = 0;						// disable SysTick during initialization
-	NVIC_ST_RELOAD_R = period-1;	// set reload to period
-	NVIC_ST_CURRENT_R = 0;				// reset current time
-	NVIC_ST_CTRL_R |= 0x5;				// re-enable SysTick while enabling clock and interrupts
-}
 
 int main(void){ 
 	ADC_Init();
-	SysTick_Init();
+	soundInit();
 	IO_Init();
 	PLL_Init();                           // set system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
@@ -113,7 +101,7 @@ int main(void){
 		//Game Logic
 		manageEnvironment(&player);
 		movePlayer(&player, &pCollection);
-		shoot(&player, &pCollection);
+		//shoot(&player, &pCollection);
 		moveProjectiles(&pCollection);
 		moveCamera(&camera);
 		

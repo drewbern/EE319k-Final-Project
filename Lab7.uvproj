@@ -571,26 +571,6 @@
               <FilePath>.\IO.c</FilePath>
             </File>
             <File>
-              <FileName>ADC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ADC.c</FilePath>
-            </File>
-            <File>
-              <FileName>ADC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\ADC.h</FilePath>
-            </File>
-            <File>
-              <FileName>InputHandler.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\InputHandler.c</FilePath>
-            </File>
-            <File>
-              <FileName>DAC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\DAC.c</FilePath>
-            </File>
-            <File>
               <FileName>Sound.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sound.c</FilePath>
