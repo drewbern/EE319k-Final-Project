@@ -38,6 +38,8 @@
 
 #include "GraphicsBuffer.h"
 
+#include "Menu.h"
+
 void testDrawLine(void);
 
 int main(void){ 
@@ -54,13 +56,18 @@ int main(void){
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
 	
-	ADCInit();
+	//ADCInit();
 	soundInit();
 	IOInit();
-	PLL_Init();                           // set system clock to 80 MHz
+	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
-
-	//testDrawLine();
+	
+	menuInit();
+	// start menu testing
+	//while(1){
+	//	startMenu();
+	//}
+	
   while(1){
 		gatherInputs();
 		

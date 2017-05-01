@@ -11,14 +11,14 @@ uint8_t putIndex = 0;
 uint8_t getIndex = 0;
 
 //sets up FIFO indeces
-void FiFo_Init() {
+void FiFo_Init(){
 	putIndex = 0;
 	getIndex = 0;
 }
 
 //puts data into the FiFo
 //returns 0 if failure due to full FiFo, returns 1 if success
-uint32_t FiFo_Put(char data) {
+uint32_t FiFo_Put(char data){
 	if((putIndex+1)%FIFO_SIZE == getIndex)
 		//full FiFo
 		return 0;
@@ -34,8 +34,7 @@ uint32_t FiFo_Put(char data) {
 
 //gets an element from the FiFo
 //returns 0 if failure due to empty FiFo, returns 1 if success
-uint32_t FiFo_Get(char *datapt)
-{
+uint32_t FiFo_Get(char *datapt){
 	if(putIndex == getIndex)
 		//empty FiFo
 		return 0;

@@ -14,8 +14,11 @@
 int main(void){
 	PLL_Init();
 	ST7735_InitR(INITR_REDTAB);
-	
+
 	drawBG();
-	drawLives(3);
-	drawBombs(3);
+	drawShip();
+	startHealth();
+	drawBombs(1);
+	
+	drawHealth(100);
 }
