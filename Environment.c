@@ -6,8 +6,10 @@
 #include "Ground.h"
 #include "Projectile.h"
 #include "IO.h"
+#include "Enemy.h"
 
 #define MAX_OBSTACLES 7
+#define MAX_ENEMIES 7
 
 Entity obstacles[MAX_OBSTACLES];
 int numObstacles = 0;
@@ -19,7 +21,9 @@ void moveObstacles(Projectile_Collection* pCollection);
 void Random_Init(uint32_t seed);
 uint8_t Random(void);
 
-void manageEnvironment(Player* player, Projectile_Collection* pCollection) {
+void manageEnvironment(Player* player, Enemy** enemies, Projectile_Collection* pCollection,
+	void increaseScore(uint32_t changeInScore)) {
+		
 	//Despawn old obstacles
 	for(int i = 0; i < MAX_OBSTACLES; i ++) {
 		if(obstacles[i].position.z <= 0) {
@@ -35,9 +39,16 @@ void manageEnvironment(Player* player, Projectile_Collection* pCollection) {
 
 	
 	distanceTraveled ++;
+	increaseScore(1);
 	
 	moveObstacles(pCollection);
 	checkCollisionEntityObstacle(&(*player).entity);
+	
+	for(int i = 0; i < MAX_ENEMIES; i ++) {
+		if((**enemies).entity.health > 0) {
+			checkCollisionEntityObstacle(&(**enemies).entity);
+		}
+	}
 }
 
 //70% chance building spawn test every 5 seconds
@@ -98,8 +109,6 @@ void renderObstacles(void) {
 }
 
 void checkCollisionEntityObstacle(Entity* entity) {
-	uint8_t hit = 0;
-	
 	for(int i = 0; i < MAX_OBSTACLES; i ++) {
 		Entity o = obstacles[i];
 		
@@ -113,7 +122,6 @@ void checkCollisionEntityObstacle(Entity* entity) {
 			
 			obstacles[i].health --;
 			//beat();
-			hit = 1;
 			(*entity).turnToRed = 1;
 			(*entity).framesRedLeft = 5;
 			obstacles[i].turnToRed = 1;

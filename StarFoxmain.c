@@ -40,10 +40,12 @@
 #include "GraphicsBuffer.h"
 
 void testDrawLine(void);
+void increaseScore(uint32_t changeInScore);
 
 Player player;
 Projectile_Collection pCollection;
 Projectile_Collection pCollection_E;
+uint32_t score;
 
 int main(void){ 
 	//Construct stuff
@@ -85,8 +87,8 @@ int main(void){
 		
 		//Game Logic
 		shoot(&player, &pCollection);
-		manageEnvironment(&player, &pCollection);
-		moveEnemies(&player, &pCollection);
+		manageEnvironment(&player, &pCollection, increaseScore);
+		moveEnemies(&player, &pCollection, increaseScore);
 		movePlayer(&player, &pCollection);			
 		moveProjectiles(&pCollection);
 		moveCamera(&camera);
@@ -99,6 +101,10 @@ int main(void){
 
 void sendShootAction() {
 	shoot(&player, &pCollection);
+}
+
+void increaseScore(uint32_t changeInScore) {
+	score += changeInScore;
 }
 
 void testDrawLine() {
