@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+void menuHeader(void);
 void drawBG(void);
 void drawShip(void);
 void startHealth(void);

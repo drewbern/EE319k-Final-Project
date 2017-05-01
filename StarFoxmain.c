@@ -62,12 +62,6 @@ int main(void){
 	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
 	
-	menuInit();
-	// start menu testing
-	//while(1){
-	//	startMenu();
-	//}
-	
   while(1){
 		gatherInputs();
 		

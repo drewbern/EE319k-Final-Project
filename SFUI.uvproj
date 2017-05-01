@@ -450,6 +450,11 @@
               <FileType>1</FileType>
               <FilePath>.\assets.c</FilePath>
             </File>
+            <File>
+              <FileName>Menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Menu.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
