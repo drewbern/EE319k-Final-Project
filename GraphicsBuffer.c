@@ -1,6 +1,6 @@
 #include "stdint.h"
 #include "ST7735.h"
-#include <math.h>
+#include "Math2.h"
 
 #define WIDTH					128
 #define HEIGHT				160

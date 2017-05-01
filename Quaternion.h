@@ -1,7 +1,7 @@
 #ifndef Quat_h
 #define Quat_h
 
-#include <math.h>
+#include "Math2.h"
 #include "math2.h"
 #include "vec3f.h"
 #include "VectorMath.h"

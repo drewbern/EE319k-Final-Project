@@ -1,4 +1,4 @@
-#include <math.h>
+#include "Math2.h"
 #include "ST7735.h"
 
 #include "Math2.h"

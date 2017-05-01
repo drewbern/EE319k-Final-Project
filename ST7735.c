@@ -55,7 +55,7 @@
 // Gnd (pin 1) connected to ground
 
 #include <stdio.h>
-#include <math.h>
+#include "Math2.h"
 #include <stdint.h>
 #include "ST7735.h"
 #include "tm4c123gh6pm.h"

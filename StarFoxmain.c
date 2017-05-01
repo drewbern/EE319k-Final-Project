@@ -73,7 +73,12 @@ int main(void){
 	ST7735_InitR(INITR_REDTAB);
 	
   while(1){
-		gatherInputs();
+		//gatherInputs();
+		float test1 = tan(3.14);
+		float test2 = tan(0);
+		float test3 = tan(1313);
+		float test4 = tan(-100);
+		float test5 = tan(-3.14);
 		
 		//Rendering
 		prepareRenderer(camera);

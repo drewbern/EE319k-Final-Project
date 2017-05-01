@@ -1,6 +1,6 @@
 #include "stdint.h"
 #include "ST7735.h"
-#include <math.h>
+#include "Math2.h"
 
 //Original 	(R1 R2 R3 G1 G2 G3 B1 B2)
 //Byte 1 		(R1 R1 R2 R2 R3 G1 G1 G2)

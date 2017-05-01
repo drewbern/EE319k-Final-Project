@@ -2,7 +2,7 @@
 #define Matrix4f_h
 
 #include "vec3f.h"
-#include <math.h>
+#include "Math2.h"
 
 typedef struct Matrix4f{
 	float m00, m10, m20, m30;						//Top row, left to right
