@@ -50,10 +50,13 @@ void render(Entity** entitiesP, int numElements) {
 		Entity entity = *(entities + i);
 		if(entity.type == PLANE) {
 			prepareEntity(&entity, PLANE_POINTS);
-			renderEntity(entity.vertexBuffer, PLANE_INDICES, PLANE_NUM_INDICES, PLANE_COLOR_BUFFER);	
+			renderEntity(entity.vertexBuffer, PLANE_INDICES, PLANE_NUM_INDICES, PLANE_COLOR_BUFFER, entity.turnToRed);	
 		} else if (entity.type == CUBE) {
 			prepareEntity(&entity, CUBE_POINTS);
-			renderEntity(entity.vertexBuffer, CUBE_INDICES, CUBE_NUM_INDICES, CUBE_COLOR_BUFFER);	
+			renderEntity(entity.vertexBuffer, CUBE_INDICES, CUBE_NUM_INDICES, CUBE_COLOR_BUFFER, entity.turnToRed);	
+		} else if (entity.type == ENEMY) {
+			prepareEntity(&entity, ENEMY_POINTS);
+			renderEntity(entity.vertexBuffer, ENEMY_INDICES, ENEMY_NUM_INDICES, ENEMY_COLOR_BUFFER, entity.turnToRed);	
 		}
 	}
 }
@@ -68,6 +71,8 @@ void prepareEntity(Entity* entityP, const float points[]) {
 		numPoints = PLANE_NUM_POINTS;
 	} else if ((*entityP).type == CUBE) {
 		numPoints = CUBE_NUM_POINTS;
+	} else if ((*entityP).type == ENEMY) {
+		numPoints = ENEMY_NUM_POINTS;
 	}
 	
 	for(int i = 0; i < numPoints-2; i +=3) {
@@ -78,7 +83,8 @@ void prepareEntity(Entity* entityP, const float points[]) {
 	}		
 }
 
-void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numIndices, const uint8_t colorBuffer[]) {
+void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numIndices, const uint8_t colorBuffer[],
+	uint8_t turnRed) {
 	for(int i = 0;  i < numIndices-2; i +=3) {
 		int16_t x0 = (int16_t)vertexBuffer[indexBuffer[i]].x;
 		int16_t y0 = (int16_t)vertexBuffer[indexBuffer[i]].y;
@@ -88,6 +94,9 @@ void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numI
 		int16_t y2 = (int16_t)vertexBuffer[indexBuffer[i+2]].y;
 
 		uint8_t color = *(colorBuffer+i/3);
+		if(turnRed == 1) {
+			color = RED;
+		}
 		drawLine(x0, y0, x1, y1, color);
 		drawLine(x1, y1, x2, y2, color);
 		drawLine(x2, y2, x0, y0, color);
@@ -129,7 +138,7 @@ void renderPlayer(Player player) {
 		*vertexBufferPointer = point;
 	}
 	
-	renderEntity(player.entity.vertexBuffer, PLANE_INDICES, PLANE_NUM_INDICES, PLANE_COLOR_BUFFER);
+	renderEntity(player.entity.vertexBuffer, PLANE_INDICES, PLANE_NUM_INDICES, PLANE_COLOR_BUFFER, player.entity.turnToRed);
 }
 
 Vector2f preparePoint(Vector3f pointA, Matrix4f transformation, Matrix4f rotation) {

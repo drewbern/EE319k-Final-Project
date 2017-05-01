@@ -10,17 +10,18 @@ enum enemyType {
 
 typedef struct Enemy{
 	enum enemyType type;
+	Entity entity;
 	Vector3f position;
-	float size;
+	Vector3f velocity;
+		
+	float reloadTime;
+	float reloadCounter;
 	//float health;
 	
 } Enemy;
 
-typedef struct Enemy_Collection {
-	Enemy projectiles[20];
-	uint8_t putIndex;
-	uint8_t getIndex;
-	
-} Enemy_Collection;
+void moveEnemies(Player* player, Projectile_Collection* pCollection);
+
+void renderEnemies(void);
 
 #endif

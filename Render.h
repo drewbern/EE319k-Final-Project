@@ -21,7 +21,8 @@ void render(Entity** entitiesP, int numElements);
 
 void prepareEntity(Entity* entityP, const float points[]);
 
-void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numTriangles, const uint8_t colorBuffer[]);
+void renderEntity(Vector2f vertexBuffer[], const uint8_t indexBuffer[], int numTriangles, const uint8_t colorBuffer[],
+	uint8_t turnRed);
 
 void renderPlayer(Player player);
 

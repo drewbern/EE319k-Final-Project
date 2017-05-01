@@ -21,6 +21,8 @@ void soundInit(void){
 	NVIC_ST_CURRENT_R = 0;
 	NVIC_ST_RELOAD_R = (uint32_t)80000000/F;
 	
+	NVIC_ST_CTRL_R = 0x07;
+	
 	currentSound = NONE;
 	DACInit();
 }
@@ -46,7 +48,7 @@ void startSound(wav soundToPlay){
 }
 
 void stopSound(void){
-	NVIC_ST_CTRL_R &= ~0x1;
+	//NVIC_ST_CTRL_R &= ~0x1;
 	
 	currentSound = NONE;
 }

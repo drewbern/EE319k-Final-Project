@@ -18,6 +18,12 @@ Vector3f cross_vec3f(Vector3f left, Vector3f right);
 
 Vector3f add_vec3f(Vector3f a, Vector3f b);
 
+Vector3f sub_vec3f(Vector3f left, Vector3f right);
+
+Vector3f normalize_vec3f(Vector3f v);
+
+float length_vec3f(Vector3f v);
+
 Vector4f mul_vec3f_mat4f(Vector3f vector, Matrix4f matrix);
 
 Vector3f mul_vec3f(Vector3f vector, Matrix3f matrix);

@@ -35,21 +35,29 @@
 #include "Environment.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Enemy.h"
 
 #include "GraphicsBuffer.h"
 
 void testDrawLine(void);
 
+Player player;
+Projectile_Collection pCollection;
+Projectile_Collection pCollection_E;
+
 int main(void){ 
 	//Construct stuff
-	Player player = newPlayer();
+	player = newPlayer();
 	Camera camera = newCamera(&player);
 	initRenderer(&camera);
 	
 	//Arrays
-	Entity entities[2];
+	//Entity entities[2];
 	//entities[0] = newCube(newVector3f(0,0,10), 0, 0, 0, newVector3f(1,1,1));
-  Projectile_Collection pCollection = newProjectileCollection();
+	//entities[0] = newEnemyEntity(newVector3f(0,0,10), 0, 0, 0, newVector3f(1,1,1));
+	
+	
+  pCollection = newProjectileCollection();
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 1, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
 	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
@@ -66,16 +74,19 @@ int main(void){
 		
 		//Rendering
 		prepareRenderer(camera);
-		Entity* entitiesP = entities;
+		//Entity* entitiesP = entities;
+		//render(&entitiesP, 1);
 		renderGround(camera);
 		renderObstacles();
-		render(&entitiesP, 1);
+		renderEnemies();
 		renderPlayer(player);
 		renderProjectiles(pCollection);
 		renderGraphicsBuffer();
 		
 		//Game Logic
-		manageEnvironment(&player);
+		shoot(&player, &pCollection);
+		manageEnvironment(&player, &pCollection);
+		moveEnemies(&player, &pCollection);
 		movePlayer(&player, &pCollection);			
 		moveProjectiles(&pCollection);
 		moveCamera(&camera);
@@ -84,6 +95,10 @@ int main(void){
 		
     //IO_HeartBeat();
   }
+}
+
+void sendShootAction() {
+	shoot(&player, &pCollection);
 }
 
 void testDrawLine() {

@@ -51,7 +51,7 @@ Player newPlayer(void) {
 	Vector3f initialPosition = {0, 2, 2};
 	Player out = {
 		initialPosition,
-		newPlane(initialPosition, 0, 0, 0, newVector3f(0.3,0.3,0.3)),
+		newPlane(initialPosition, 0, 0, 0, newVector3f(0.6,0.42,0.4)),
 		3,
 		0,
 		0,
@@ -131,7 +131,7 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 		
 		velocity = mul_vec4f(velocity, rotate);
 		
-		addProjectile(pCollection, newProjectile((*p).position, newVector3f(velocity.x, velocity.y, velocity.z)));
+		addProjectile(pCollection, newProjectile((*p).position, newVector3f(velocity.x, velocity.y, velocity.z), PLAYER_PROJECTILE));
 		
 		(*p).reloadCounter = (*p).reloadTime;
 	}

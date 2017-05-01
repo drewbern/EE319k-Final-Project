@@ -41,6 +41,26 @@ Vector3f add_vec3f(Vector3f a, Vector3f b) {
 	return out;
 }
 
+/**
+Returns left sub right
+**/
+Vector3f sub_vec3f(Vector3f left, Vector3f right) {
+	Vector3f out = {left.x - right.x, left.y - right.y, left.z - right.z};
+	return out;
+}
+
+Vector3f normalize_vec3f(Vector3f v) {
+	float length = length_vec3f(v);
+	
+	Vector3f out = {v.x/length, v.y/length, v.z/length};
+	
+	return out;
+}
+
+float length_vec3f(Vector3f v) {
+	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
 Vector3f cross_vec3f(Vector3f left, Vector3f right) {
 	Vector3f out = {
 				left.y * right.z - left.z * right.y,
