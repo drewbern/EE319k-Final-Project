@@ -29,6 +29,16 @@ void renderGraphicsBuffer() {
 		
 }
 
+void renderPartialGraphicsBuffer(uint8_t x, uint8_t y, uint8_t w, uint8_t h) {
+	ST7735_PushBuffer(x,160-y,&graphicsBuffer[0][0],w,h);
+	for(int r = y; r < h; r ++) {
+		for(int c = x; c < w; c++) {
+			graphicsBuffer[r][c] = 0;
+		}
+	}
+		
+}
+
 void drawImage(int x, int y, const uint8_t *image, int w, int h ) {
 	if(x > WIDTH || y > HEIGHT || (x + w) < 0 || (y + h) < 0) {
 		return;

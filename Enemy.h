@@ -20,7 +20,8 @@ typedef struct Enemy{
 	
 } Enemy;
 
-void moveEnemies(Player* player, Projectile_Collection* pCollection);
+void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*increaseScore)(uint32_t changeInScore),
+	uint8_t difficulty);
 
 void renderEnemies(void);
 

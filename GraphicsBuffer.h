@@ -18,6 +18,8 @@
 
 void renderGraphicsBuffer(void);
 
+void renderPartialGraphicsBuffer(uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+
 void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint8_t color);
 
 void drawPixel(int x, int y, uint8_t color);

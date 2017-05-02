@@ -36,9 +36,7 @@
 #include "Player.h"
 #include "Projectile.h"
 #include "Enemy.h"
-
 #include "GraphicsBuffer.h"
-
 #include "Menu.h"
 
 Player player;
@@ -46,60 +44,58 @@ Projectile_Collection pCollection;
 Projectile_Collection pCollection_E;
 uint32_t score;
 
+void increaseScore(uint32_t changeInScore);
+
 int main(void){ 
 	//Construct stuff
 	player = newPlayer();
 	Camera camera = newCamera(&player);
 	initRenderer(&camera);
-	
-	//Arrays
-	//Entity entities[2];
-	//entities[0] = newCube(newVector3f(0,0,10), 0, 0, 0, newVector3f(1,1,1));
-	//entities[0] = newEnemyEntity(newVector3f(0,0,10), 0, 0, 0, newVector3f(1,1,1));
-	
-	
+
   pCollection = newProjectileCollection();
-	//addProjectile(&pCollection, newProjectile(newVector3f(0, 1, 5), newVector3f(0, 0, 0)));
-	//addProjectile(&pCollection, newProjectile(newVector3f(0, 2, 5), newVector3f(0, 0, 0)));
-	//addProjectile(&pCollection, newProjectile(newVector3f(0, 3, 5), newVector3f(0, 0, 0)));
 	
 	//ADCInit();
 	soundInit();
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
-	//menuInit(&camera);
 	
-	//while(1) {
+	
+	while(1) {	
+		camera = newCamera(&player);
+		menuInit(&camera);
+		
 		//playMenu();
+		uint8_t gameDifficulty = 1;//difficultyMenu(camera);
 		
-	//}
-	//difficultyMenu(camera);
-	
-  while(1){
-		//gatherInputs();
-				
-		//Game Logic
-		shoot(&player, &pCollection);
-		manageEnvironment(&player, &pCollection);
-		moveEnemies(&player, &pCollection);
-		movePlayer(&player, &pCollection);			
-		moveProjectiles(&pCollection);
-		moveCamera(&camera);
+		while(player.entity.health > 0){
+			//gatherInputs();
+					
+			//Game Logic
+			shoot(&player, &pCollection);
+			manageEnvironment(&player, &pCollection, gameDifficulty);
+			moveEnemies(&player, &pCollection, &increaseScore, gameDifficulty);
+			movePlayer(&player, &pCollection);			
+			moveProjectiles(&pCollection);
+			moveCamera(&camera);
+			
+			//Rendering
+			prepareRenderer(camera);
+			renderGround(camera);
+			renderObstacles();
+			renderEnemies();
+			renderPlayer(player);
+			renderProjectiles(pCollection);
+			renderGraphicsBuffer();
+			
+			
+			score += gameDifficulty;													//Hey, if you survived a frame, you deserve some points
+			//IO_HeartBeat();
+		}
 		
-		//Rendering
-		prepareRenderer(camera);
-		//Entity* entitiesP = entities;
-		//render(&entitiesP, 1);
-		renderGround(camera);
-		renderObstacles();
-		renderEnemies();
-		renderPlayer(player);
-		renderProjectiles(pCollection);
-		renderGraphicsBuffer();
-		
-    //IO_HeartBeat();
-  }
+		//Player died, show death screen
+		deathMenu(score);
+	}
 }
 
 void sendShootAction() {
