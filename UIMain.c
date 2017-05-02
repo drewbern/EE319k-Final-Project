@@ -11,7 +11,7 @@
 #include "ST7735.h"
 
 #include "assets.h"
-#include "Menu.h"
+#include "Menu2.h"
 #include "FiFo.h"
 #include "UART.h"
 
@@ -35,7 +35,7 @@ int main(void){
 			
 		mBeat();	
 		uint8_t code = status&0x0F;	// lower byte holds code
-		uint8_t data = status&0xF0;	// upper byte holds data
+		uint8_t data = (status&0xF0) >> 4;	// upper byte holds data
 			
 		// cases for code received to change stats/menu status
 		switch (code){
@@ -47,14 +47,16 @@ int main(void){
 				drawBombs(data);
 			break;
 			
-			case 2:	// start game w/ initial UI
+			case 2: // score update
+			
+			case 3:	// start game w/ initial UI
 				drawBG();
 				drawShip();
 				startHealth();
 				drawBombs(1);
 			break;
 			
-			case 3: // game over
+			case 4: // game over
 				// TODO game over screen
 			break;
 			
