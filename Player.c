@@ -32,6 +32,8 @@
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
 #define YAW_FACTOR 50		
 
+void takenDamage(void);
+
 typedef struct Player {
 	Vector3f position;
 	Entity entity;
@@ -67,7 +69,12 @@ Player newPlayer(void) {
 void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	//Other important stuff for player that is not movement
 	(*p).reloadCounter = fmax((*p).reloadCounter - 1, 0);
-	(*p).entity.health -= testCollision(&(*p).entity, pCollection, ENEMY_PROJECTILE);
+	uint8_t hit = testCollision(&(*p).entity, pCollection, ENEMY_PROJECTILE);
+	if(hit != 0) {
+		(*p).entity.health -= hit;
+		takenDamage();
+	}
+	
 	
 	//Horizontal Movement
 	float horizontalMovement = getXPos() * MOVE_SPEED;
@@ -135,4 +142,8 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 		
 		(*p).reloadCounter = (*p).reloadTime;
 	}
+}
+
+void takenDamage() {
+	
 }
