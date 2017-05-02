@@ -54,7 +54,7 @@ int main(void){
 
   pCollection = newProjectileCollection();
 	
-	//ADCInit();
+	ADCInit();
 	soundInit();
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz
@@ -66,10 +66,10 @@ int main(void){
 		menuInit(&camera);
 		
 		//playMenu();
-		uint8_t gameDifficulty = 1;//difficultyMenu(camera);
+		uint8_t gameDifficulty = 3 ;//difficultyMenu(camera);
 		
 		while(player.entity.health > 0){
-			//gatherInputs();
+			gatherInputs();
 					
 			//Game Logic
 			shoot(&player, &pCollection);
