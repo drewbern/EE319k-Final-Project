@@ -67,7 +67,7 @@ Player newPlayer(void) {
 void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	//Other important stuff for player that is not movement
 	(*p).reloadCounter = fmax((*p).reloadCounter - 1, 0);
-	(*p).entity.health -= testCollision(&(*p).entity, pCollection, PLAYER_PROJECTILE);
+	(*p).entity.health -= testCollision(&(*p).entity, pCollection, ENEMY_PROJECTILE);
 	
 	//Horizontal Movement
 	float horizontalMovement = getXPos() * MOVE_SPEED;

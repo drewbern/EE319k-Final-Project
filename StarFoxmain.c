@@ -41,9 +41,6 @@
 
 #include "Menu.h"
 
-void testDrawLine(void);
-void increaseScore(uint32_t changeInScore);
-
 Player player;
 Projectile_Collection pCollection;
 Projectile_Collection pCollection_E;
@@ -71,14 +68,24 @@ int main(void){
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
+	//menuInit(&camera);
+	
+	//while(1) {
+		//playMenu();
+		
+	//}
+	//difficultyMenu(camera);
 	
   while(1){
 		//gatherInputs();
-		float test1 = tan(3.14);
-		float test2 = tan(0);
-		float test3 = tan(1313);
-		float test4 = tan(-100);
-		float test5 = tan(-3.14);
+				
+		//Game Logic
+		shoot(&player, &pCollection);
+		manageEnvironment(&player, &pCollection);
+		moveEnemies(&player, &pCollection);
+		movePlayer(&player, &pCollection);			
+		moveProjectiles(&pCollection);
+		moveCamera(&camera);
 		
 		//Rendering
 		prepareRenderer(camera);
@@ -90,16 +97,6 @@ int main(void){
 		renderPlayer(player);
 		renderProjectiles(pCollection);
 		renderGraphicsBuffer();
-		
-		//Game Logic
-		shoot(&player, &pCollection);
-		manageEnvironment(&player, &pCollection, increaseScore);
-		moveEnemies(&player, &pCollection, increaseScore);
-		movePlayer(&player, &pCollection);			
-		moveProjectiles(&pCollection);
-		moveCamera(&camera);
-		
-		//for(int i = 0; i < 1000000; i ++) {		}
 		
     //IO_HeartBeat();
   }
@@ -113,39 +110,3 @@ void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
 }
 
-void testDrawLine() {
-	/*
-	ST7735_DrawLine(64,80,64,160, 0xFFFF);			
-	ST7735_DrawLine(64,80,128,80, 0xFFFF);			
-	ST7735_DrawLine(64,80,64,-1, 0xFFFF);			
-	ST7735_DrawLine(64,80,-1,80, 0xFFFF);	
-				
-	ST7735_DrawLine(64,80,128,160, 0xFFFF);			
-	ST7735_DrawLine(64,80,-1,160, 0xFFFF);			
-	ST7735_DrawLine(64,80,-1,-1, 0xFFFF);			
-	ST7735_DrawLine(64,80,128,-1, 0xFFFF);
-
-	ST7735_DrawLine(-10, 10, 64,80, 0xFFFF);			
-	ST7735_DrawLine(-10, 150, 64,80, 0xFFFF);			
-	ST7735_DrawLine(138,10,64,80, 0xFFFF);			
-	ST7735_DrawLine(138,150,64,80, 0xFFFF);	
-*/
-	//drawLine(64,80,64,160, 0xFF);			
-	//drawLine(64,80,128,80, 0xFF);			
-	//drawLine(64,80,64,-10, 0xFF);			
-	
-	/*
-	drawLine(64,80,-1,80, 0xFF);	
-				
-	drawLine(64,80,128,160, 0xFF);			
-	drawLine(64,80,-1,160, 0xFF);			
-	drawLine(64,80,-1,-1, 0xFF);			
-	drawLine(64,80,128,-1, 0xFF);
-
-	
-	drawLine(-10, 10, 64,80, 0xFF);			
-	drawLine(-10, 150, 64,80, 0xFF);			
-	drawLine(138,10,64,80, 0xFF);			
-	drawLine(138,150,64,80, 0xFF);	
-	*/
-}

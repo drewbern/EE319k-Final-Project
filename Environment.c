@@ -21,8 +21,7 @@ void moveObstacles(Projectile_Collection* pCollection);
 void Random_Init(uint32_t seed);
 uint8_t Random(void);
 
-void manageEnvironment(Player* player, Enemy** enemies, Projectile_Collection* pCollection,
-	void increaseScore(uint32_t changeInScore)) {
+void manageEnvironment(Player* player, Enemy** enemies, Projectile_Collection* pCollection) {
 		
 	//Despawn old obstacles
 	for(int i = 0; i < MAX_OBSTACLES; i ++) {
@@ -39,16 +38,18 @@ void manageEnvironment(Player* player, Enemy** enemies, Projectile_Collection* p
 
 	
 	distanceTraveled ++;
-	increaseScore(1);
 	
 	moveObstacles(pCollection);
 	checkCollisionEntityObstacle(&(*player).entity);
 	
+	/*
 	for(int i = 0; i < MAX_ENEMIES; i ++) {
 		if((**enemies).entity.health > 0) {
 			checkCollisionEntityObstacle(&(**enemies).entity);
 		}
 	}
+	
+	*/
 }
 
 //70% chance building spawn test every 5 seconds
@@ -88,7 +89,6 @@ void moveObstacles(Projectile_Collection* pCollection) {
 		if(obstacles[i].health > 0) {
 			obstacles[i].position.z -= CAMERA_SPEED;
 			obstacles[i].health -= testCollision(&obstacles[i], pCollection, ALL);
-			//obstacles[i].health -= testCollision(&obstacles[i], pCollection, 3);
 		}
 	}
 }

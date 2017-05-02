@@ -6,5 +6,7 @@
 #define CAMERA_SPEED 0.7
 
 void renderGround(Camera camera);
+float renderMenuGround(Camera camera);
+void initGround(void);
 
 #endif

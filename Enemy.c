@@ -27,7 +27,7 @@ Enemy newEnemy(Vector3f position, Vector3f velocity) {
 	return out;
 }
 
-void moveEnemies(Player* player, Projectile_Collection* pCollection, void increaseScore(uint32_t changeInScore)) {
+void moveEnemies(Player* player, Projectile_Collection* pCollection) {
 	//Despawn old enemies
 	for(int i = 0; i < MAX_ENEMIES; i ++) {
 		if(enemies[i].position.z < 0 || enemies[i].position.z > DESPAWN_DISTANCE) {
@@ -40,12 +40,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void increa
 		if(enemies[i].entity.health > 0) {
 			enemies[i].position = add_vec3f(enemies[i].position, enemies[i].velocity); 
 			enemies[i].entity.position = enemies[i].position;
-			
-			
-			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
-			increaseScore(hit * 10000);
-			enemies[i].entity.health -= hit;
-			
+			enemies[i].entity.health -= testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			
 			

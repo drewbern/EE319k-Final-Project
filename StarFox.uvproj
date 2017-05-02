@@ -425,6 +425,11 @@
               <FileType>1</FileType>
               <FilePath>.\StarFoxmain.c</FilePath>
             </File>
+            <File>
+              <FileName>Menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Menu.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -734,6 +739,11 @@
               <FileName>VectorMath.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\VectorMath.h</FilePath>
+            </File>
+            <File>
+              <FileName>Menu.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Menu.h</FilePath>
             </File>
           </Files>
         </Group>

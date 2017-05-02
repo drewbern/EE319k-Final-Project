@@ -164,25 +164,27 @@ Return 0 if no hit, 1 if hit
 uint8_t testCollision(Entity* entity, Projectile_Collection* pCollection, enum ProjectileType typeToTest) {
 	uint8_t hit = 0;
 	
+	
 	for(int i = 0; i < MAX_PROJECTILES_IN_COLLECTION; i ++) {
-		Projectile p = (*pCollection).projectiles[i];
-		
-		
-		
-		if(p.live != 0 && (p.type == typeToTest || typeToTest == ALL) && 
+		//Projectile p = (*pCollection).projectiles[i];
+	
+		if((*pCollection).projectiles[i].live != 0 && ((*pCollection).projectiles[i].type == typeToTest || typeToTest == ALL) && 
 			//Is projectile between front and back of entity?
-			p.position.z < ((*entity).position.z + (*entity).scale.z/2 + PROJECTILE_HITBOX_SIZE) &&  p.position.z > ((*entity).position.z - (*entity).scale.z/2 - PROJECTILE_HITBOX_SIZE) &&
+			(*pCollection).projectiles[i].position.z < ((*entity).position.z + (*entity).scale.z/2 + PROJECTILE_HITBOX_SIZE) && 
+			(*pCollection).projectiles[i].position.z > ((*entity).position.z - (*entity).scale.z/2 - PROJECTILE_HITBOX_SIZE) &&
 			//Is projectile between top and bottom of entity?
-			p.position.y < ((*entity).position.y + (*entity).scale.y + PROJECTILE_HITBOX_SIZE) &&  p.position.y > ((*entity).position.y - PROJECTILE_HITBOX_SIZE) && 
+			(*pCollection).projectiles[i].position.y < ((*entity).position.y + (*entity).scale.y + PROJECTILE_HITBOX_SIZE) &&
+			(*pCollection).projectiles[i].position.y > ((*entity).position.y - PROJECTILE_HITBOX_SIZE) && 
 			//Is projectile between left and right of entity?
-			p.position.x < ((*entity).position.x + (*entity).scale.x/2 + PROJECTILE_HITBOX_SIZE) &&  p.position.x > ((*entity).position.x - (*entity).scale.x/2) - PROJECTILE_HITBOX_SIZE) {
+			(*pCollection).projectiles[i].position.x < ((*entity).position.x + (*entity).scale.x/2 + PROJECTILE_HITBOX_SIZE) &&
+			(*pCollection).projectiles[i].position.x > ((*entity).position.x - (*entity).scale.x/2) - PROJECTILE_HITBOX_SIZE) {
 			
 			removeProjectile(pCollection, i);
 			hit = 1;
 			(*entity).turnToRed = 1;
 			(*entity).framesRedLeft = 5;
 			//beat();
-		} else if (p.live != 0) {
+		} else if ((*pCollection).projectiles[i].live != 0) {
 			(*entity).framesRedLeft --;
 			if((*entity).framesRedLeft <= 0) {
 				(*entity).turnToRed = 0;
@@ -190,6 +192,7 @@ uint8_t testCollision(Entity* entity, Projectile_Collection* pCollection, enum P
 			}
 		}
 	}
+	
 	return hit;
 }
 

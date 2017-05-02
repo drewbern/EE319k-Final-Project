@@ -2,6 +2,6 @@
 
 #include <stdint.h>
 
-void menuInit(void);
-void startMenu(void);
-void mBeat(void);
+void menuInit(Camera* c);
+void playMenu(void);
+void difficultyMenu(Camera c);
