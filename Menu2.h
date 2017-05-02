@@ -2,6 +2,6 @@
 
 #include <stdint.h>
 
-void menuInit(void);
+void menuInit2(void);
 void startMenu(void);
 void mBeat(void);

@@ -11,6 +11,7 @@
 #include "VectorMath.h"
 #include "Matrix4f.h"
 #include "IO.h"
+#include "UART.h"
 
 #include "Projectile.h"
 
@@ -32,7 +33,7 @@
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
 #define YAW_FACTOR 50		
 
-void takenDamage(void);
+void takenDamage(uint8_t);
 
 typedef struct Player {
 	Vector3f position;
@@ -54,11 +55,14 @@ Player newPlayer(void) {
 	Player out = {
 		initialPosition,
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.6,0.42,0.4)),
+		
 		3,
 		0,
+		
 		0,
 		0,
 		0,
+		
 		5,
 		0		
 	};
@@ -72,7 +76,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	uint8_t hit = testCollision(&(*p).entity, pCollection, ENEMY_PROJECTILE);
 	if(hit != 0) {
 		(*p).entity.health -= hit;
-		takenDamage();
+		takenDamage((*p).entity.health);
 	}
 	
 	
@@ -144,6 +148,10 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 	}
 }
 
-void takenDamage() {
+void takenDamage(uint8_t health){
+	uint8_t status = 0;
+	UART_OutChar(status);
 	
+	UART_OutChar(health);
+	UART_OutChar(0);			// health is only one byte
 }

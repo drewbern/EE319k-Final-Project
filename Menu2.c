@@ -6,7 +6,7 @@
 
 #define startInputs ((GPIO_PORTF_DATA_R&0x1) || ((GPIO_PORTF_DATA_R&0x10) >> 4))
 
-void menuInit(void){
+void menuInit2(void){
 	SYSCTL_RCGCGPIO_R |= 0x20;
 	uint8_t delay = 0;
 	delay++;
