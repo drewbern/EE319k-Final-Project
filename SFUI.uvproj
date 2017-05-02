@@ -451,9 +451,9 @@
               <FilePath>.\assets.c</FilePath>
             </File>
             <File>
-              <FileName>Menu.c</FileName>
+              <FileName>Menu2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Menu.c</FilePath>
+              <FilePath>.\Menu2.c</FilePath>
             </File>
           </Files>
         </Group>
