@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "FiFo.h"
+#include "Menu2.h"
 
 uint32_t errorCount;		//maybe for debugging
 uint32_t RxCounter = 0;
@@ -12,11 +13,16 @@ uint32_t RxCounter = 0;
 // UART ISR
 // uses codes from FiFo to perform certain actions
 void UART1_Handler(void){
+	mBeat();
+	mBeat();
+	
 	// when ready, puts status data into FiFo
 	while(!(UART1_FR_R&0x10))
 		FiFo_Put((char)UART1_DR_R&0xFF);
 	
 	UART1_ICR_R = 0x10;	// acknowledge that interrupt occurred
+	
+	mBeat();
 }
 
 // input 8 bits from UART

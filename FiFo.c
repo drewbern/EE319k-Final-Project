@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#define FIFO_SIZE 3
+#define FIFO_SIZE 5
 uint8_t fifo[FIFO_SIZE];
 uint8_t putIndex = 0;
 uint8_t getIndex = 0;

@@ -3020,12 +3020,12 @@ void startHealth(void){
 
 // pass health integer, draws health bar accordingly. make sure to update maxHealth #define.
 // TODO make animation for health changing
-void drawHealth(uint8_t health){
+void drawHealth(uint16_t health){
 	ST7735_FillRect(healthX + ((healthW * ((health * 10) / maxHealth)) / 10), healthY - healthH + 1, healthW - ((healthW * ((health * 10) / maxHealth)) / 10), healthH, 0);
 }
 
 // pass bomb integer from 0 to 3, draws bomb icons accordingly.
-void drawBombs(uint8_t bombsCount){
+void drawBombs(uint16_t bombsCount){
 	switch (bombsCount){
 		case 1:
 			ST7735_DrawBitmap(bombX, bombY, bombSprite, bombDimension, bombDimension);

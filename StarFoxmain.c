@@ -20,6 +20,7 @@
 #include "IO.h"
 #include "Print.h"
 #include "Sound.h"
+#include "UART.h"
 
 #include "Math2.h"
 #include "vec2f.h"
@@ -42,7 +43,7 @@
 Player player;
 Projectile_Collection pCollection;
 Projectile_Collection pCollection_E;
-uint32_t score;
+uint16_t score;
 
 void increaseScore(uint32_t changeInScore);
 
@@ -104,5 +105,12 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
+	uint8_t status = 0x02;
+	UART_OutChar(status);
+	
+	uint8_t tempScore = score&0x0FF;
+	UART_OutChar(tempScore);
+	tempScore = (score&0xFF00) >> 8;
+	UART_OutChar(tempScore);
 }
 

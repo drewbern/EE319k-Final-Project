@@ -580,6 +580,16 @@
               <FileType>1</FileType>
               <FilePath>.\FiFo.c</FilePath>
             </File>
+            <File>
+              <FileName>Menu2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Menu2.c</FilePath>
+            </File>
+            <File>
+              <FileName>assets.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\assets.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
