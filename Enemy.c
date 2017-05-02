@@ -10,10 +10,10 @@
 #define MAX_ENEMIES 7
 #define DESPAWN_DISTANCE 25
 #define PROJECTILE_SPEED 0.6
-#define ENEMY_SPAWN_TIMER_MAX 100
+#define ENEMY_SPAWN_TIMER_MAX 300
 
 Enemy enemies[MAX_ENEMIES];
-float enemySpawnTimer = 0;
+float enemySpawnTimer = ENEMY_SPAWN_TIMER_MAX;
 
 void generateNewEnemies(void);
 void Random_Init(uint32_t seed);
@@ -27,7 +27,8 @@ Enemy newEnemy(Vector3f position, Vector3f velocity) {
 	return out;
 }
 
-void moveEnemies(Player* player, Projectile_Collection* pCollection) {
+void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*increaseScore)(uint32_t changeInScore),
+	uint8_t difficulty) {
 	//Despawn old enemies
 	for(int i = 0; i < MAX_ENEMIES; i ++) {
 		if(enemies[i].position.z < 0 || enemies[i].position.z > DESPAWN_DISTANCE) {
@@ -40,7 +41,11 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection) {
 		if(enemies[i].entity.health > 0) {
 			enemies[i].position = add_vec3f(enemies[i].position, enemies[i].velocity); 
 			enemies[i].entity.position = enemies[i].position;
-			enemies[i].entity.health -= testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
+			
+			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
+			enemies[i].entity.health -= hit;
+			increaseScore(difficulty * difficulty * 100 * hit);
+			
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			
 			
@@ -60,7 +65,14 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection) {
 	//Spawn new enemies
 	if(enemySpawnTimer <= 0) {
 		generateNewEnemies();
-		enemySpawnTimer = ENEMY_SPAWN_TIMER_MAX;
+		
+		//Difficulty changes spawn rate
+		//Easy (1) = 300 frames
+		//Med (2) = 150 frames
+		//Hard (3) = 100 frames
+		
+		enemySpawnTimer = ENEMY_SPAWN_TIMER_MAX / difficulty;
+		
 		//beat();
 	}
 	enemySpawnTimer --;;

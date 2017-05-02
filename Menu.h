@@ -1,7 +1,9 @@
 // Menu.h
 
 #include <stdint.h>
+#include "Camera.h"
 
 void menuInit(Camera* c);
 void playMenu(void);
-void difficultyMenu(Camera c);
+uint8_t difficultyMenu(Camera c);
+void deathMenu(uint32_t score);

@@ -7,6 +7,8 @@
 #include "Projectile.h"
 #include "IO.h"
 #include "Enemy.h"
+#include "Environment.h"
+
 
 #define MAX_OBSTACLES 7
 #define MAX_ENEMIES 7
@@ -21,16 +23,20 @@ void moveObstacles(Projectile_Collection* pCollection);
 void Random_Init(uint32_t seed);
 uint8_t Random(void);
 
-void manageEnvironment(Player* player, Enemy** enemies, Projectile_Collection* pCollection) {
-		
+void manageEnvironment(Player* player, Projectile_Collection* pCollection, uint8_t difficulty) {
+	
 	//Despawn old obstacles
 	for(int i = 0; i < MAX_OBSTACLES; i ++) {
 		if(obstacles[i].position.z <= 0) {
 			obstacles[i].health = 0;
 		}
 	}
+	float distanceNeeded = 60 / (float)difficulty;
 	
-	if(distanceTraveled >= 20) {
+	//If difficulty is easy (1) spawn every 60 frames
+	//If difficulty is medium (2) spawn every 30 frames
+	//If difficulty is hard (3) spawn every 20 frames
+	if(distanceTraveled >= (distanceNeeded)) {
 		generateNewObstacles();
 		distanceTraveled = 0;
 		//beat();
@@ -41,26 +47,14 @@ void manageEnvironment(Player* player, Enemy** enemies, Projectile_Collection* p
 	
 	moveObstacles(pCollection);
 	checkCollisionEntityObstacle(&(*player).entity);
-	
-	/*
-	for(int i = 0; i < MAX_ENEMIES; i ++) {
-		if((**enemies).entity.health > 0) {
-			checkCollisionEntityObstacle(&(**enemies).entity);
-		}
-	}
-	
-	*/
 }
 
-//70% chance building spawn test every 5 seconds
 void generateNewObstacles(void) {
 	Random_Init(NVIC_ST_CURRENT_R);
-	//if(Random() > 230 && (putIndex+1)%MAX_OBSTACLES != getIndex) {
 	
 	for(int i = 0; i < MAX_OBSTACLES; i ++) {
 		if(obstacles[i].health <= 0) {
 			float xPos = ((float)(Random()-128))/20;
-			//float xPos = 0;
 			float width = ((float)(Random()+30))/70;
 			float height = ((float)(Random()+70))/70;
 			float depth = ((float)(Random()+50))/50;

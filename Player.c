@@ -22,7 +22,7 @@
 #define MAX_PITCH 16										//Maximum pitch player will do while going up or down
 #define MAX_YAW 35
 
-#define MOVE_SPEED 0.20									
+#define MOVE_SPEED 0.30									
 #define ROLL_SPEED 5										//Degrees per frame
 #define PITCH_SPEED 3										//Degrees per frame
 #define YAW_SPEED 0.001
