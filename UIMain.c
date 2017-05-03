@@ -32,10 +32,9 @@ int main(void){
 	drawBG();
 	drawShip();
 	startHealth();
+	drawBombs(1);
 	
 	drawScore(0);
-		
-	FiFo_Init();
 	
 	while(1){
 		while(FiFo_Get(&out) == 0){}

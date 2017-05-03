@@ -3044,7 +3044,7 @@ void drawScore(uint8_t score){
 }
 
 // pass bomb integer from 0 to 3, draws bomb icons accordingly.
-void drawBombs(char bombsCount){
+void drawBombs(uint8_t bombsCount){
 	switch (bombsCount){
 		case 1:
 			ST7735_DrawBitmap(bombX, bombY, bombSprite, bombDimension, bombDimension);

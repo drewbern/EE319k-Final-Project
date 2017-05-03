@@ -64,7 +64,7 @@ int main(void){
 
   pCollection = newProjectileCollection();
 	
-	DisableInterrupts();
+	//DisableInterrupts();
 	
 	ADCInit();
 	IOInit();
@@ -75,7 +75,7 @@ int main(void){
 	menuInit2();
 	soundInit();
 	
-	EnableInterrupts();
+	//EnableInterrupts();
 
 	while(1) {	
 		camera = newCamera(&player);
