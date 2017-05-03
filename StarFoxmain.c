@@ -20,6 +20,7 @@
 #include "IO.h"
 #include "Print.h"
 #include "Sound.h"
+#include "Menu2.h"
 #include "UART.h"
 #include "FiFo.h"
 
@@ -63,8 +64,8 @@ int main(void){
 	ST7735_InitR(INITR_REDTAB);
 	FiFo_Init();
 	UART_Init();
-	
-	
+	menuInit2();
+
 	while(1) {	
 		camera = newCamera(&player);
 		menuInit(&camera);
@@ -73,7 +74,7 @@ int main(void){
 		uint8_t gameDifficulty = 1;//difficultyMenu(camera);
 		
 		while(player.entity.health > 0){
-			//gatherInputs();
+			gatherInputs();
 					
 			//Game Logic
 			shoot(&player, &pCollection);
@@ -93,11 +94,12 @@ int main(void){
 			renderGraphicsBuffer();
 			
 			
-			score += gameDifficulty;													//Hey, if you survived a frame, you deserve some points
+			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			//IO_HeartBeat();
 		}
 		
 		//Player died, show death screen
+		UART_OutChar(0x01);
 		deathMenu(score);
 	}
 }
@@ -108,12 +110,14 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
-	uint8_t status = 0x02;
-	UART_OutChar(status);
+	uint8_t data[3];
 	
-	uint8_t tempScore = score&0x0FF;
-	UART_OutChar(tempScore);
-	tempScore = (score&0xFF00) >> 8;
-	UART_OutChar(tempScore);
+	data[0] = 0x02;
+	data[1] = score&0x00FF;
+	uint16_t tempScore = score;
+	tempScore = tempScore >> 8;
+	data[2] = tempScore&0x00FF;
+	
+	for(uint8_t n = 0; n < 3; n++)
+		UART_OutChar(data[n]);
 }
-

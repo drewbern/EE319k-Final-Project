@@ -27,15 +27,22 @@ int main(void){
 	FiFo_Init();
 	UART_Init();
 	
-	startMenu();
+	//startMenu();
+	
+	drawBG();
+	drawShip();
+	startHealth();
+	drawBombs(1);
+	
+	drawScore(0);
 	
 	while(1){
 		while(FiFo_Get(&out) == 0){}
 			
-		mBeat();
-			
-		FiFo_Get(&out);			// out now holds transmitted code
+		FiFo_Get(&out);
 		uint8_t code = out;	// code now holds out
+			
+		if(code <= 2){	// if code indicates that data will be present
 			
 		FiFo_Get(&out);
 		data = 0;
@@ -46,8 +53,11 @@ int main(void){
 		uint16_t tempOut = out;
 		tempOut = tempOut << 8;
 		data += tempOut;	// upper byte of data now holds upper byte of data	
-			
-		mBeat();
+		}
+		else{
+			FiFo_Get(&out);
+			FiFo_Get(&out);
+		}
 			
 		// cases for code received to change stats/menu status
 		switch (code){		
@@ -60,6 +70,7 @@ int main(void){
 			break;
 			
 			case 2: // score update
+				drawScore(data);
 			break;
 			
 			case 3:	// start game w/ initial UI
@@ -70,11 +81,7 @@ int main(void){
 			break;
 			
 			case 4: // game over
-				// TODO game over screen
-			break;
-			
-			default:
-				ST7735_FillScreen(0xFFFF);	// fills screen with white upon invalid code
+				ST7735_FillScreen(0x0);
 			break;
 		}
 	}
