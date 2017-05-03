@@ -51,6 +51,7 @@ uint16_t score;
 uint32_t frames;
 
 void increaseScore(uint32_t changeInScore);
+void sendBomb(void);
 
 int main(void){ 
 	//Construct stuff
@@ -68,8 +69,6 @@ int main(void){
 	FiFo_Init();
 	UART_Init();
 	menuInit2();
-	
-	player.numBombs = 1;
 
 	while(1) {	
 		camera = newCamera(&player);
@@ -83,7 +82,6 @@ int main(void){
 			gatherInputs();
 					
 			//Game Logic
-			shoot(&player, &pCollection);
 			manageEnvironment(&player, &pCollection, gameDifficulty);
 			moveEnemies(&player, &pCollection, &increaseScore, gameDifficulty);
 			movePlayer(&player, &pCollection);			
@@ -99,15 +97,27 @@ int main(void){
 			renderProjectiles(pCollection);
 			renderGraphicsBuffer();
 			
+			
+			//Last things
+			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
+				shoot(&player, &pCollection);
+			}
+			if((GPIO_PORTE_DATA_R & 0x10) != 0) {
+				sendBomb();
+			}
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			UART_Update(player.entity.health, score, player.numBombs, gameStatus, frames);
 			frames++;
+					
 			//IO_HeartBeat();
 			
-			GPIO_PORTF_DATA_R = (GPIO_PORTE_DATA_R&0x20) >> 4;
 		}
 		
 		//Player died, show death screen
+		
+		removeAllEnemies();
+		removeAllProjectiles(&pCollection);
+		removeAllObstacles();
 		deathMenu(score);
 	}
 }
@@ -118,4 +128,14 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
+	
+}
+
+void sendBomb(void) {
+	ST7735_FillRect(0,1,128,160, 0xFFFF);
+	removeAllEnemies();
+	removeAllProjectiles(&pCollection);
+	removeAllObstacles();
+	
+	player.numBombs --;
 }

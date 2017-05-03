@@ -37,4 +37,6 @@ void addProjectile(Projectile_Collection* pCollection, Projectile projectile);
 
 void renderProjectiles(Projectile_Collection pCollection);
 
+void removeAllProjectiles(Projectile_Collection* pCollection);
+
 #endif

@@ -239,3 +239,9 @@ void renderProjectiles(Projectile_Collection pCollection) {
 		}
 	}
 }
+
+void removeAllProjectiles(Projectile_Collection* pCollection) {
+	for(int i = 0; i < MAX_PROJECTILES_IN_COLLECTION; i ++) {
+		(*pCollection).projectiles[i].live = 0;
+	}
+}

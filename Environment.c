@@ -134,3 +134,9 @@ void checkCollisionEntityObstacle(Entity* entity) {
 		}
 	}
 }
+
+void removeAllObstacles(void) {
+	for(int i = 0; i < MAX_OBSTACLES; i ++) {
+		obstacles[i].health = 0;
+	}
+}
