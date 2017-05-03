@@ -6,6 +6,7 @@
 #include "Ground.h"
 #include "IO.h"
 #include "Menu.h"
+#include "UART.h"
 
 Entity entities[1];
 	
@@ -561,7 +562,24 @@ uint8_t difficultyMenu(Camera c) {
 	return selectedDifficulty;
 }
 
-void deathMenu(uint32_t score_In) {
+void deathMenu(uint16_t score_In) {
+	uint8_t data[3];
+	data[0] = 0x04;
+	data[1] = 0;
+	data[2] = 0;
+		
+	for(uint8_t n = 0; n < 3; n++)
+		UART_OutChar(data[n]);
+	
+	data[0] = 0x02;
+	data[1] = score_In&0x00FF;
+	uint16_t tempScore = score_In;
+	tempScore = tempScore >> 8;
+	data[2] = tempScore&0x00FF;
+	
+	for(uint8_t n = 0; n < 3; n++)
+		UART_OutChar(data[n]);
+	
 	while(1) {						//No button pressed
 		uint32_t score = score_In;
 		
@@ -589,6 +607,5 @@ void deathMenu(uint32_t score_In) {
 		outString[4] = out;
 		
 		ST7735_DrawString(8, 6, outString, 0xFFFF);
-
 	}		
 }

@@ -15,7 +15,7 @@
 #define shipX 11
 #define shipY 103
 
-#define maxHealth 100
+#define maxHealth 3
 #define healthW		108
 #define healthH		13
 #define healthX 	10
@@ -3020,8 +3020,33 @@ void startHealth(void){
 
 // pass health integer, draws health bar accordingly. make sure to update maxHealth #define.
 // TODO make animation for health changing
-void drawHealth(uint16_t health){
+void drawHealth(uint8_t health){
 	ST7735_FillRect(healthX + ((healthW * ((health * 10) / maxHealth)) / 10), healthY - healthH + 1, healthW - ((healthW * ((health * 10) / maxHealth)) / 10), healthH, 0);
+}
+
+void drawScore(uint16_t score){
+	char outString[5];
+	
+	char out = score/10000 + 0x30;
+	outString[0] = out;
+	score %= 10000;
+		
+	out = score/1000 + 0x30;
+	outString[1] = out;
+	score %= 1000;
+		
+	out = score/100 + 0x30;
+	outString[2] = out;
+	score %= 100;
+		
+	out = score/10 + 0x30;
+	outString[3] = out;
+	score %= 10;
+		
+	out = score + 0x30;
+	outString[4] = out;
+		
+	ST7735_DrawString(8, 3, outString, 0xFFFF);
 }
 
 // pass bomb integer from 0 to 3, draws bomb icons accordingly.

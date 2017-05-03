@@ -115,6 +115,7 @@ void checkCollisionEntityObstacle(Entity* entity) {
 			(*entity).position.x > (o.position.x  - o.scale.x/2  - (*entity).scale.x/2) &&  (*entity).position.x < (o.position.x + o.scale.x/2 + (*entity).scale.x/2)) {
 			
 			obstacles[i].health --;
+			(*entity).health --;
 			//beat();
 			(*entity).turnToRed = 1;
 			(*entity).framesRedLeft = 5;

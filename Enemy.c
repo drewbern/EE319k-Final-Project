@@ -78,7 +78,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 	enemySpawnTimer --;;
 }
 
-#define ENEMY_FRONT_SPEED 0.1
+#define ENEMY_FRONT_SPEED 0.23
 #define ENEMY_BACK_SPEED -0.05
 
 void generateNewEnemies(void) {
@@ -86,7 +86,7 @@ void generateNewEnemies(void) {
 	
 	for(int i = 0; i < MAX_ENEMIES; i ++) {
 		if(enemies[i].entity.health <= 0) {
-			beat();
+			//beat();
 			float xPos = ((float)(Random())-127)/32;
 			float yPos = ((float)(Random())/255)+2;
 			float zPos = DESPAWN_DISTANCE;
