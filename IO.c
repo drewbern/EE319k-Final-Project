@@ -43,14 +43,19 @@ void beat(void) {
 	GPIO_PORTF_DATA_R ^= 0x2;	//red LED toggled
 }
 
-//initializes PF1 (red onboard LED)
+//initializes PF1 (red onboard LED) and Glove ports
 void IOInit(void) {
 	SYSCTL_RCGCGPIO_R |= 0x20;
+	SYSCTL_RCGCGPIO_R |= 0x10;
 	uint8_t delay = 1;
 	delay--;
 	
 	GPIO_PORTF_DIR_R |= 0x2;
 	GPIO_PORTF_DEN_R |= 0x2;
+	
+	GPIO_PORTE_DIR_R &= ~0x18;			//Port E 4 and 5
+	GPIO_PORTE_DEN_R &= ~0x18;
+	
 }
 
 //initializes ADC input

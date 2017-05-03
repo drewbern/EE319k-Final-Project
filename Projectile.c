@@ -146,7 +146,7 @@ void removeProjectile(Projectile_Collection* pCollection, int index) {
 
 void moveProjectiles(Projectile_Collection* pCollection) {
 	for(int i = 0; i < MAX_PROJECTILES_IN_COLLECTION; i ++) {
-		if((*pCollection).projectiles[i].position.z >= MAX_PROJECTILE_DISTANCE || (*pCollection).projectiles[i].position.z < 0 ||
+		if((*pCollection).projectiles[i].position.z >= MAX_PROJECTILE_DISTANCE || (*pCollection).projectiles[i].position.z <= 0 ||
 					(*pCollection).projectiles[i].position.y <= 0) {
 			(*pCollection).projectiles[i].live = 0;		
 		}
