@@ -460,6 +460,7 @@ void menuInit(Camera* c){
 
 #define ROTATE_SPEED 10
 void playMenu(void){
+	while((GPIO_PORTE_DATA_R & 0x20) != 0) {}				//Make sure prev button press doesnt override this
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {				//BUTTON NOT PRESSED
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
@@ -476,13 +477,11 @@ void playMenu(void){
 
 uint8_t difficultyMenu(Camera c) {
 	initGround();
-	//while(entities[0].yaw < 360) {
-	while((GPIO_PORTE_DATA_R & 0x20) == 0) {
+	while(entities[0].yaw < 360) {
+		entities[0].yaw += ROTATE_SPEED;
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
 		renderGraphicsBuffer();
-
-		entities[0].yaw += ROTATE_SPEED;
 	}
 		
 	uint8_t selectedDifficulty = 2;
@@ -490,11 +489,14 @@ uint8_t difficultyMenu(Camera c) {
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {					//While button not pressed
 		float xPos = getXPos();
 		
+		gatherInputs();
 		
-		if(xPos > 0.5) {
+		if(getXPos() > 0.5) {
 			selectedDifficulty = 3;
-		} else if (xPos < -0.5) {
+		} else if (getXPos() < -0.5) {
 			selectedDifficulty = 1;
+		} else {
+			selectedDifficulty = 2;
 		}
 				
 		//Display difficulties
