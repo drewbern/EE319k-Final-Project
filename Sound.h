@@ -16,7 +16,7 @@ typedef struct wav{
 } wav;
 
 void soundInit(void);
-void startSound(wav soundToPlay);
+void startSound(enum soundList name);
 void sound_laser(void);
 
 //DAC
