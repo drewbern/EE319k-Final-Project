@@ -7,6 +7,7 @@
 #include "IO.h"
 #include "Menu.h"
 #include "UART.h"
+#include "stdio.h"
 
 Entity entities[1];
 	
@@ -459,7 +460,7 @@ void menuInit(Camera* c){
 
 #define ROTATE_SPEED 10
 void playMenu(void){
-	while(1) {				//REPLACE WITH BUTTON NOT PRESSED
+	while((GPIO_PORTE_DATA_R & 0x20) == 0) {				//BUTTON NOT PRESSED
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
 		renderPartialGraphicsBuffer(0,0,128,129);
@@ -476,7 +477,7 @@ void playMenu(void){
 uint8_t difficultyMenu(Camera c) {
 	initGround();
 	//while(entities[0].yaw < 360) {
-	while(0) {
+	while((GPIO_PORTE_DATA_R & 0x20) == 0) {
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
 		renderGraphicsBuffer();
@@ -486,7 +487,7 @@ uint8_t difficultyMenu(Camera c) {
 		
 	uint8_t selectedDifficulty = 2;
 	
-	while(1) {					//While button not pressed
+	while((GPIO_PORTE_DATA_R & 0x20) == 0) {					//While button not pressed
 		float xPos = getXPos();
 		
 		
@@ -580,7 +581,7 @@ void deathMenu(uint16_t score_In) {
 	for(uint8_t n = 0; n < 3; n++)
 		UART_OutChar(data[n]);
 	
-	while(1) {						//No button pressed
+	while((GPIO_PORTE_DATA_R & 0x20) == 0) {						//No button pressed
 		uint32_t score = score_In;
 		
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);

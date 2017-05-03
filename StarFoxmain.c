@@ -72,10 +72,12 @@ int main(void){
 
 	while(1) {	
 		camera = newCamera(&player);
+		player = newPlayer();
+		pCollection = newProjectileCollection();
 		menuInit(&camera);
 		
-		//playMenu();
-		uint8_t gameDifficulty = 1;//difficultyMenu(camera);
+		playMenu();
+		uint8_t gameDifficulty = difficultyMenu(camera);
 		gameStatus = 0;
 		
 		while(player.entity.health > 0){
