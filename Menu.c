@@ -567,7 +567,7 @@ uint8_t difficultyMenu(Camera c) {
 		renderGraphicsBuffer();
 	}
 	
-	UART_OutChar(0);					// game start code
+	UART_OutChar(0x2A);					// game start code
 	//Sound here
 	return selectedDifficulty;
 }
