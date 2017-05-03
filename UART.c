@@ -36,7 +36,7 @@ void UART_OutChar(char data){
 
 // updates all game stats to UART
 void UART_Update(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gameStatus, uint32_t frames){
-	if(frames%30 == 0){
+	if(frames%500 == 0){
 	uint8_t score1 = score&0x00FF;
 	uint8_t score2 = (score&0xFF00) >> 8;
 	

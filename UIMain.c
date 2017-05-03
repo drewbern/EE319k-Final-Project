@@ -37,12 +37,14 @@ int main(void){
 	while(1){
 		while(FiFo_Get(&out) == 0){}
 		
-		FiFo_Get(&out);
+		mBeat();	
+			
 		drawHealth(out);
 		FiFo_Get(&out);
 		score += out;
 		FiFo_Get(&out);
 		score += (out << 8);
+		drawScore(score);
 		FiFo_Get(&out);
 		drawBombs(out);
 		FiFo_Get(&out);

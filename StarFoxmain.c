@@ -104,7 +104,6 @@ int main(void){
 		}
 		
 		//Player died, show death screen
-		UART_OutChar(0x01);
 		deathMenu(score);
 	}
 }
@@ -115,14 +114,4 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
-	uint8_t data[4];
-	
-	data[0] = 0x02;
-	data[1] = score&0x00FF;
-	uint16_t tempScore = score;
-	tempScore = tempScore >> 8;
-	data[2] = tempScore&0x00FF;
-	
-	for(uint8_t n = 0; n < 3; n++)
-		UART_OutChar(data[n]);
 }
