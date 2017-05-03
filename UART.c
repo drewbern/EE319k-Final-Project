@@ -17,6 +17,8 @@ void UART1_Handler(void){
 	while(!(UART1_FR_R&0x10))
 		FiFo_Put((char)UART1_DR_R&0xFF);
 	
+	mBeat();
+	
 	UART1_ICR_R = 0x10;	// acknowledge that interrupt occurred
 }
 
@@ -67,7 +69,7 @@ void UART_Init(void){
 	UART1_LCRH_R = 0x70;		// 8-bit, no parity bits, one stop, FiFos
 	UART1_CTL_R = 0x301;		// UART enabled
 	
-	GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R&0xF00FFFF)+0x220000;	// UART ports
+	GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R&0xFFFFFF0F)+0x000030;	// UART ports
 	GPIO_PORTC_AMSEL_R &= ~0x30;	// disable PC4&5 analog functionality
 	GPIO_PORTC_AFSEL_R |= 0x30;		// enable altfunct on PC4&5
 	GPIO_PORTC_DEN_R |= 0x30;			// enable digital I/O on PC4&5
@@ -75,7 +77,7 @@ void UART_Init(void){
 	//get clarifification on this section
 	UART1_IM_R |= 0x10;       // ARM RXRIS
 	UART1_IFLS_R |= 0x10;     // half full (bits 3-5)
-	UART1_IFLS_R &= ~(0x28); 
+	//UART1_IFLS_R &= ~(0x28); 
 	NVIC_PRI1_R |= 0x200000;  // priority 1 (bits 21-23)
 	NVIC_EN0_R |= 0x40;       // enable interrupt 6 in NVIC
 }

@@ -25,11 +25,10 @@ int main(void){
 	FiFo_Init();
 	UART_Init();
 	
-	while(out != 0x2A){
+	while(FiFo_Get(&out) == 0){
 		startMenu();
-		FiFo_Get(&out);
 	}
-	
+
 	drawBG();
 	drawShip();
 	startHealth();
