@@ -23,6 +23,7 @@
 #include "Menu2.h"
 #include "UART.h"
 #include "FiFo.h"
+#include "TExaS.h"
 
 #include "Math2.h"
 #include "vec2f.h"
@@ -46,29 +47,35 @@ Player player;
 Projectile_Collection pCollection;
 Projectile_Collection pCollection_E;
 
-uint8_t gameStatus;	// 0 = game, 1 = game over
-uint16_t score;
+uint8_t score;
 uint32_t frames;
 
-void increaseScore(uint32_t changeInScore);
+void increaseScore(uint8_t changeInScore);
 void sendBomb(void);
+void DisableInterrupts(void);
+void EnableInterrupts(void);
 
 int main(void){ 
 	//Construct stuff
 	player = newPlayer();
+	player.entity.numBombs = 1;
 	Camera camera = newCamera(&player);
 	initRenderer(&camera);
 
   pCollection = newProjectileCollection();
 	
+	DisableInterrupts();
+	
 	ADCInit();
-	soundInit();
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
 	FiFo_Init();
 	UART_Init();
 	menuInit2();
+	soundInit();
+	
+	EnableInterrupts();
 
 	while(1) {	
 		camera = newCamera(&player);
@@ -82,6 +89,8 @@ int main(void){
 		
 		while(player.entity.health > 0){
 			gatherInputs();
+			
+			player.entity.numBombs = player.numBombs;
 					
 			//Game Logic
 			manageEnvironment(&player, &pCollection, gameDifficulty);
@@ -99,13 +108,11 @@ int main(void){
 			renderProjectiles(pCollection);
 			renderGraphicsBuffer();
 			
-			
 			//Last things
 			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
-				//Play sound here
 				shoot(&player, &pCollection);
 			}
-			if(score % 1000 == 0 && player.numBombs < 3) {
+			if(((score % 30) == 0) && (player.numBombs < 3)) {
 				player.numBombs ++;
 			}
 			
@@ -113,12 +120,11 @@ int main(void){
 				//Play sound here
 				sendBomb();
 			}
-			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
-			
-			if(frames % 10 == 0){
-				UART_changeStats(player.entity.health, score, player.numBombs);
-				
+			if(frames % 30 == 0){
+				increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			}
+				
+			changeStats(player.entity.health, score, player.numBombs);
 
 			frames++;
 					
@@ -138,7 +144,7 @@ void sendShootAction() {
 	shoot(&player, &pCollection);
 }
 
-void increaseScore(uint32_t changeInScore) {
+void increaseScore(uint8_t changeInScore) {
 	score += changeInScore;
 	
 }
@@ -149,6 +155,6 @@ void sendBomb(void) {
 	removeAllProjectiles(&pCollection);
 	removeAllObstacles();
 	
-	player.numBombs --;
+	player.numBombs--;
 	player.bombReloadCounter = 30;
 }

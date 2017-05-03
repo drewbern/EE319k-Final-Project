@@ -15,6 +15,7 @@
 
 #include "Projectile.h"
 #include "Player.h"
+#include "Sound.h"
 
 #define MAX_DISPLACEMENT 2							//How far the player can move from the middle
 #define MAX_HEIGHT 3										//How far up player can move from ground
@@ -125,6 +126,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 
 void shoot(Player* p, Projectile_Collection* pCollection) {
 	if((*p).reloadCounter <= 0) {
+		sound_laser();
 		Vector4f velocity = {0, 0, PROJECTILE_SPEED, 1};
 		Matrix4f rotate = createRotationMatrix((*p).pitch, (*p).yaw, (*p).roll);
 		

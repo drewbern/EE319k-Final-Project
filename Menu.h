@@ -6,4 +6,4 @@
 void menuInit(Camera* c);
 void playMenu(void);
 uint8_t difficultyMenu(Camera c);
-void deathMenu(uint16_t score);
+void deathMenu(uint8_t score);

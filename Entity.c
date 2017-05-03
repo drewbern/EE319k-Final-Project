@@ -113,7 +113,7 @@ Entity newCube(Vector3f position, float p, float y, float r, Vector3f scale) {
 		newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0)},
 		p, y, r,
 		CUBE_HEALTH,
-		0, 0,
+		0, 0, 0,
 		scale};
 		return out;
 }
@@ -126,7 +126,7 @@ Entity newPlane(Vector3f position, float p, float y, float r, Vector3f scale) {
 		newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0)},
 		p, y, r,
 		3,	//Change to constructor later
-		0, 0,
+		0, 0, 0,
 		scale};
 		return out;
 }
@@ -139,7 +139,7 @@ Entity newEnemyEntity(Vector3f position, float p, float y, float r, Vector3f sca
 		newVector2f(0,0), newVector2f(0,0), newVector2f(0,0), newVector2f(0,0)},
 		p, y, r,
 		1,	//Change to constructor later
-		0, 0,
+		0, 0, 0,
 		scale};
 		return out;
 }

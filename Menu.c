@@ -8,6 +8,8 @@
 #include "Menu.h"
 #include "UART.h"
 #include "stdio.h"
+#include "Menu2.h"
+#include "FiFo.h"
 
 Entity entities[1];
 	
@@ -565,62 +567,21 @@ uint8_t difficultyMenu(Camera c) {
 		renderGraphicsBuffer();
 	}
 	
-	UART_OutChar(0x2A);					// game start code
+	UART_OutChar(0);					// game start code
 	//Sound here
 	return selectedDifficulty;
 }
 
-void deathMenu(uint16_t score_In) {
-	uint32_t score = score_In;
-	char outString[5];
-	
+void deathMenu(uint8_t score_In) {	
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
 		
-		char out = score/10000 + 0x30;
-		outString[0] = out;
-		score %= 10000;
-		
-		out = score/1000 + 0x30;
-		outString[1] = out;
-		score %= 1000;
-		
-		out = score/100 + 0x30;
-		outString[2] = out;
-		score %= 100;
-		
-		out = score/10 + 0x30;
-		outString[3] = out;
-		score %= 10;
-		
-		out = score + 0x30;
-		outString[4] = out;
-		
-		ST7735_DrawString(8, 6, outString, 0xFFFF);
+		drawScore(score_In);
 	}
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
 		
-		char out = score/10000 + 0x30;
-		outString[0] = out;
-		score %= 10000;
-		
-		out = score/1000 + 0x30;
-		outString[1] = out;
-		score %= 1000;
-		
-		out = score/100 + 0x30;
-		outString[2] = out;
-		score %= 100;
-		
-		out = score/10 + 0x30;
-		outString[3] = out;
-		score %= 10;
-		
-		out = score + 0x30;
-		outString[4] = out;
-		
-		ST7735_DrawString(8, 6, outString, 0xFFFF);
+		drawScore(score_In);
 	}						//No button pressed		
 	//Sound here
 }

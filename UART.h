@@ -7,4 +7,4 @@
 void UART_Init(void);
 char UART_InChar(void);
 void UART_OutChar(char data);
-void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs);
+void changeStats(uint8_t health, uint8_t score, uint8_t bombs);

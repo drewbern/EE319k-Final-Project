@@ -27,7 +27,7 @@ Enemy newEnemy(Vector3f position, Vector3f velocity) {
 	return out;
 }
 
-void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*increaseScore)(uint32_t changeInScore),
+void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*increaseScore)(uint8_t changeInScore),
 	uint8_t difficulty) {
 	//Despawn old enemies
 	for(int i = 0; i < MAX_ENEMIES; i ++) {
@@ -44,7 +44,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 			
 			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
 			enemies[i].entity.health -= hit;
-			increaseScore(difficulty * difficulty * 50 * hit);
+			increaseScore(difficulty * difficulty * 3 * hit);
 			
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			

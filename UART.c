@@ -17,8 +17,6 @@ void UART1_Handler(void){
 	while(!(UART1_FR_R&0x10))
 		FiFo_Put((char)UART1_DR_R&0xFF);
 	
-	mBeat();
-	
 	UART1_ICR_R = 0x10;	// acknowledge that interrupt occurred
 }
 
@@ -33,24 +31,15 @@ char UART_InChar(void){
 // spins while T isn't ready
 void UART_OutChar(char data){
   while((UART1_FR_R&UART_FR_TXFF) != 0) {}
-  GPIO_PORTF_DATA_R ^= 0x2;
 	UART1_DR_R = data;
 }
 
 // updates all game stats to UART
-void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs){
-	uint16_t tempScore = score;
-	tempScore &= 0x00FF;
-	uint8_t score1 = tempScore;
+void changeStats(uint8_t health, uint8_t score, uint8_t bombs){
+	uint8_t stats[4] = {0x2A, health, score, bombs};
 	
-	tempScore = score;
-	tempScore &= (tempScore&0xFF00) >> 8;
-	uint8_t score2 = tempScore;
-	
-	UART_OutChar(health);
-	UART_OutChar(score1);
-	UART_OutChar(score2);
-	UART_OutChar(bombs);
+	for(uint8_t n = 0; n < 4; n++)
+		UART_OutChar(stats[n]);
 }
 
 // initialize UART1 on PC4 (RxD) and PC5 (TxD)
@@ -70,7 +59,7 @@ void UART_Init(void){
 	UART1_LCRH_R = 0x70;		// 8-bit, no parity bits, one stop, FiFos
 	UART1_CTL_R = 0x301;		// UART enabled
 	
-	GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R&0xFFFFFF0F)+0x000030;	// UART ports
+	GPIO_PORTC_PCTL_R = (GPIO_PORTC_PCTL_R&0xFF00FFFF)+0x00220000;	// UART ports
 	GPIO_PORTC_AMSEL_R &= ~0x30;	// disable PC4&5 analog functionality
 	GPIO_PORTC_AFSEL_R |= 0x30;		// enable altfunct on PC4&5
 	GPIO_PORTC_DEN_R |= 0x30;			// enable digital I/O on PC4&5

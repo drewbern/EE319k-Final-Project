@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "Sound.h"
+#include "Menu2.h"
 
 #define F	11025
 
@@ -18,10 +19,12 @@ void sound_laser(){
 
 void soundInit(void){
 	NVIC_ST_CTRL_R = 0;
+	NVIC_ST_RELOAD_R = 80000000/F - 1;
 	NVIC_ST_CURRENT_R = 0;
-	NVIC_ST_RELOAD_R = (uint32_t)80000000/F;
 	
+	NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R&0x00FFFFFF)|0x40000000;
 	NVIC_ST_CTRL_R = 0x07;
+	n = 0;
 	
 	currentSound = NONE;
 	DACInit();
@@ -38,27 +41,29 @@ void DACInit(void){
 }
 
 void startSound(wav soundToPlay){
-	NVIC_ST_CURRENT_R = 0;
-	NVIC_ST_CTRL_R |= 0x1;
-	n = 0;
+	if(n == 0){
+		NVIC_ST_CTRL_R |= 0x1;
 	
-	currentSound = soundToPlay.name;
+		currentSound = soundToPlay.name;
 	
-	DACOut(soundToPlay.sounds[0]);
+		DACOut(soundToPlay.sounds[0]);
+	}
 }
 
 void stopSound(void){
-	//NVIC_ST_CTRL_R &= ~0x1;
-	
 	currentSound = NONE;
+	n = 0;
 }
 
 void SysTick_Handler(void){
+	mBeat();
+	
 	switch (currentSound){
 		case LASER:
 			if(n < lsr.length-1){
 				n++;
 				DACOut(lsr.sounds[n]);
+				//mBeat();
 			}
 			else
 				stopSound();

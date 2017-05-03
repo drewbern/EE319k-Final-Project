@@ -8,8 +8,8 @@
 
 #define FIFO_SIZE 100
 uint8_t fifo[FIFO_SIZE];
-uint8_t putIndex = 0;
-uint8_t getIndex = 0;
+uint8_t putIndex;
+uint8_t getIndex;
 
 //sets up FIFO indeces
 void FiFo_Init(){
@@ -22,8 +22,7 @@ void FiFo_Init(){
 uint32_t FiFo_Put(char data){	
 	if((putIndex+1)%FIFO_SIZE == getIndex){
 		//full FiFo
-		//mBeat();
-		
+		mBeat();
 		return 0;
 	}
 	else{
@@ -39,9 +38,11 @@ uint32_t FiFo_Put(char data){
 //gets an element from the FiFo
 //returns 0 if failure due to empty FiFo, returns 1 if success
 uint32_t FiFo_Get(char *datapt){
-	if(putIndex == getIndex)
+	if(putIndex == getIndex){
 		//empty FiFo
+		//mBeat();
 		return 0;
+	}
 	else{
 		*datapt = fifo[getIndex];
 		

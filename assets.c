@@ -3020,37 +3020,31 @@ void startHealth(void){
 
 // pass health integer, draws health bar accordingly. make sure to update maxHealth #define.
 // TODO make animation for health changing
-void drawHealth(uint16_t health){
+void drawHealth(uint8_t health){
 	ST7735_FillRect(healthX + ((healthW * ((health * 10) / maxHealth)) / 10), healthY - healthH + 1, healthW - ((healthW * ((health * 10) / maxHealth)) / 10), healthH, 0);
 }
 
-void drawScore(uint16_t score){
-	char outString[5];
+void drawScore(uint8_t score){
+	char outString[4];
 	
-	char out = score/10000 + 0x30;
+	char out = score/100 + 0x30;
 	outString[0] = out;
-	score %= 10000;
-		
-	out = score/1000 + 0x30;
-	outString[1] = out;
-	score %= 1000;
-		
-	out = score/100 + 0x30;
-	outString[2] = out;
 	score %= 100;
 		
 	out = score/10 + 0x30;
-	outString[3] = out;
+	outString[1] = out;
 	score %= 10;
 		
 	out = score + 0x30;
-	outString[4] = out;
+	outString[2] = out;
 		
+	outString[3] = 0x00;
+	
 	ST7735_DrawString(8, 3, outString, 0xFFFF);
 }
 
 // pass bomb integer from 0 to 3, draws bomb icons accordingly.
-void drawBombs(uint16_t bombsCount){
+void drawBombs(char bombsCount){
 	switch (bombsCount){
 		case 1:
 			ST7735_DrawBitmap(bombX, bombY, bombSprite, bombDimension, bombDimension);
@@ -3070,7 +3064,7 @@ void drawBombs(uint16_t bombsCount){
 			ST7735_DrawBitmap(bombX + (bombDimension + bSpace)*2, bombY, bombSprite, bombDimension, bombDimension);
 			break;
 		
-		case 0:
+		default:
 			ST7735_FillRect(bombX, bombY, 0, bombDimension, bombDimension);
 			ST7735_FillRect(bombX + bombDimension + bSpace, bombY, 0, bombDimension, bombDimension);
 			ST7735_FillRect(bombX + (bombDimension + bSpace)*2, bombY, 0, bombDimension, bombDimension);
