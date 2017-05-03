@@ -68,6 +68,8 @@ int main(void){
 	FiFo_Init();
 	UART_Init();
 	menuInit2();
+	
+	player.numBombs = 1;
 
 	while(1) {	
 		camera = newCamera(&player);
@@ -101,6 +103,8 @@ int main(void){
 			UART_Update(player.entity.health, score, player.numBombs, gameStatus, frames);
 			frames++;
 			//IO_HeartBeat();
+			
+			GPIO_PORTF_DATA_R = (GPIO_PORTE_DATA_R&0x20) >> 4;
 		}
 		
 		//Player died, show death screen

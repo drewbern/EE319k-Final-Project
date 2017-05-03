@@ -15,7 +15,7 @@
 #define shipX 11
 #define shipY 103
 
-#define maxHealth 2
+#define maxHealth 3
 #define healthW		108
 #define healthH		13
 #define healthX 	10
