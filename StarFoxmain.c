@@ -105,12 +105,14 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
+	/*
 	uint8_t status = 0x02;
 	UART_OutChar(status);
 	
-	uint8_t tempScore = score&0x0FF;
+	uint8_t tempScore = score&0x0FF;  
 	UART_OutChar(tempScore);
 	tempScore = (score&0xFF00) >> 8;
 	UART_OutChar(tempScore);
+	*/
 }
 

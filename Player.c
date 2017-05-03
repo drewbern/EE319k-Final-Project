@@ -150,8 +150,10 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 
 void takenDamage(uint8_t health){
 	uint8_t status = 0;
+	/*
 	UART_OutChar(status);
 	
 	UART_OutChar(health);
 	UART_OutChar(0);			// health is only one byte
+	*/
 }
