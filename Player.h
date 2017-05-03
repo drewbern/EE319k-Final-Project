@@ -9,8 +9,8 @@ typedef struct Player {
 	Vector3f position;
 	Entity entity;
 
-	float health;
-	float numBombs;
+	uint8_t health;
+	uint8_t numBombs;
 	
 	float pitch;
 	float yaw;
@@ -18,6 +18,7 @@ typedef struct Player {
 	
 	float reloadTime;
 	float reloadCounter;
+	int bombReloadCounter;
 } Player;
 
 Player newPlayer(void);

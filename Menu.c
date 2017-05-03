@@ -460,12 +460,13 @@ void menuInit(Camera* c){
 
 #define ROTATE_SPEED 10
 void playMenu(void){
+	ST7735_FillScreen(0);														//Clear all
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {}				//Make sure prev button press doesnt override this
 		
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {				//BUTTON NOT PRESSED
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
-		renderPartialGraphicsBuffer(0,0,128,129);
+		renderPartialGraphicsBuffer(0,59,128,129);
 		
 		ST7735_DrawBitmap(14, 130, Play, 100, 30);
 		
@@ -569,12 +570,11 @@ uint8_t difficultyMenu(Camera c) {
 }
 
 void deathMenu(uint16_t score_In) {
-	while((GPIO_PORTE_DATA_R & 0x20) == 0) {						//No button pressed
-		uint32_t score = score_In;
-		
+	uint32_t score = score_In;
+	char outString[5];
+	
+	while((GPIO_PORTE_DATA_R & 0x20) != 0) {
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
-		
-		char outString[5];
 		
 		char out = score/10000 + 0x30;
 		outString[0] = out;
@@ -596,5 +596,29 @@ void deathMenu(uint16_t score_In) {
 		outString[4] = out;
 		
 		ST7735_DrawString(8, 6, outString, 0xFFFF);
-	}		
+	}
+	while((GPIO_PORTE_DATA_R & 0x20) == 0) {
+		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
+		
+		char out = score/10000 + 0x30;
+		outString[0] = out;
+		score %= 10000;
+		
+		out = score/1000 + 0x30;
+		outString[1] = out;
+		score %= 1000;
+		
+		out = score/100 + 0x30;
+		outString[2] = out;
+		score %= 100;
+		
+		out = score/10 + 0x30;
+		outString[3] = out;
+		score %= 10;
+		
+		out = score + 0x30;
+		outString[4] = out;
+		
+		ST7735_DrawString(8, 6, outString, 0xFFFF);
+	}						//No button pressed		
 }

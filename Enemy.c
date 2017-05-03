@@ -10,7 +10,7 @@
 #define MAX_ENEMIES 7
 #define DESPAWN_DISTANCE 25
 #define PROJECTILE_SPEED 0.6
-#define ENEMY_SPAWN_TIMER_MAX 300
+#define ENEMY_SPAWN_TIMER_MAX 150
 
 Enemy enemies[MAX_ENEMIES];
 float enemySpawnTimer = ENEMY_SPAWN_TIMER_MAX;
@@ -44,7 +44,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 			
 			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
 			enemies[i].entity.health -= hit;
-			increaseScore(difficulty * difficulty * 100 * hit);
+			increaseScore(difficulty * difficulty * 50 * hit);
 			
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			

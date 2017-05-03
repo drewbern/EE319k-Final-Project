@@ -32,8 +32,9 @@ char UART_InChar(void){
 // output 8 bits to UART
 // spins while T isn't ready
 void UART_OutChar(char data){
-  while((UART1_FR_R&UART_FR_TXFF) != 0);
-  UART1_DR_R = data;
+  while((UART1_FR_R&UART_FR_TXFF) != 0) {}
+  GPIO_PORTF_DATA_R ^= 0x2;
+	UART1_DR_R = data;
 }
 
 // updates all game stats to UART
