@@ -13,9 +13,6 @@ uint32_t RxCounter = 0;
 // UART ISR
 // uses codes from FiFo to perform certain actions
 void UART1_Handler(void){
-	mBeat();
-	mBeat();
-	
 	// when ready, puts status data into FiFo
 	while(!(UART1_FR_R&0x10))
 		FiFo_Put((char)UART1_DR_R&0xFF);

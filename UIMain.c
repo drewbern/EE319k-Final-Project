@@ -32,6 +32,8 @@ int main(void){
 	while(1){
 		while(FiFo_Get(&out) == 0){}
 			
+		mBeat();
+			
 		FiFo_Get(&out);			// out now holds transmitted code
 		uint8_t code = out;	// code now holds out
 			
@@ -45,8 +47,10 @@ int main(void){
 		tempOut = tempOut << 8;
 		data += tempOut;	// upper byte of data now holds upper byte of data	
 			
+		mBeat();
+			
 		// cases for code received to change stats/menu status
-		switch (code){
+		switch (code){		
 			case 0:	// health update
 				drawHealth(data);
 			break;

@@ -55,7 +55,7 @@ int main(void){
 
   pCollection = newProjectileCollection();
 	
-	//ADCInit();
+	ADCInit();
 	soundInit();
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz

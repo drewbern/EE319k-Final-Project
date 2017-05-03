@@ -4,8 +4,9 @@
 // Allows for a UART UI in which the FiFo will likely be full of UI data
 
 #include <stdint.h>
+#include "Menu2.h"
 
-#define FIFO_SIZE 5
+#define FIFO_SIZE 1
 uint8_t fifo[FIFO_SIZE];
 uint8_t putIndex = 0;
 uint8_t getIndex = 0;
@@ -19,9 +20,10 @@ void FiFo_Init(){
 //puts data into the FiFo
 //returns 0 if failure due to full FiFo, returns 1 if success
 uint32_t FiFo_Put(char data){
-	if((putIndex+1)%FIFO_SIZE == getIndex)
+	if((putIndex+1)%FIFO_SIZE == getIndex){
 		//full FiFo
 		return 0;
+	}
 	else{
 		fifo[putIndex] = data;
 		++putIndex;
