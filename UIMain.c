@@ -25,7 +25,10 @@ int main(void){
 	FiFo_Init();
 	UART_Init();
 	
-	//startMenu();
+	while(out != 0x2A){
+		startMenu();
+		FiFo_Get(&out);
+	}
 	
 	drawBG();
 	drawShip();
@@ -39,9 +42,6 @@ int main(void){
 			
 		score = 0;
 			
-		if(out == 0)
-			mBeat();
-			
 		drawHealth(out);
 		FiFo_Get(&out);
 		//score += out;
@@ -50,7 +50,5 @@ int main(void){
 		//drawScore(score);
 		FiFo_Get(&out);
 		drawBombs(out);
-		FiFo_Get(&out);
-		uint8_t gameStatus = out;
 	}
 }
