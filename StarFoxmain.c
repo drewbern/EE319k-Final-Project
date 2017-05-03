@@ -45,7 +45,10 @@
 Player player;
 Projectile_Collection pCollection;
 Projectile_Collection pCollection_E;
+
+uint8_t gameStatus;	// 0 = game, 1 = game over
 uint16_t score;
+uint32_t frames;
 
 void increaseScore(uint32_t changeInScore);
 
@@ -72,6 +75,7 @@ int main(void){
 		
 		//playMenu();
 		uint8_t gameDifficulty = 1;//difficultyMenu(camera);
+		gameStatus = 0;
 		
 		while(player.entity.health > 0){
 			gatherInputs();
@@ -93,8 +97,9 @@ int main(void){
 			renderProjectiles(pCollection);
 			renderGraphicsBuffer();
 			
-			
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
+			UART_Update(player.entity.health, score, player.numBombs, gameStatus, frames);
+			frames++;
 			//IO_HeartBeat();
 		}
 		
@@ -110,7 +115,7 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
-	uint8_t data[3];
+	uint8_t data[4];
 	
 	data[0] = 0x02;
 	data[1] = score&0x00FF;

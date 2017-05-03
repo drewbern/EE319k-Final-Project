@@ -34,6 +34,18 @@ void UART_OutChar(char data){
   UART1_DR_R = data;
 }
 
+// updates all game stats to UART
+void UART_Update(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gameStatus, uint32_t frames){
+	if(frames%30 == 0){
+	uint8_t score1 = score&0x00FF;
+	uint8_t score2 = (score&0xFF00) >> 8;
+	
+	uint8_t stats[5] = {health, score1, score2, bombs, gameStatus};
+	for(uint8_t n = 0; n < 5; n++)
+		UART_OutChar(stats[n]);
+	}
+}
+
 // initialize UART1 on PC4 (RxD) and PC5 (TxD)
 // baud rate of 115200 bits/sec
 void UART_Init(void){

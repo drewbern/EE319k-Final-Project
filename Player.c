@@ -76,7 +76,6 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	uint8_t hit = testCollision(&(*p).entity, pCollection, ENEMY_PROJECTILE);
 	if(hit != 0) {
 		(*p).entity.health -= hit;
-		takenDamage((*p).entity.health);
 	}
 	
 	
@@ -146,15 +145,4 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 		
 		(*p).reloadCounter = (*p).reloadTime;
 	}
-}
-
-void takenDamage(uint8_t health){
-	uint8_t data[3];
-	
-	data[0] = 0x00;
-	data[1] = health;
-	data[2] = 0;
-	
-	for(uint8_t n = 0; n < 3; n++)
-		UART_OutChar(data[n]);
 }
