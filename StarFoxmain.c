@@ -78,7 +78,7 @@ int main(void){
 		
 		playMenu();
 		uint8_t gameDifficulty = difficultyMenu(camera);
-		gameStatus = 0;
+		
 		
 		while(player.entity.health > 0){
 			gatherInputs();
@@ -110,7 +110,7 @@ int main(void){
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			
 			if(frames % 100 == 0){
-				UART_changeStats(player.entity.health, score, player.numBombs, gameStatus);
+				UART_changeStats(player.entity.health, score, player.numBombs);
 			}
 
 			frames++;

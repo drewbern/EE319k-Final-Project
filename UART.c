@@ -35,8 +35,7 @@ void UART_OutChar(char data){
 }
 
 // updates all game stats to UART
-void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gameStatus, uint32_t frames){
-	if(frames%500 == 0){
+void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs){
 	uint16_t tempScore = score;
 	tempScore &= 0x00FF;
 	uint8_t score1 = tempScore;
@@ -49,8 +48,6 @@ void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gam
 	UART_OutChar(score1);
 	UART_OutChar(score2);
 	UART_OutChar(bombs);
-	UART_OutChar(gameStatus);
-	}
 }
 
 // initialize UART1 on PC4 (RxD) and PC5 (TxD)

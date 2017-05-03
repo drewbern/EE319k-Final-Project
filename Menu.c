@@ -461,6 +461,7 @@ void menuInit(Camera* c){
 #define ROTATE_SPEED 10
 void playMenu(void){
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {}				//Make sure prev button press doesnt override this
+		
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {				//BUTTON NOT PRESSED
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
@@ -561,6 +562,8 @@ uint8_t difficultyMenu(Camera c) {
 		render(&entitiesP, 1);
 		renderGraphicsBuffer();
 	}
+	
+	UART_OutChar(0x2A);					// game start code
 	
 	return selectedDifficulty;
 }

@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include "Menu2.h"
 
-#define FIFO_SIZE 5
+#define FIFO_SIZE 4
 uint8_t fifo[FIFO_SIZE];
 uint8_t putIndex = 0;
 uint8_t getIndex = 0;
