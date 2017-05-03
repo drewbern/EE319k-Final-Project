@@ -16,9 +16,7 @@
 #include "UART.h"
 
 char out;
-
-uint8_t code;
-uint16_t data;
+uint16_t score = 0;
 
 int main(void){
 	PLL_Init();
@@ -38,51 +36,16 @@ int main(void){
 	
 	while(1){
 		while(FiFo_Get(&out) == 0){}
-			
-		FiFo_Get(&out);
-		uint8_t code = out;	// code now holds out
-			
-		if(code <= 2){	// if code indicates that data will be present
-			
-		FiFo_Get(&out);
-		data = 0;
-		data += out;			// lower byte of data now holds lower byte of data
-		data &= ~0xFF00;	
 		
 		FiFo_Get(&out);
-		uint16_t tempOut = out;
-		tempOut = tempOut << 8;
-		data += tempOut;	// upper byte of data now holds upper byte of data	
-		}
-		else{
-			FiFo_Get(&out);
-			FiFo_Get(&out);
-		}
-			
-		// cases for code received to change stats/menu status
-		switch (code){		
-			case 0:	// health update
-				drawHealth(data);
-			break;
-			
-			case 1: // bombs update
-				drawBombs(data);
-			break;
-			
-			case 2: // score update
-				drawScore(data);
-			break;
-			
-			case 3:	// start game w/ initial UI
-				drawBG();
-				drawShip();
-				startHealth();
-				drawBombs(1);
-			break;
-			
-			case 4: // game over
-				ST7735_FillScreen(0x0);
-			break;
-		}
+		drawHealth(out);
+		FiFo_Get(&out);
+		score += out;
+		FiFo_Get(&out);
+		score += (out << 8);
+		FiFo_Get(&out);
+		drawBombs(out);
+		FiFo_Get(&out);
+		uint8_t gameStatus = out;
 	}
 }
