@@ -145,3 +145,9 @@ void renderEnemies(void) {
 	render(&oP, numEnemies);
 }
 
+void removeAllEnemies(void) {
+	for(int i = 0; i < MAX_ENEMIES; i ++) {
+		enemies[i].entity.health = 0;
+	}
+}
+

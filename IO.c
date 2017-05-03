@@ -53,8 +53,8 @@ void IOInit(void) {
 	GPIO_PORTF_DIR_R |= 0x2;
 	GPIO_PORTF_DEN_R |= 0x2;
 	
-	GPIO_PORTE_DIR_R &= ~0x18;			//Port E 4 and 5
-	GPIO_PORTE_DEN_R &= ~0x18;
+	GPIO_PORTE_DIR_R &= ~0x30;			//Port E 4 and 5
+	GPIO_PORTE_DEN_R |= 0x30;
 	
 }
 

@@ -25,4 +25,6 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 
 void renderEnemies(void);
 
+void removeAllEnemies(void);
+
 #endif

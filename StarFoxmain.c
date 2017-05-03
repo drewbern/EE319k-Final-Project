@@ -51,6 +51,7 @@ uint16_t score;
 uint32_t frames;
 
 void increaseScore(uint32_t changeInScore);
+void sendBomb(void);
 
 int main(void){ 
 	//Construct stuff
@@ -81,7 +82,6 @@ int main(void){
 			gatherInputs();
 					
 			//Game Logic
-			shoot(&player, &pCollection);
 			manageEnvironment(&player, &pCollection, gameDifficulty);
 			moveEnemies(&player, &pCollection, &increaseScore, gameDifficulty);
 			movePlayer(&player, &pCollection);			
@@ -97,14 +97,26 @@ int main(void){
 			renderProjectiles(pCollection);
 			renderGraphicsBuffer();
 			
+			
+			//Last things
+			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
+				shoot(&player, &pCollection);
+			}
+			if((GPIO_PORTE_DATA_R & 0x10) != 0) {
+				sendBomb();
+			}
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			UART_Update(player.entity.health, score, player.numBombs, gameStatus, frames);
 			frames++;
+					
 			//IO_HeartBeat();
 		}
 		
 		//Player died, show death screen
 		UART_OutChar(0x01);
+		removeAllEnemies();
+		removeAllProjectiles(&pCollection);
+		removeAllObstacles();
 		deathMenu(score);
 	}
 }
@@ -115,14 +127,13 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
-	uint8_t data[4];
+}
+
+void sendBomb(void) {
+	ST7735_FillRect(0,1,128,160, 0xFFFF);
+	removeAllEnemies();
+	removeAllProjectiles(&pCollection);
+	removeAllObstacles();
 	
-	data[0] = 0x02;
-	data[1] = score&0x00FF;
-	uint16_t tempScore = score;
-	tempScore = tempScore >> 8;
-	data[2] = tempScore&0x00FF;
-	
-	for(uint8_t n = 0; n < 3; n++)
-		UART_OutChar(data[n]);
+	player.numBombs --;
 }
