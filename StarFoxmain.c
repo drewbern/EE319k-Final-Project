@@ -21,6 +21,7 @@
 #include "Print.h"
 #include "Sound.h"
 #include "UART.h"
+#include "FiFo.h"
 
 #include "Math2.h"
 #include "vec2f.h"
@@ -60,6 +61,8 @@ int main(void){
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
+	FiFo_Init();
+	UART_Init();
 	
 	
 	while(1) {	
