@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include "Menu2.h"
 
-#define FIFO_SIZE 50
+#define FIFO_SIZE 5
 uint8_t fifo[FIFO_SIZE];
 uint8_t putIndex = 0;
 uint8_t getIndex = 0;
@@ -22,6 +22,7 @@ void FiFo_Init(){
 uint32_t FiFo_Put(char data){
 	if((putIndex+1)%FIFO_SIZE == getIndex){
 		//full FiFo
+		mBeat();
 		return 0;
 	}
 	else{

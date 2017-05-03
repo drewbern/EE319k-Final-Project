@@ -45,9 +45,11 @@ void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gam
 	tempScore &= (tempScore&0xFF00) >> 8;
 	uint8_t score2 = tempScore;
 	
-	uint8_t stats[5] = {health, score1, score2, bombs, gameStatus};
-	for(uint8_t n = 0; n < 5; n++)
-		UART_OutChar(stats[n]);
+	UART_OutChar(health);
+	UART_OutChar(score1);
+	UART_OutChar(score2);
+	UART_OutChar(bombs);
+	UART_OutChar(gameStatus);
 	}
 }
 

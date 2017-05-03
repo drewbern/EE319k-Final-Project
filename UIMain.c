@@ -39,17 +39,18 @@ int main(void){
 			
 		score = 0;
 			
+		if(out == 0)
+			mBeat();
+			
 		drawHealth(out);
 		FiFo_Get(&out);
-		score += out;
+		//score += out;
 		FiFo_Get(&out);
-		score += (out << 8);
-		drawScore(score);
+		//score += (out << 8);
+		//drawScore(score);
 		FiFo_Get(&out);
 		drawBombs(out);
 		FiFo_Get(&out);
 		uint8_t gameStatus = out;
-			
-		mBeat();	
 	}
 }

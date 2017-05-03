@@ -108,7 +108,8 @@ int main(void){
 				sendBomb();
 			}
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
-			UART_Update(player.entity.health, score, player.numBombs, gameStatus, frames);
+			if(frames % 30 == 0)
+				UART_changeStats(player.entity.health, score, player.numBombs, gameStatus);
 			frames++;
 					
 			//IO_HeartBeat();

@@ -564,23 +564,6 @@ uint8_t difficultyMenu(Camera c) {
 }
 
 void deathMenu(uint16_t score_In) {
-	uint8_t data[3];
-	data[0] = 0x04;
-	data[1] = 0;
-	data[2] = 0;
-		
-	for(uint8_t n = 0; n < 3; n++)
-		UART_OutChar(data[n]);
-	
-	data[0] = 0x02;
-	data[1] = score_In&0x00FF;
-	uint16_t tempScore = score_In;
-	tempScore = tempScore >> 8;
-	data[2] = tempScore&0x00FF;
-	
-	for(uint8_t n = 0; n < 3; n++)
-		UART_OutChar(data[n]);
-	
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {						//No button pressed
 		uint32_t score = score_In;
 		
