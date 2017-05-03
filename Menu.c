@@ -573,6 +573,9 @@ uint8_t difficultyMenu(Camera c) {
 }
 
 void deathMenu(uint8_t score_In) {	
+	UART_OutChar(0x7F);
+	UART_OutChar(score_In);
+	
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
 		
