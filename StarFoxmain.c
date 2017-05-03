@@ -104,21 +104,23 @@ int main(void){
 			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
 				shoot(&player, &pCollection);
 			}
-			if((GPIO_PORTE_DATA_R & 0x10) != 0) {
+			if(score % 1000 == 0 && player.numBombs < 3) {
+				player.numBombs ++;
+			}
+			
+			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0) {
 				sendBomb();
 			}
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			
-			if(frames % 100 == 0){
+			if(frames % 10 == 0){
 				UART_changeStats(player.entity.health, score, player.numBombs);
+				
 			}
 
 			frames++;
 					
 			//IO_HeartBeat();
-			if(player.entity.health <= 0) {
-				GPIO_PORTF_DATA_R = 0x2;
-			}
 		}
 		
 		//Player died, show death screen
@@ -146,4 +148,5 @@ void sendBomb(void) {
 	removeAllObstacles();
 	
 	player.numBombs --;
+	player.bombReloadCounter = 30;
 }

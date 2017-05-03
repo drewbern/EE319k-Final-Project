@@ -14,6 +14,7 @@
 #include "UART.h"
 
 #include "Projectile.h"
+#include "Player.h"
 
 #define MAX_DISPLACEMENT 2							//How far the player can move from the middle
 #define MAX_HEIGHT 3										//How far up player can move from ground
@@ -28,27 +29,13 @@
 #define YAW_SPEED 0.001
 
 #define PROJECTILE_SPEED 0.6
+#define BOMB_RELOAD			300
 
 //Can roll factor just be max roll / max input
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
 #define YAW_FACTOR 50		
 
 void takenDamage(uint8_t);
-
-typedef struct Player {
-	Vector3f position;
-	Entity entity;
-
-	float health;
-	float numBombs;
-	
-	float pitch;
-	float yaw;
-	float roll;
-	
-	float reloadTime;
-	float reloadCounter;
-} Player;
 
 Player newPlayer(void) {
 	Vector3f initialPosition = {0, 2, 2};
@@ -57,7 +44,7 @@ Player newPlayer(void) {
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.6,0.42,0.4)),
 		
 		3,
-		0,
+		3,
 		
 		0,
 		0,
@@ -77,6 +64,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	if(hit != 0) {
 		(*p).entity.health -= hit;
 	}
+	(*p).bombReloadCounter = fmax((*p).bombReloadCounter - 1, 0);
 	
 	
 	//Horizontal Movement

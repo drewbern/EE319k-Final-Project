@@ -44,7 +44,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 			
 			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
 			enemies[i].entity.health -= hit;
-			increaseScore(difficulty * difficulty * 100 * hit);
+			increaseScore(difficulty * difficulty * 50 * hit);
 			
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			
