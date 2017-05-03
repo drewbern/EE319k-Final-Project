@@ -102,6 +102,7 @@ int main(void){
 			
 			//Last things
 			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
+				//Play sound here
 				shoot(&player, &pCollection);
 			}
 			if(score % 1000 == 0 && player.numBombs < 3) {
@@ -109,6 +110,7 @@ int main(void){
 			}
 			
 			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0) {
+				//Play sound here
 				sendBomb();
 			}
 			increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points

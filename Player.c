@@ -63,6 +63,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	uint8_t hit = testCollision(&(*p).entity, pCollection, ENEMY_PROJECTILE);
 	if(hit != 0) {
 		(*p).entity.health -= hit;
+		//Play sound here
 	}
 	(*p).bombReloadCounter = fmax((*p).bombReloadCounter - 1, 0);
 	

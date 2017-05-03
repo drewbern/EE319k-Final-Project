@@ -475,6 +475,7 @@ void playMenu(void){
 			entities[0].yaw -= (360);
 		}
 	}
+	//Sound here
 }
 
 uint8_t difficultyMenu(Camera c) {
@@ -565,7 +566,7 @@ uint8_t difficultyMenu(Camera c) {
 	}
 	
 	UART_OutChar(0x2A);					// game start code
-	
+	//Sound here
 	return selectedDifficulty;
 }
 
@@ -621,4 +622,5 @@ void deathMenu(uint16_t score_In) {
 		
 		ST7735_DrawString(8, 6, outString, 0xFFFF);
 	}						//No button pressed		
+	//Sound here
 }
