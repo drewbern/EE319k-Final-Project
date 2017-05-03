@@ -30,7 +30,7 @@ void renderGraphicsBuffer() {
 }
 
 void renderPartialGraphicsBuffer(uint8_t x, uint8_t y, uint8_t w, uint8_t h) {
-	ST7735_PushBuffer(x,160-y,&graphicsBuffer[0][0],w,h);
+	ST7735_PushBuffer(x,160-y,&graphicsBuffer[y][x],w,h);
 	for(int r = y; r < h; r ++) {
 		for(int c = x; c < w; c++) {
 			graphicsBuffer[r][c] = 0;

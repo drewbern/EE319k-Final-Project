@@ -116,7 +116,9 @@ int main(void){
 			frames++;
 					
 			//IO_HeartBeat();
-			
+			if(player.entity.health <= 0) {
+				GPIO_PORTF_DATA_R = 0x2;
+			}
 		}
 		
 		//Player died, show death screen

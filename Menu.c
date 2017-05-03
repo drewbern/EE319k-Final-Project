@@ -464,7 +464,7 @@ void playMenu(void){
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {				//BUTTON NOT PRESSED
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
-		renderPartialGraphicsBuffer(0,0,128,129);
+		renderPartialGraphicsBuffer(0,30,128,129);
 		
 		ST7735_DrawBitmap(14, 130, Play, 100, 30);
 		

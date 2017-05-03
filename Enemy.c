@@ -10,7 +10,7 @@
 #define MAX_ENEMIES 7
 #define DESPAWN_DISTANCE 25
 #define PROJECTILE_SPEED 0.6
-#define ENEMY_SPAWN_TIMER_MAX 300
+#define ENEMY_SPAWN_TIMER_MAX 150
 
 Enemy enemies[MAX_ENEMIES];
 float enemySpawnTimer = ENEMY_SPAWN_TIMER_MAX;
