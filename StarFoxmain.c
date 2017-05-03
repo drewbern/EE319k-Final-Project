@@ -64,7 +64,7 @@ int main(void){
 
   pCollection = newProjectileCollection();
 	
-	DisableInterrupts();
+	//DisableInterrupts();
 	
 	ADCInit();
 	IOInit();

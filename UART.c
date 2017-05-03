@@ -68,6 +68,6 @@ void UART_Init(void){
 	UART1_IM_R |= 0x10;       // ARM RXRIS
 	UART1_IFLS_R |= 0x10;     // half full (bits 3-5)
 	//UART1_IFLS_R &= ~(0x28); 
-	NVIC_PRI1_R |= 0x200000;  // priority 1 (bits 21-23)
+	NVIC_PRI1_R |= 0x400000;  // priority 1 (bits 21-23)
 	NVIC_EN0_R |= 0x40;       // enable interrupt 6 in NVIC
 }
