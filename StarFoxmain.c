@@ -112,10 +112,11 @@ int main(void){
 			frames++;
 					
 			//IO_HeartBeat();
+			
 		}
 		
 		//Player died, show death screen
-		UART_OutChar(0x01);
+		
 		removeAllEnemies();
 		removeAllProjectiles(&pCollection);
 		removeAllObstacles();
@@ -129,6 +130,7 @@ void sendShootAction() {
 
 void increaseScore(uint32_t changeInScore) {
 	score += changeInScore;
+	
 }
 
 void sendBomb(void) {

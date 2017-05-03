@@ -35,10 +35,15 @@ void UART_OutChar(char data){
 }
 
 // updates all game stats to UART
-void UART_Update(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gameStatus, uint32_t frames){
+void UART_changeStats(uint8_t health, uint16_t score, uint8_t bombs, uint8_t gameStatus, uint32_t frames){
 	if(frames%500 == 0){
-	uint8_t score1 = score&0x00FF;
-	uint8_t score2 = (score&0xFF00) >> 8;
+	uint16_t tempScore = score;
+	tempScore &= 0x00FF;
+	uint8_t score1 = tempScore;
+	
+	tempScore = score;
+	tempScore &= (tempScore&0xFF00) >> 8;
+	uint8_t score2 = tempScore;
 	
 	uint8_t stats[5] = {health, score1, score2, bombs, gameStatus};
 	for(uint8_t n = 0; n < 5; n++)

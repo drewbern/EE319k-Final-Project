@@ -16,7 +16,7 @@
 #include "UART.h"
 
 char out;
-uint16_t score = 0;
+uint16_t score;
 
 int main(void){
 	PLL_Init();
@@ -36,16 +36,20 @@ int main(void){
 	
 	while(1){
 		while(FiFo_Get(&out) == 0){}
-		
-		FiFo_Get(&out);
+			
+		score = 0;
+			
 		drawHealth(out);
 		FiFo_Get(&out);
 		score += out;
 		FiFo_Get(&out);
 		score += (out << 8);
+		drawScore(score);
 		FiFo_Get(&out);
 		drawBombs(out);
 		FiFo_Get(&out);
 		uint8_t gameStatus = out;
+			
+		mBeat();	
 	}
 }
