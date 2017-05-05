@@ -23,7 +23,7 @@ Enemy newEnemy(Vector3f position, Vector3f velocity) {
 	Enemy out  = {BASIC,
 		newEnemyEntity(position, 0,0,0, newVector3f(1,1,1)),
 		position,	velocity,
-		20, 0};	//Change with randomized position and velocity and reload
+		ENEMY_SPAWN_TIMER_MAX, ENEMY_SPAWN_TIMER_MAX};
 	return out;
 }
 
@@ -78,7 +78,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 	enemySpawnTimer --;;
 }
 
-#define ENEMY_FRONT_SPEED 0.23
+#define ENEMY_FRONT_SPEED 0.3
 #define ENEMY_BACK_SPEED -0.05
 
 void generateNewEnemies(void) {
@@ -127,7 +127,6 @@ void generateNewEnemies(void) {
 				
 		}
 	}
-	//Play sound here
 }
 
 void renderEnemies(void) {

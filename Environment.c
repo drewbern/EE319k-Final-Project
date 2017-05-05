@@ -54,7 +54,7 @@ void generateNewObstacles(void) {
 	
 	for(int i = 0; i < MAX_OBSTACLES; i ++) {
 		if(obstacles[i].health <= 0) {
-			float xPos = ((float)(Random()-128))/20;
+			float xPos = ((float)(Random()-128))/40;
 			float width = ((float)(Random()+30))/70;
 			float height = ((float)(Random()+70))/70;
 			float depth = ((float)(Random()+50))/50;

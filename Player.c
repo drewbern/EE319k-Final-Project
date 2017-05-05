@@ -34,7 +34,8 @@
 
 //Can roll factor just be max roll / max input
 #define ROLL_FACTOR -2200								//Converting movement input to how much roll should occur
-#define YAW_FACTOR 50		
+#define PITCH_FACTOR -1700
+#define YAW_FACTOR 30		
 
 void takenDamage(uint8_t);
 
@@ -106,7 +107,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 		(*p).position.y = fmin(fmax((*p).position.y, MIN_HEIGHT), MAX_HEIGHT);				// clamps position
 	}
 	
-	float targetPitch = verticalMovement * ROLL_FACTOR;
+	float targetPitch = verticalMovement * PITCH_FACTOR;
 	if((*p).position.y <= MIN_HEIGHT+0.1 || (*p).position.y >= MAX_HEIGHT) {
 		targetPitch = 0;
 	}

@@ -7,7 +7,7 @@
 #include "IO.h"
 
 #define CAMERA_Z -8.3				//The focal point
-#define MAX_PROJECTILE_DISTANCE 20
+#define MAX_PROJECTILE_DISTANCE 25
 #define MAX_PROJECTILES_IN_COLLECTION 25
 #define PROJECTILE_HITBOX_SIZE	0.13							//The "radius" of hitbox
 
