@@ -22,7 +22,6 @@ void FiFo_Init(){
 uint32_t FiFo_Put(char data){	
 	if((putIndex+1)%FIFO_SIZE == getIndex){
 		//full FiFo
-		mBeat();
 		return 0;
 	}
 	else{

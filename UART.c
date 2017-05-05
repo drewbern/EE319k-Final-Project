@@ -17,7 +17,7 @@ void UART1_Handler(void){
 	while(!(UART1_FR_R&0x10))
 		FiFo_Put((char)UART1_DR_R&0xFF);
 	
-	mBeat();
+	//mBeat();
 	
 	UART1_ICR_R = 0x10;	// acknowledge that interrupt occurred
 }

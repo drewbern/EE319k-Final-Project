@@ -72,7 +72,7 @@ void SysTick_Handler(void){
 	switch (currentSound){
 		case NONE:
 			stopSound();
-			break;
+		break;
 		
 		case LASER:
 			if(n < lsr.length-1){
@@ -82,7 +82,7 @@ void SysTick_Handler(void){
 			}
 			else
 				stopSound();
-			break;
+		break;
 	}
 	
 }

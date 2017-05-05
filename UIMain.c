@@ -38,15 +38,15 @@ int main(void){
 	
 	while(1){
 		while(FiFo_Get(&out) == 0){}
-		if(out == 0x2A){	
-		
-		while(FiFo_Get(&out) == 0){}
-		drawHealth(out);
-		
-		while(FiFo_Get(&out) == 0){}
-		drawScore(out);	
 			
-		while(FiFo_Get(&out) == 0){}
+		
+		if(out == 0x2A){	
+			
+		FiFo_Get(&out);
+		drawHealth(out);
+		FiFo_Get(&out);
+		drawScore(out);	
+		FiFo_Get(&out);
 		drawBombs(out);
 		}
 	}
