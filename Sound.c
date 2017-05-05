@@ -78,7 +78,6 @@ void SysTick_Handler(void){
 			if(n < lsr.length-1){
 				n++;
 				DACOut(lsr.sounds[n]);
-				mBeat();
 			}
 			else
 				stopSound();

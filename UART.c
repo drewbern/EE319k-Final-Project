@@ -6,6 +6,7 @@
 #include "tm4c123gh6pm.h"
 #include "FiFo.h"
 #include "Menu2.h"
+#include "IO.h"
 
 uint32_t errorCount;		//maybe for debugging
 uint32_t RxCounter = 0;
@@ -32,11 +33,13 @@ char UART_InChar(void){
 void UART_OutChar(char data){
   while((UART1_FR_R&UART_FR_TXFF) != 0) {}
 	UART1_DR_R = data;
+	GPIO_PORTF_DATA_R ^= 0x02;
 }
 
 // updates all game stats to UART
 void changeStats(uint8_t health, uint8_t score, uint8_t bombs){
 	uint8_t stats[4] = {0x2A, health, score, bombs};
+	//uint8_t stats[4] = {0x2A, 1, score, bombs};
 	
 	for(uint8_t n = 0; n < 4; n++)
 		UART_OutChar(stats[n]);

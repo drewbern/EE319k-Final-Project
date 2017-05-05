@@ -577,14 +577,48 @@ void deathMenu(uint8_t score_In) {
 	UART_OutChar(score_In);
 	
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {
+		uint8_t score = score_In;
+		
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
 		
-		drawScore(score_In);
+		char outString[4];
+	
+		char out = score/100 + 0x30;
+		outString[0] = out;
+		score %= 100;
+			
+		out = score/10 + 0x30;
+		outString[1] = out;
+		score %= 10;
+			
+		out = score + 0x30;
+		outString[2] = out;
+			
+		outString[3] = 0x00;
+		
+		ST7735_DrawString(8, 6, outString, 0xFFFF);
 	}
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {
+		uint8_t score = score_In;
+		
 		ST7735_DrawString(8, 5, "SCORE", 0xFFFF);
 		
-		drawScore(score_In);
+		char outString[4];
+	
+		char out = score/100 + 0x30;
+		outString[0] = out;
+		score %= 100;
+			
+		out = score/10 + 0x30;
+		outString[1] = out;
+		score %= 10;
+			
+		out = score + 0x30;
+		outString[2] = out;
+			
+		outString[3] = 0x00;
+		
+		ST7735_DrawString(8, 6, outString, 0xFFFF);
 	}						//No button pressed		
 	//Sound here
 }
