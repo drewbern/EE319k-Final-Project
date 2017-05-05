@@ -5,6 +5,7 @@
 #include "GraphicsBuffer.h"
 #include "Entity.h"
 #include "IO.h"
+#include "Sound.h"
 
 #define CAMERA_Z -8.3				//The focal point
 #define MAX_PROJECTILE_DISTANCE 20
@@ -184,7 +185,7 @@ uint8_t testCollision(Entity* entity, Projectile_Collection* pCollection, enum P
 			(*entity).turnToRed = 1;
 			(*entity).framesRedLeft = 5;
 			//beat();
-			//Play sound here
+			sound_damage();
 		} else if ((*pCollection).projectiles[i].live != 0) {
 			(*entity).framesRedLeft --;
 			if((*entity).framesRedLeft <= 0) {

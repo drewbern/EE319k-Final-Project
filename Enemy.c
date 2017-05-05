@@ -6,6 +6,7 @@
 #include "VectorMath.h"
 #include "IO.h"
 #include "Render.h"
+#include "Sound.h"
 
 #define MAX_ENEMIES 7
 #define DESPAWN_DISTANCE 25
@@ -44,7 +45,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 			
 			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
 			enemies[i].entity.health -= hit;
-			increaseScore(difficulty * difficulty * 3 * hit);
+			increaseScore(difficulty* 3 * hit);
 			
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			
@@ -73,7 +74,7 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 		
 		enemySpawnTimer = ENEMY_SPAWN_TIMER_MAX / difficulty;
 		
-		//beat();
+		sound_alert();
 	}
 	enemySpawnTimer --;;
 }

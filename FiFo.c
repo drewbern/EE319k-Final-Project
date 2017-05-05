@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 #include "Menu2.h"
+#include "FiFo.h"
 
 #define FIFO_SIZE 100
 uint8_t fifo[FIFO_SIZE];
@@ -15,6 +16,9 @@ uint8_t getIndex;
 void FiFo_Init(){
 	putIndex = 0;
 	getIndex = 0;
+	
+	for(uint8_t n = 0; n < FIFO_SIZE; n++)
+		fifo[n] = 0;
 }
 
 //puts data into the FiFo
@@ -24,7 +28,7 @@ uint32_t FiFo_Put(char data){
 		//full FiFo
 		return 0;
 	}
-	else{
+	else{	
 		fifo[putIndex] = data;
 		++putIndex;
 		putIndex %= FIFO_SIZE;

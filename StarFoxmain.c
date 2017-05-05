@@ -12,6 +12,7 @@
 // RESET (pin 3) connected to PA7 (GPIO)
 // VCC (pin 2) connected to +3.3 V
 // Gnd (pin 1) connected to ground
+
 #include <stdio.h>
 #include <stdint.h>
 #include "ST7735.h"
@@ -58,39 +59,40 @@ void EnableInterrupts(void);
 int main(void){ 
 	//Construct stuff
 	player = newPlayer();
-	player.entity.numBombs = 1;
 	Camera camera = newCamera(&player);
 	initRenderer(&camera);
 
   pCollection = newProjectileCollection();
 	
-	//DisableInterrupts();
+	EnableInterrupts();
 	
 	ADCInit();
 	IOInit();
 	PLL_Init();									// sets system clock to 80 MHz
 	ST7735_InitR(INITR_REDTAB);
-	FiFo_Init();
 	UART_Init();
+	FiFo_Init();
+	
 	menuInit2();
 	soundInit();
 	
-	//EnableInterrupts();
+	sound_menu();
 
 	while(1) {	
 		camera = newCamera(&player);
 		player = newPlayer();
 		pCollection = newProjectileCollection();
 		menuInit(&camera);
+		score = 0;
 		
 		playMenu();
 		uint8_t gameDifficulty = difficultyMenu(camera);
 		
+		//UART_Init();
+		FiFo_Init();
 		
 		while(player.entity.health > 0){
 			gatherInputs();
-			
-			player.entity.numBombs = player.numBombs;
 					
 			//Game Logic
 			manageEnvironment(&player, &pCollection, gameDifficulty);
@@ -112,15 +114,15 @@ int main(void){
 			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
 				shoot(&player, &pCollection);
 			}
-			if(((score % 30) == 0) && (player.numBombs < 3)) {
+			if((score % 30 == 0) && (player.numBombs < 3) && (score != 0)){
 				player.numBombs ++;
 			}
 			
 			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0) {
-				//Play sound here
+				sound_bomb();
 				sendBomb();
 			}
-			if(frames % 30 == 0){
+			if(frames % 20 == 0){
 				increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			}
 				
@@ -132,6 +134,8 @@ int main(void){
 		}
 		
 		//Player died, show death screen
+		
+		UART_OutChar(0x7B);
 		
 		removeAllEnemies();
 		removeAllProjectiles(&pCollection);
