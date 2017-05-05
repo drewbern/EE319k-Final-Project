@@ -19,7 +19,12 @@ void moveCamera(Camera* c) {
 	(*c).position.y = (*(*c).player).position.y/2 + HEIGHT_ABOVE_PLAYER;
 	(*c).position.z = (*(*c).player).position.z - DISTANCE_FROM_PLAYER;
 	
-	(*c).roll = -(*(*c).player).roll/2;
+	if(isDoingBarrelRoll() == 0) {
+		(*c).roll = -(*(*c).player).roll/2;
+	} else {
+		(*c).roll = 0;
+	}
+	
 	(*c).pitch = (*(*c).player).pitch/4;
 	(*c).yaw = -(*(*c).player).yaw/3;
 	//(*c).roll = 30;

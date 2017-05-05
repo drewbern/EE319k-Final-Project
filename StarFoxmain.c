@@ -118,7 +118,7 @@ int main(void){
 				player.numBombs ++;
 			}
 			
-			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0) {
+			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0 && fabs(getXPos()) < 0.6) {
 				sound_bomb();
 				sendBomb();
 			}

@@ -26,5 +26,7 @@ Player newPlayer(void);
 void movePlayer(Player* p, Projectile_Collection* pCollection);
 
 void shoot(Player* p, Projectile_Collection* pCollection);
+
+uint8_t isDoingBarrelRoll();
 	
 #endif

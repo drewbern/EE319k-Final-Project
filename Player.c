@@ -39,6 +39,11 @@
 
 void takenDamage(uint8_t);
 
+uint8_t doBarrelRoll = 0;
+#define BARREL_ROLL_SPEED 15
+#define BARREL_ROLL_MOVE_SPEED 0.6
+
+
 Player newPlayer(void) {
 	Vector3f initialPosition = {0, 2, 2};
 	Player out = {
@@ -69,9 +74,24 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	}
 	(*p).bombReloadCounter = fmax((*p).bombReloadCounter - 1, 0);
 	
+	if(fabs(getXPos()) <= 0.6 && ((GPIO_PORTE_DATA_R & 0x10) != 0) && doBarrelRoll == 0) {
+		//Don't shoot bomb, actually but DO A FREAKIN BARRELL ROLL >:(
+		if(getXPos() > 0) {	
+			doBarrelRoll = 1;
+		} else {
+			doBarrelRoll = -1;
+		}
+	}
+	
+	
 	
 	//Horizontal Movement
-	float horizontalMovement = getXPos() * MOVE_SPEED;
+	float horizontalMovement;
+	if(doBarrelRoll == 0) {
+		horizontalMovement = getXPos() * MOVE_SPEED;
+	} else {
+		horizontalMovement = getXPos() * BARREL_ROLL_MOVE_SPEED;
+	}
 	
 	if(fabs(horizontalMovement)  > MOVE_SPEED*0.6) {
 		(*p).position.x += horizontalMovement;
@@ -79,15 +99,41 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	}
 	
 	
+	
+	
+	
+	
+	
+	//Roll
+	
 	float targetRoll = horizontalMovement * ROLL_FACTOR;
 	
 	float deltaRoll = (targetRoll - (*p).roll) * fabs(getXPos());
-	if(deltaRoll > 0) {
-		(*p).roll += fmin(deltaRoll, ROLL_SPEED);
-	} else if (deltaRoll < 0) {
-		(*p).roll += fmax(deltaRoll, -ROLL_SPEED);
+	if(doBarrelRoll == 0) {
+		if(deltaRoll > 0) {
+			(*p).roll += fmin(deltaRoll, ROLL_SPEED);
+		} else if (deltaRoll < 0) {
+			(*p).roll += fmax(deltaRoll, -ROLL_SPEED);
+		}
+		(*p).roll = fmin(fmax((*p).roll, -MAX_ROLL), MAX_ROLL);	
+	} else {
+		
+		(*p).roll += BARREL_ROLL_SPEED * doBarrelRoll;
+		
+		
+		if((*p).roll > 360 || (*p).roll < -360) {
+			doBarrelRoll = 0;
+			(*p).roll = 0;
+		}			
 	}
-	(*p).roll = fmin(fmax((*p).roll, -MAX_ROLL), MAX_ROLL);	
+	
+	
+	
+	
+	
+	
+	
+	//Yaw
 	
 	float targetYaw = horizontalMovement * YAW_FACTOR;
 	
@@ -137,4 +183,11 @@ void shoot(Player* p, Projectile_Collection* pCollection) {
 		
 		(*p).reloadCounter = (*p).reloadTime;
 	}
+}
+
+/**
+Returns 0 if NOT doing barrel roll
+**/
+uint8_t isDoingBarrelRoll() {
+	return doBarrelRoll;
 }
