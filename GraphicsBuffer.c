@@ -90,6 +90,7 @@ int findRegion(float x, float y) {
  
 // Implementing Cohen-Sutherland algorithm
 // Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
+// Used help from https://www.cs.helsinki.fi/group/goa/viewing/leikkaus/lineClip.html
 void clipAndDrawLine(float x1, float y1, float x2, float y2, uint8_t color) {
 	int region1 = findRegion(x1, y1);
 	int region2 = findRegion(x2, y2);

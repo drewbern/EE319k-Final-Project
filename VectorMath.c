@@ -112,6 +112,11 @@ Matrix4f createTransformationMatrix(Vector3f translation, Vector3f scale) {
 		return matrix;
 }
 
+/**
+Used help from
+http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation/
+(no code, just math algorithms)
+**/
 Matrix4f createRotationMatrix(float p, float y, float r) {
 	float pitch = toRadians(p);
 	float yaw = toRadians(y);

@@ -114,15 +114,15 @@ int main(void){
 			if((GPIO_PORTE_DATA_R & 0x20) != 0) {
 				shoot(&player, &pCollection);
 			}
-			if((score % 30 == 0) && (player.numBombs < 3) && (score != 0)){
+			if((score % 256 >= 256 - gameDifficulty) && (player.numBombs < 3) && (score != 0)){
 				player.numBombs ++;
 			}
 			
-			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0 && fabs(getXPos()) < 0.6) {
+			if((GPIO_PORTE_DATA_R & 0x10) != 0 && player.numBombs > 0 && player.bombReloadCounter <= 0 && fabs(getXPos()) < 0.4) {
 				sound_bomb();
 				sendBomb();
 			}
-			if(frames % 20 == 0){
+			if(frames % 60 == 0){
 				increaseScore(gameDifficulty);	// Hey, if you survived a frame, you deserve some points
 			}
 				

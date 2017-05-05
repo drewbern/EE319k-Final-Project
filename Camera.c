@@ -27,7 +27,6 @@ void moveCamera(Camera* c) {
 	
 	(*c).pitch = (*(*c).player).pitch/4;
 	(*c).yaw = -(*(*c).player).yaw/3;
-	//(*c).roll = 30;
 }
 
 Camera newCamera(Player* p) {

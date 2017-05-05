@@ -185,7 +185,6 @@ uint8_t testCollision(Entity* entity, Projectile_Collection* pCollection, enum P
 			(*entity).turnToRed = 1;
 			(*entity).framesRedLeft = 5;
 			//beat();
-			sound_damage();
 		} else if ((*pCollection).projectiles[i].live != 0) {
 			(*entity).framesRedLeft --;
 			if((*entity).framesRedLeft <= 0) {

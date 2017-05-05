@@ -177,6 +177,10 @@ void createViewMatrix(Camera camera) {
 	translate_mat4f(negativeCameraPos, &viewMatrix);
 }
 
+
+/**
+Used help from ThinMatrix's OpenGL youtube tutorial
+**/
 void createProjectionMatrix(void) {		 
 														 
 	float aspectRatio = (float) WIDTH / (float) HEIGHT;

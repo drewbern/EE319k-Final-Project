@@ -39,8 +39,8 @@
 
 void takenDamage(uint8_t);
 
-uint8_t doBarrelRoll = 0;
-#define BARREL_ROLL_SPEED 15
+int8_t doBarrelRoll = 0;
+#define BARREL_ROLL_SPEED 45
 #define BARREL_ROLL_MOVE_SPEED 0.6
 
 
@@ -51,7 +51,7 @@ Player newPlayer(void) {
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.6,0.42,0.4)),
 		
 		3,
-		2,
+		3,
 		
 		0,
 		0,
@@ -71,15 +71,16 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 	if(hit != 0) {
 		(*p).entity.health -= hit;
 		//Play sound here
+		sound_damage();
 	}
 	(*p).bombReloadCounter = fmax((*p).bombReloadCounter - 1, 0);
 	
-	if(fabs(getXPos()) <= 0.6 && ((GPIO_PORTE_DATA_R & 0x10) != 0) && doBarrelRoll == 0) {
+	if(fabs(getXPos()) >= 0.4 && ((GPIO_PORTE_DATA_R & 0x10) != 0) && doBarrelRoll == 0) {
 		//Don't shoot bomb, actually but DO A FREAKIN BARRELL ROLL >:(
 		if(getXPos() > 0) {	
-			doBarrelRoll = 1;
-		} else {
 			doBarrelRoll = -1;
+		} else {
+			doBarrelRoll = 1;
 		}
 	}
 	
@@ -93,7 +94,7 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 		horizontalMovement = getXPos() * BARREL_ROLL_MOVE_SPEED;
 	}
 	
-	if(fabs(horizontalMovement)  > MOVE_SPEED*0.6) {
+	if(fabs(horizontalMovement)  > MOVE_SPEED*0.4) {
 		(*p).position.x += horizontalMovement;
 		(*p).position.x = fmin(fmax((*p).position.x, -MAX_DISPLACEMENT), MAX_DISPLACEMENT);				// clamps position
 	}
@@ -117,14 +118,17 @@ void movePlayer(Player* p, Projectile_Collection* pCollection) {
 		}
 		(*p).roll = fmin(fmax((*p).roll, -MAX_ROLL), MAX_ROLL);	
 	} else {
-		
-		(*p).roll += BARREL_ROLL_SPEED * doBarrelRoll;
-		
+		if(doBarrelRoll == 1) {
+			(*p).roll += BARREL_ROLL_SPEED;
+		} else {
+			(*p).roll -= BARREL_ROLL_SPEED;
+		}
 		
 		if((*p).roll > 360 || (*p).roll < -360) {
 			doBarrelRoll = 0;
 			(*p).roll = 0;
-		}			
+		}	
+		
 	}
 	
 	

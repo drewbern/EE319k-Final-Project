@@ -24,7 +24,7 @@ Enemy newEnemy(Vector3f position, Vector3f velocity) {
 	Enemy out  = {BASIC,
 		newEnemyEntity(position, 0,0,0, newVector3f(1,1,1)),
 		position,	velocity,
-		ENEMY_SPAWN_TIMER_MAX, ENEMY_SPAWN_TIMER_MAX};
+		ENEMY_SPAWN_TIMER_MAX/3, ENEMY_SPAWN_TIMER_MAX/3};
 	return out;
 }
 
@@ -44,8 +44,11 @@ void moveEnemies(Player* player, Projectile_Collection* pCollection, void (*incr
 			enemies[i].entity.position = enemies[i].position;
 			
 			uint8_t hit = testCollision(&enemies[i].entity, pCollection, PLAYER_PROJECTILE);
-			enemies[i].entity.health -= hit;
-			increaseScore(difficulty* 3 * hit);
+			if(hit != 0) { 
+				enemies[i].entity.health -= hit;
+				increaseScore(difficulty* 3 * hit);
+				sound_damage();
+			}
 			
 			enemies[i].reloadCounter = fmax(enemies[i].reloadCounter - 1, 0);
 			
