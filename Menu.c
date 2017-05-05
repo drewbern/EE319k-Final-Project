@@ -10,6 +10,7 @@
 #include "stdio.h"
 #include "Menu2.h"
 #include "FiFo.h"
+#include "Sound.h"
 
 Entity entities[1];
 	
@@ -465,6 +466,8 @@ void playMenu(void){
 	ST7735_FillScreen(0);														//Clear all
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {}				//Make sure prev button press doesnt override this
 		
+		
+	sound_menu();
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {				//BUTTON NOT PRESSED
 		Entity* entitiesP = entities;
 		render(&entitiesP, 1);
@@ -477,7 +480,8 @@ void playMenu(void){
 			entities[0].yaw -= (360);
 		}
 	}
-	//Sound here
+	
+	sound_menu();
 }
 
 uint8_t difficultyMenu(Camera c) {
@@ -495,15 +499,22 @@ uint8_t difficultyMenu(Camera c) {
 		float xPos = getXPos();
 		
 		gatherInputs();
+		uint8_t lastSelected;
 		
 		if(getXPos() > 0.5) {
 			selectedDifficulty = 3;
+			if(lastSelected != selectedDifficulty)
+				sound_select();
 		} else if (getXPos() < -0.5) {
 			selectedDifficulty = 1;
+			if(lastSelected != selectedDifficulty)
+				sound_select();
 		} else {
 			selectedDifficulty = 2;
+			if(lastSelected != selectedDifficulty)
+				sound_select();
 		}
-				
+		
 		//Display difficulties
 		ST7735_DrawBitmap(0, 130, Difficulties, 128, 30);
 		
@@ -524,6 +535,8 @@ uint8_t difficultyMenu(Camera c) {
 			ST7735_FillRect(95, 109, 2, 14, 0x0000);
 			ST7735_FillRect(126, 109, 2, 14, 0x0000);	
 			
+			lastSelected = selectedDifficulty;
+			
 		} else if (selectedDifficulty == 3) {
 			ST7735_FillRect(95, 107, 33, 2, 0xFAA0);
 			ST7735_FillRect(95, 123, 33, 2, 0xFAA0);
@@ -539,7 +552,10 @@ uint8_t difficultyMenu(Camera c) {
 			ST7735_FillRect(0, 123, 33, 2, 0x0000);
 			ST7735_FillRect(0, 109, 2, 14, 0x0000);
 			ST7735_FillRect(31, 109, 2, 14, 0x0000);
-		} else {
+			
+			lastSelected = selectedDifficulty;
+			
+		} else if (selectedDifficulty == 2){
 			ST7735_FillRect(36, 107, 57, 2, 0xFAA0);
 			ST7735_FillRect(36, 123, 57, 2, 0xFAA0);
 			ST7735_FillRect(36, 109, 2, 14, 0xFAA0);
@@ -554,11 +570,15 @@ uint8_t difficultyMenu(Camera c) {
 			ST7735_FillRect(95, 123, 33, 2, 0x0000);
 			ST7735_FillRect(95, 109, 2, 14, 0x0000);
 			ST7735_FillRect(126, 109, 2, 14, 0x0000);		
+			
+			lastSelected = selectedDifficulty;
 		}
 	}
 	
 	//Wait for input
 	float endPoint = 24;
+	
+	sound_theme();
 	
 	while(endPoint > 0) {
 		Entity* entitiesP = entities;
@@ -567,12 +587,15 @@ uint8_t difficultyMenu(Camera c) {
 		renderGraphicsBuffer();
 	}
 	
-	UART_OutChar(0x2A);					// game start code
-	//Sound here
+	UART_OutChar(0x7A);					// game start code
+	
 	return selectedDifficulty;
 }
 
 void deathMenu(uint8_t score_In) {	
+	//UART_OutChar(0x7B);
+	sound_death();
+	
 	while((GPIO_PORTE_DATA_R & 0x20) != 0) {
 		uint8_t score = score_In;
 		
@@ -593,7 +616,7 @@ void deathMenu(uint8_t score_In) {
 			
 		outString[3] = 0x00;
 		
-		ST7735_DrawString(8, 6, outString, 0xFFFF);
+		ST7735_DrawString(9, 6, outString, 0xFFFF);
 	}
 	while((GPIO_PORTE_DATA_R & 0x20) == 0) {
 		uint8_t score = score_In;
@@ -615,7 +638,10 @@ void deathMenu(uint8_t score_In) {
 			
 		outString[3] = 0x00;
 		
-		ST7735_DrawString(8, 6, outString, 0xFFFF);
+		ST7735_DrawString(9, 6, outString, 0xFFFF);
 	}						//No button pressed		
-	//Sound here
+	
+	for(uint32_t n = 1000000; n > 0; n--){}
+
+	
 }

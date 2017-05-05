@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "ST7735.h"
 #include "tm4c123gh6pm.h"
+#include "Menu2.h"
 
 // 3D
 #include "Player.h"
@@ -3021,6 +3022,7 @@ void startHealth(void){
 // pass health integer, draws health bar accordingly. make sure to update maxHealth #define.
 // TODO make animation for health changing
 void drawHealth(uint8_t health){
+	startHealth();
 	ST7735_FillRect(healthX + ((healthW * ((health * 10) / maxHealth)) / 10), healthY - healthH + 1, healthW - ((healthW * ((health * 10) / maxHealth)) / 10), healthH, 0);
 }
 
@@ -3040,34 +3042,30 @@ void drawScore(uint8_t score){
 		
 	outString[3] = 0x00;
 	
-	ST7735_DrawString(8, 3, outString, 0xFFFF);
+	ST7735_DrawString(9, 3, outString, 0xFFFF);
 }
 
 // pass bomb integer from 0 to 3, draws bomb icons accordingly.
 void drawBombs(uint8_t bombsCount){
-	switch (bombsCount){
+	switch(bombsCount){
 		case 1:
 			ST7735_DrawBitmap(bombX, bombY, bombSprite, bombDimension, bombDimension);
-			ST7735_FillRect(bombX + bombDimension + bSpace, bombY, 0, bombDimension, bombDimension);
-			ST7735_FillRect(bombX + (bombDimension + bSpace)*2, bombY, 0, bombDimension, bombDimension);
-			break;
+			ST7735_FillRect(bombX + bombDimension + bSpace, bombY - bombDimension + 1, bombDimension*2 + bSpace, bombDimension + 1, 0);
+		break;
 		
 		case 2:
 			ST7735_DrawBitmap(bombX, bombY, bombSprite, bombDimension, bombDimension);
 			ST7735_DrawBitmap(bombX + bombDimension + bSpace, bombY, bombSprite, bombDimension, bombDimension);
-			ST7735_FillRect(bombX + (bombDimension + bSpace)*2, bombY, 0, bombDimension, bombDimension);
-			break;
+			ST7735_FillRect(bombX + (bombDimension + bSpace)*2, bombY - bombDimension + 1, bombDimension, bombDimension + 1, 0);
+		break;
 		
 		case 3:
 			ST7735_DrawBitmap(bombX, bombY, bombSprite, bombDimension, bombDimension);
 			ST7735_DrawBitmap(bombX + bombDimension + bSpace, bombY, bombSprite, bombDimension, bombDimension);
 			ST7735_DrawBitmap(bombX + (bombDimension + bSpace)*2, bombY, bombSprite, bombDimension, bombDimension);
-			break;
+		break;
 		
 		default:
-			ST7735_FillRect(bombX, bombY, 0, bombDimension, bombDimension);
-			ST7735_FillRect(bombX + bombDimension + bSpace, bombY, 0, bombDimension, bombDimension);
-			ST7735_FillRect(bombX + (bombDimension + bSpace)*2, bombY, 0, bombDimension, bombDimension);
-			break;
+			ST7735_FillRect(bombX, bombY - bombDimension + 1, bombDimension*3 + bSpace*2, bombDimension + 1, 0);
 	}
 }

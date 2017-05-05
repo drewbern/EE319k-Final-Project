@@ -46,7 +46,7 @@ Player newPlayer(void) {
 		newPlane(initialPosition, 0, 0, 0, newVector3f(0.6,0.42,0.4)),
 		
 		3,
-		3,
+		2,
 		
 		0,
 		0,

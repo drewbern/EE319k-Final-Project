@@ -15,8 +15,10 @@
 #include "FiFo.h"
 #include "UART.h"
 
-char out = 0;
-uint8_t score;
+char out;
+uint8_t lastHealth;
+
+void EnableInterrupts(void);
 
 int main(void){
 	PLL_Init();
@@ -24,30 +26,49 @@ int main(void){
 	menuInit2();
 	FiFo_Init();
 	UART_Init();
+	EnableInterrupts();
 	
 	startMenu();
 	
-	while(FiFo_Get(&out) == 0){}
-
-	drawBG();
-	drawShip();
-	startHealth();
-	drawBombs(1);
+	lastHealth = 3;
 	
-	drawScore(0);
-	
-	while(1){
+	while(1){	
 		while(FiFo_Get(&out) == 0){}
-			
+					
+		if(out == 0x2A){
+			FiFo_Get(&out);		
 		
-		if(out == 0x2A){	
-			
-		FiFo_Get(&out);
-		drawHealth(out);
-		FiFo_Get(&out);
-		drawScore(out);	
-		FiFo_Get(&out);
-		drawBombs(out);
+			while(out != 0x7C){
+				switch(out){		
+					case 0x7F:
+					FiFo_Get(&out);
+					
+					if(out != lastHealth){
+						drawHealth(out);
+						lastHealth = out;
+					}
+					
+					FiFo_Get(&out);
+					break;
+
+					case 0x7E:
+						FiFo_Get(&out);
+						drawScore(out);
+					
+					FiFo_Get(&out);
+					break;
+				
+					case 0x7D:
+						FiFo_Get(&out);
+						drawBombs(out);
+					
+					FiFo_Get(&out);
+					break;
+					
+					default:
+						FiFo_Get(&out);
+				} 
+			}
 		}
 	}
 }

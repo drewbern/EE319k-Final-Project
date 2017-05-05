@@ -47,7 +47,7 @@ typedef struct Entity {
 	float yaw;
 	float roll;
 	uint8_t health;
-	uint8_t numBombs;
+
 	uint8_t turnToRed;
 	uint8_t framesRedLeft;
 	Vector3f scale;
